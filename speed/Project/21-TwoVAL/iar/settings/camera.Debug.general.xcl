@@ -1,0 +1,17 @@
+"D:\software\IAR7_8\arm\bin\armproc.dll" 
+
+"D:\software\IAR7_8\arm\bin\armjlink2.dll" 
+
+"E:\CHIP\smartcar\FREESCAR\PROGRAM\3333\K60_OV77\Project\21-TwoVAL\iar\Debug\Exe\mydemo.out" 
+
+--plugin "D:\software\IAR7_8\arm\bin\armbat.dll" 
+
+--device_macro "D:\software\IAR7_8\arm\config\debugger\NXP\Kxx.dmac" 
+
+--device_macro "D:\software\IAR7_8\arm\config\debugger\NXP\Kxx_Trace.dmac" 
+
+--flash_loader "D:\software\IAR7_8\arm\config\flashloader\Freescale\FlashKx0Dxxx128K_2K_1K.board" 
+
+
+
+

@@ -1,0 +1,13 @@
+D:\github clone\smartcar\speed\Lib\Chip\src
+D:\github clone\smartcar\speed\Lib\Chip\src\IAR
+D:\github clone\smartcar\speed\Lib\Chip\inc
+D:\github clone\smartcar\speed\Lib\Chip\inc\IAR
+D:\github clone\smartcar\speed\Lib\Chip\inc\kinetis
+D:\github clone\smartcar\speed\Lib\CMSIS
+D:\github clone\smartcar\speed\Lib\CMSIS\inc
+D:\github clone\smartcar\speed\Lib\Driver
+D:\github clone\smartcar\speed\Lib\fatfs
+D:\github clone\smartcar\speed\Project\21-TwoVAL\app
+D:\github clone\smartcar\speed\Project\21-TwoVAL\app\inc
+D:\github clone\smartcar\speed\Project\21-TwoVAL\Driver
+D:\github clone\smartcar\speed\Project\21-TwoVAL\iar
