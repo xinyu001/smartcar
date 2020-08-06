@@ -74,58 +74,58 @@ void get_edge()   //尽量减少乘法运算
   for(i=0;i<60;i++)
   {
     last=0; 
-    x=i*10;//行数
-    find=0;//每一行的遍历中只要发生一次跳变就把find改成1    
-    edgposition[i]=0;       //16位无符号整型数组，长度为图像的高
-    for(j=0;j<10;j++)       //字节列数; 该层循环相当于在一个字节一个字节地遍历
+    x=i*10;                                     //行数
+    find=0;                                     //每一行的遍历中只要发生一次跳变就把find改成1    
+    edgposition[i]=0;                           //16位无符号整型数组，长度为图像的高
+    for(j=0;j<10;j++)                           //字节列数; 该层循环相当于在一个字节一个字节地遍历
     {
-      if(imgbuff_process[x+j]==0xff)    //8位无符号整型一维数组，长度为60行*（80/8）列
-      {  //如果该字节全1（白）
+      if(imgbuff_process[x+j]==0xff)            //8位无符号整型一维数组，长度为60行*（80/8）列
+      {                                         //如果该字节全1（白）
         if(last==0)
-        {  //如果这是该行第一个字节或者该行中上一个是0（黑）
-          y=j<<3;//该字节列数*8=记录跳变后第一列像素列数
+        {                                       //如果这是该行第一个字节或者该行中上一个是0（黑）
+          y=j<<3;                               //该字节列数*8=记录跳变后第一列像素列数
           if(find==0)
-          {  //如果是该行第一次跳变
+          {                                     //如果是该行第一次跳变
             edgposition[i]=cont;
           }
-          img_edg[cont++]=y;   //该行跳变的位置（跳变后第一列像素列数）记录在该数组
+          img_edg[cont++]=y;                    //该行跳变的位置（跳变后第一列像素列数）记录在该数组
           find=1;
         }
-        last=1;//标记上一个（此处）是1
-        continue;//遍历下一个字节
+        last=1;                                 //标记上一个（此处）是1
+        continue;                               //遍历下一个字节
       }
       if(imgbuff_process[x+j]==0)
-      {  //如果该字节全0（黑）
+      {                                         //如果该字节全0（黑）
         if(last==1)
-        {  //如果该行上一个是1（白）
+        {                                       //如果该行上一个是1（白）
           y=j<<3;
           if(find==0)
-          {//如果是该行第一次跳变
+          {                                     //如果是该行第一次跳变
             edgposition[i]=cont;
           }
-          img_edg[cont++]=y;   //该行跳变的位置（跳变后第一列像素列数）记录在该数组  
+          img_edg[cont++]=y;                    //该行跳变的位置（跳变后第一列像素列数）记录在该数组  
           find=1;
         }
-        last=0;//标记上一个（此处）是0
-        continue;//遍历下一个字节
+        last=0;                                 //标记上一个（此处）是0
+        continue;                               //遍历下一个字节
       }      
       for(n=7;n>=0;n--)
-      {//如果该字节不是全0或全1的话，就从前往后一位一位遍历这个字节
-        temp=(imgbuff_process[x+j]>>n)&1;// 获取该点像素值 （0或1）     
-        if(temp!=last) //与上一个值不相同 出现了跳变沿            
+      {                                         //如果该字节不是全0或全1的话，就从前往后一位一位遍历这个字节
+        temp=(imgbuff_process[x+j]>>n)&1;       // 获取该点像素值 （0或1）     
+        if(temp!=last)                          //与上一个值不相同 出现了跳变沿            
         {
            y=j<<3;  
            if(find==0)
-           {//如果是该行第一次跳变
+           {                                    //如果是该行第一次跳变
             edgposition[i]=cont;
            }
-           img_edg[cont++]=y+7-n;   //该行跳变的位置（跳变后第一列像素列数）记录在该数组
+           img_edg[cont++]=y+7-n;               //该行跳变的位置（跳变后第一列像素列数）记录在该数组
            find=1;
         }
-        last=temp;                //存储该点的值
+        last=temp;                              //存储该点的值
       } 
     } 
-    img_edg[cont++]=0xff;  //跳变位置的列数不可能达到11111111 
+    img_edg[cont++]=0xff;                       //跳变位置的列数不可能达到11111111 
 
   }
 }
@@ -157,7 +157,6 @@ void judgeblack()
       sum[n-15] = sum[n-15] + whitenum;
     } 
   }
-  //s 切换电磁
   
   if(flag==0)
   {
@@ -196,9 +195,8 @@ void judgeblack()
   }
   }*/
   
-  //s 从电磁切换回普通赛道类型
   
-  if(RoadType==100)
+  if(RoadType==100)                             // 从电磁切换回普通赛道类型
   {
       if((sum[0]<60) && (sum[1]<60) && (sum[2]<60) && (sum[3]<60) && (sum[4]<60) && (sum[0]>30) && (sum[1]>30) && (sum[2]>30) && (sum[3]>30) && (sum[4]>30))
       {
@@ -222,59 +220,23 @@ void Search()
       
       judgeblack(); 
       vol0=adc_once(ADC1_SE7a, ADC_16bit);
-      vol1=adc_once(ADC1_SE13, ADC_16bit);  /////////////////7月4日
+      vol1=adc_once(ADC1_SE13, ADC_16bit);              //7月4日
 
       Display1=adc_once(ADC1_SE8, ADC_16bit);
       Display2=adc_once(ADC1_SE13, ADC_16bit);
       Display3=adc_once(ADC1_SE10, ADC_16bit);
       
-      // 将两个电磁检测到得数值通过蓝牙发送给串口
-   /*  uart_putchar(UART0,'0'+ Display1/10000);
-      uart_putchar(UART0,'0'+ Display1/1000%10);
-      uart_putchar(UART0,'0'+ Display1/100%10);
-      uart_putchar(UART0,'0'+ Display1/10%10);
-      uart_putchar(UART0,'0'+ Display1%10);
-      uart_putchar(UART0,' ');
-      
-      uart_putchar(UART0,'0'+ Display2/10000);
-      uart_putchar(UART0,'0'+ Display2/1000%10);
-      uart_putchar(UART0,'0'+ Display2/100%10);
-      uart_putchar(UART0,'0'+ Display2/10%10);
-      uart_putchar(UART0,'0'+ Display2%10);
-      uart_putchar(UART0,' '); 
-      uart_putchar(UART0,'\n'); */
-   //将红外检测到的数值通过蓝牙发给串口
-   /*  uart_putchar(UART0,'0'+ vol0/10000);
-      uart_putchar(UART0,'0'+ vol0/1000%10);
-      uart_putchar(UART0,'0'+ vol0/100%10);
-      uart_putchar(UART0,'0'+ vol0/10%10);
-      uart_putchar(UART0,'0'+ vol0%10);
-      uart_putchar(UART0,' ');
-      uart_putchar(UART0,'0'+ vol1/10000);
-      uart_putchar(UART0,'0'+ vol1/1000%10);
-      uart_putchar(UART0,'0'+ vol1/100%10);
-      uart_putchar(UART0,'0'+ vol1/10%10);
-      uart_putchar(UART0,'0'+ vol1%10);
-      uart_putchar(UART0,' ');
-      uart_putchar(UART0,'\n'); */
-      
-      /*  distance_test=1000*Distance;
-      uart_putchar(UART0,'0'+ ((int)distance_test)/1000);
-      uart_putchar(UART0,'.');
-      uart_putchar(UART0,'0'+ ((int)distance_test)/100%10);
-      uart_putchar(UART0,'0'+ ((int)distance_test)/10%10);
-      uart_putchar(UART0,'0'+ ((int)distance_test)%10);*/
-   //  uart_putchar(UART0,'\n');
+
   
-  float Middle_Err_Sum=0,slope;    //Middle_Err_Sum是一行的误差
-  static int i,j,find;             //find连通域标志，1表示遇到连通域
+  float Middle_Err_Sum=0,slope;                         //Middle_Err_Sum是一行的误差
+  static int i,j,find;                                  //find连通域标志，1表示遇到连通域
   uint8 left_cont=0,right_cont=0;
   
-  uint8 Stop_Change=0,Stop_White=0,Stop_Black=0;//起跑线相关
+  uint8 Stop_Change=0,Stop_White=0,Stop_Black=0;        //起跑线相关
   static int k;
   
   int leftfind=0,rightfind=0;
-  int AllWhileStartLine=0,AllWhileEndLine=0;//分别是图像中从下往上第一个和最后一个全白行，变量拼写有误
+  int AllWhileStartLine=0,AllWhileEndLine=0;            //分别是图像中从下往上第一个和最后一个全白行，变量拼写有误
   
   static int break_line_left=0,break_line_right=0,continue_line_left=0,continue_line_right=0;
               //左右边线断线前的最后一行            //左右边线续线行的第一行
@@ -282,11 +244,11 @@ void Search()
   static int last_err;
   
   int search_end_line=0;
-  for(i=0;i<60;i++)  //清空数组(该数组定义在camera.c 8位无符号整型)
+  for(i=0;i<60;i++)                             //清空数组(该数组定义在camera.c 8位无符号整型)
   {  
-        LMR[0][i]=0; //左边线数列
-        LMR[1][i]=0;  //中线数列
-        LMR[2][i]=80; //右边线数列
+        LMR[0][i]=0;                            //左边线数列
+        LMR[1][i]=0;                            //中线数列
+        LMR[2][i]=80;                           //右边线数列
   }
   leftfind=0;
   rightfind=0;
@@ -295,16 +257,14 @@ void Search()
   continue_line_left=0;
   continue_line_right=0;
   
-  for(i=59;i>0;i--) //从第59行开始搜线，目的是总结归纳图像
+  for(i=59;i>0;i--)                             //从第59行开始搜线，目的是总结归纳图像
   {
  
    
     //起跑线
-   if(i==30 &&  Distance>40)  //Distance>8即保证车是在第二次经过起跑线时才执行 //s 原Distance>20，i==55
+   if(i==30 &&  Distance>40)  //Distance>40即保证车是在第二次经过起跑线时才执行  原i==55
     {
 
-//      if(ABS(X_Gyro)<5&&ABS(Turn_Speed)<20)//ABS(X_Gyro)<5&&
-//      {
         for(j=1;j<8;j++)
         {
           for(k=7;k>=0;k--)
@@ -328,11 +288,11 @@ void Search()
           }
         }
         
-        if((Stop_Black+Stop_White)>6)//s 原8，因为摄像头高度从20cm调为10cm，看到的条数减少了
+        if((Stop_Black+Stop_White)>6)                   //s 原8，因为摄像头高度从20cm调为10cm，看到的条数减少了
         {
           
-          RoadType=205;//s 8.1 看到起跑线，准备入库
-          Distance200=Distance;//记录当前距离
+          RoadType=205;                                 //s 8.1 看到起跑线，准备入库
+          Distance200=Distance;                         //记录当前距离
           
 //          Speed_H=0;
 //          Speed_M=0;
@@ -340,22 +300,22 @@ void Search()
         }
         Stop_Black=0;
         Stop_White=0;
-//      }
+
         
     }    
     
 
-    if(edgposition[i]==0&&(i!=0)) //表示从该行开始往上图像全黑 置为丢线  lost_line=0则舵机正常转向
+    if(edgposition[i]==0&&(i!=0))                       //表示从该行开始往上图像全黑 置为丢线  lost_line=0则舵机正常转向
     {
       if(i>24)
-      {//如果从上往下第25行才开始跳变
+      {                                                 //如果从上往下第25行才开始跳变
         if(last_err>0)
         {
-           lost_line=1;//使control.c中让舵机往右
+           lost_line=1;                                 //使control.c中让舵机往右
         }
         if(last_err<0)
         {
-           lost_line=2;//使control.c中让舵机往左
+           lost_line=2;                                 //使control.c中让舵机往左
         }
       }
 //      if(i<23)
@@ -364,82 +324,82 @@ void Search()
 //      }
       
       
-      break;//跳出搜线循环for,该行往上全黑，不需要搜了
+      break;                                            //跳出搜线循环for,该行往上全黑，不需要搜了
     }
-    j=edgposition[i];//j为第i行第一次跳变沿在数组img_edg[]中的下标 j代表黑变白 即左边线 j+1代表变黑 即右边线 
-    if(i==59)  //底部开始行
-    {     //这个while就是在挑选出最后一行中比较准确的跳变沿来赋值左右边线，有排除噪声的作用
-        while(img_edg[j]!=255)//img_edg[j]代表第i行该跳变沿(黑变白)的坐标（列数），0~79列
+    j=edgposition[i];                                   //j为第i行第一次跳变沿在数组img_edg[]中的下标 j代表黑变白 即左边线 j+1代表变黑 即右边线 
+    if(i==59)                                           //底部开始行
+    {                                                   //这个while就是在挑选出最后一行中比较准确的跳变沿来赋值左右边线，有排除噪声的作用
+        while(img_edg[j]!=255)                          //img_edg[j]代表第i行该跳变沿(黑变白)的坐标（列数），0~79列
        {  //255=0xff 代表本行坐标值结束，进入下一行
-          if((img_edg[j]<55)&&(img_edg[j+1]>25))  //左边沿小于55 右边沿大于25(即不太歪的情况下或者该行全白）
+          if((img_edg[j]<55)&&(img_edg[j+1]>25))        //左边沿小于55 右边沿大于25(即不太歪的情况下或者该行全白）
           {
-            if((img_edg[j+1]-img_edg[j])>25) //右边沿-左边沿大于20
+            if((img_edg[j+1]-img_edg[j])>25)            //右边沿-左边沿大于20
             {
-              LMR[0][i]=img_edg[j];//赋值左边线最后一行为相应的列数
+              LMR[0][i]=img_edg[j];                     //赋值左边线最后一行为相应的列数
               if(img_edg[j+1]==255)
-              {//看不到该行下一次跳变（白变黑）
-                 LMR[2][i]=80;    //赋值右边线最后一行  
+              {                                         //看不到该行下一次跳变（白变黑）
+                 LMR[2][i]=80;                          //赋值右边线最后一行  
               }
               else
-              {//看到该行有下一次跳变（白变黑）
-                 LMR[2][i]=img_edg[j+1];//赋值右边线最后一行 
+              {                                         //看到该行有下一次跳变（白变黑）
+                 LMR[2][i]=img_edg[j+1];                //赋值右边线最后一行 
               }
-              break;//跳出while循环，也就结束了if（i==59)，进入下一行搜线for循环
+              break;                                    //跳出while循环，也就结束了if（i==59)，进入下一行搜线for循环
             }
           } 
           if(img_edg[j+1]==255)
           {
-            break;//跳出while循环，也就跳出if（i==59)，进入下一行搜线for循环
+            break;                                      //跳出while循环，也就跳出if（i==59)，进入下一行搜线for循环
           }
-          j=j+2;//更新j然后进入下一次while循环（继续分析底部行的情况），运行到这里说明有可能是噪声
+          j=j+2;                                        //更新j然后进入下一次while循环（继续分析底部行的情况），运行到这里说明有可能是噪声
        }
        
     //  if(LMR[0][i]==0)  break_line_left=59;
      // if(LMR[2][i]==80) break_line_right=59;
     }
-    else   //不是底部开始行，其他的59行
+    else                                                //不是底部开始行，其他的59行
     { 
-        find=0;   //连通域标志先设为0 表示没有遇到连通域
-        while(img_edg[j]!=255)//img_edg[j]代表第i行该跳变沿(黑变白)的坐标（列数），0~79列，循环结束的条件为到了该行的结束标志0xff。
+        find=0;                                         //连通域标志先设为0 表示没有遇到连通域
+        while(img_edg[j]!=255)                          //img_edg[j]代表第i行该跳变沿(黑变白)的坐标（列数），0~79列，循环结束的条件为到了该行的结束标志0xff。
        {
         if((img_edg[j]<=LMR[2][i+1])&&(img_edg[j+1]>=LMR[0][i+1])&&(img_edg[j+1]-img_edg[j])>8)     
         {//如果该行左边沿小于等于上一行的右边线 &&该行右边沿大于等于上一行的左边线 && 是连通域；
-          find=1;//连通域标志，1表示遇到连通域
+          find=1;                                       //连通域标志，1表示遇到连通域
           if(LMR[0][i]==0&&(img_edg[j]!=0))
-          {//如果该行左边线还未赋值，但看到了该行跳变沿（黑变白)
+          {                                             //如果该行左边线还未赋值，但看到了该行跳变沿（黑变白)
             if(break_line_left!=0&&(continue_line_left==0))//表示可能循环到的是十字路全白区域前方的行，需要进一步判断
-            {//十字路口的情况下（左边线断线前的最后一行有记录），且左边线续线位置没有记录
+            {                                           //十字路口的情况下（左边线断线前的最后一行有记录），且左边线续线位置没有记录
               if(img_edg[j]>LMR[0][break_line_left]&&img_edg[j]<55)
-              {//判断该跳变沿（黑变白)有没有可能是左边线的续线（近大远小）
-                LMR[0][i]=img_edg[j];    //赋值该行左边线的列数
-                continue_line_left=i;    //保存左边线续线行（每一张图片至多执行一次）
+              {                                         //判断该跳变沿（黑变白)有没有可能是左边线的续线（近大远小）
+                LMR[0][i]=img_edg[j];                   //赋值该行左边线的列数
+                continue_line_left=i;                   //保存左边线续线行（每一张图片至多执行一次）
                 leftfind=1;
               }
             }
             else
             {//如果该行左边线还未赋值，但看到了该行第一个跳变沿（黑变白)，且（（左边线未断线即没有十字路）或（左边线的断线处和续线处都找到了））
                 if(LMR[2][i]==80)
-                {//如果该行右边线还未赋值
-                 LMR[0][i]=img_edg[j];//则赋值左边线为该行第一个跳变沿(黑变白)的坐标（列数）
+                {                                       //如果该行右边线还未赋值
+                 LMR[0][i]=img_edg[j];                  //则赋值左边线为该行第一个跳变沿(黑变白)的坐标（列数）
                  leftfind=1;
                 }
             }
           } 
 
           if(img_edg[j+1]!=255&&(LMR[2][i]==80))
-          {//如果该行右边线还未赋值且看得到该行第二个跳变沿（白变黑）
+          {                                             //如果该行右边线还未赋值且看得到该行第二个跳变沿（白变黑）
             if(break_line_right!=0&&(continue_line_right==0)&&(img_edg[j+1]>20))////表示可能循环到的是十字路全白区域前方的行，需要进一步判断
             {//十字路口的情况下（右边线断线前的最后一行有记录），且右边线续线位置没有记录
               if(img_edg[j+1]<LMR[2][break_line_right])
-              {//判断该跳变沿（黑变白)有没有可能是右边线的续线（近大远小）
-                LMR[2][i]=img_edg[j+1];//赋值该行右边线的列数
-                continue_line_right=i;//记录右边线续线行（每一张图片至多执行一次）
+              {                                         //判断该跳变沿（黑变白)有没有可能是右边线的续线（近大远小）
+                LMR[2][i]=img_edg[j+1];                 //赋值该行右边线的列数
+                continue_line_right=i;                  //记录右边线续线行（每一张图片至多执行一次）
                 rightfind=1;
               }
             }
             else
             {
-                if((RoadType==1))  //十字路口标志，初值为0表示未进入
+                if((RoadType==1))                       //十字路口标志，初值为0表示未进入
                  {
                    if(img_edg[j+1]>30)
                    {
@@ -449,66 +409,66 @@ void Search()
                  }
                 else
                 {
-                   LMR[2][i]=img_edg[j+1];//赋值右边线为该行第二个跳变沿(白变黑)的坐标（列数）
+                   LMR[2][i]=img_edg[j+1];              //赋值右边线为该行第二个跳变沿(白变黑)的坐标（列数）
                    rightfind=1;
                 }
             }
           }
-        }//连通域判断结束
-        if(img_edg[j+1]==255) //该行的跳变沿结束了
+        }                                               //连通域判断结束
+        if(img_edg[j+1]==255)                           //该行的跳变沿结束了
         {
-          if(img_edg[j]==0) //说明该行为全白 
+          if(img_edg[j]==0)                             //说明该行为全白 
           { 
             if(AllWhileStartLine==0)
-            {//说明是第一次遇到全白行
-              AllWhileStartLine=i; //记录全白行开始的行数（因为是倒序搜线所以实际上是最底部的全白行）
+            {                                           //说明是第一次遇到全白行
+              AllWhileStartLine=i;                      //记录全白行开始的行数（因为是倒序搜线所以实际上是最底部的全白行）
             }
-            AllWhileEndLine=i;//暂时将该行记录为全白行结束的行数
+            AllWhileEndLine=i;                          //暂时将该行记录为全白行结束的行数
 
             if(/*(rightfind&&leftfind&&(RoadType==0)&&i>20)||*/(AllWhileStartLine-AllWhileEndLine)>40)
               //且（（两边边线都找到了 （排除顶部20行的干扰））或（至少有了12行的全白行））  10
             {
-                if(RoadType==0) RoadType=1; //进入十字了
+                if(RoadType==0) RoadType=1;             //进入十字了
             }
           }
-          break;//跳出while，因为该行跳变沿结束了
+          break;                                        //跳出while，因为该行跳变沿结束了
         }
         
         
-        j=j+2;//每一行可能会有很多个跳变值
+        j=j+2;                                          //每一行可能会有很多个跳变值
        }
-       //以上是搜索连通域的算法
+                                                        //以上是搜索连通域的算法
        
        
        
-       if(RoadType==1)  //（不是底部开始行的前提下）在十字内对搜线进行特殊处理（记录左右边线断线前的最后一行）
+       if(RoadType==1)                                  //（不是底部开始行的前提下）在十字内对搜线进行特殊处理（记录左右边线断线前的最后一行）
        { 
          if(left_cont>=4)
-         {//至少连续四次找到左边线
+         {                                              //至少连续四次找到左边线
            if(((LMR[0][i]<(LMR[0][i+1]-1))||(LMR[0][i]==0))&&i>20)
-           {           //左边线往外扩展（排除了循环到十字路口前方的行的情况）或者断线
+           {                                            //左边线往外扩展（排除了循环到十字路口前方的行的情况）或者断线
                 LMR[0][i]=0;
                 if(break_line_left==0)break_line_left=i+1;         //记录左边线断线前的最后一行（前后那么多if主要是为了避免进入十字路口后该语句重复执行，仅当该行是断线后的第一行才执行到这里）
            }
          }
-         if(LMR[0][i]!=0) //找到了左边边线就给这个变量加1
+         if(LMR[0][i]!=0)                               //找到了左边边线就给这个变量加1
          {
            left_cont++;       
          }
          else
          {
-           left_cont=0;//遇到了十字路口，且循环到的行是十字路口内，才执行，为了避免进入上一个if
+           left_cont=0;               //遇到了十字路口，且循环到的行是十字路口内，才执行，为了避免进入上一个if
          }
          
          if(right_cont>=4)
          {
            if(((LMR[2][i]>(LMR[2][i+1]+1))||(LMR[2][i]==80))&&i>20)
-           {    ////右边线往外扩展或者断线
+           {                                            //右边线往外扩展或者断线
                 LMR[2][i]=80;
                  if(break_line_right==0)break_line_right=i+1;       //记录右边线断线前的最后一行（前后那么多if主要是为了避免进入十字路口后该语句重复执行）
            }
          }
-         if(LMR[2][i]!=80) //找到了右边线
+         if(LMR[2][i]!=80)                              //找到了右边线
          {
            right_cont++;
          }
@@ -519,14 +479,14 @@ void Search()
        }
      
        
-       if(find==0)//（不是底部开始行的前提下）没有找到连通区域
+       if(find==0)                                      //（不是底部开始行的前提下）没有找到连通区域
        {
-         search_end_line=i;  //记录的是从倒数第二行开始往上遇到的第一个没有连通域的行数
-         break;////跳出搜线循环for，这种方式跳出循环的话，i为从下往上最后一个有连通域的行数或最后一行
+         search_end_line=i;                             //记录的是从倒数第二行开始往上遇到的第一个没有连通域的行数
+         break;         //跳出搜线循环for，这种方式跳出循环的话，i为从下往上最后一个有连通域的行数或最后一行
        }
   }
   
- }//搜线for循环结束
+ }                                                      //搜线for循环结束
 
  
 
@@ -545,19 +505,14 @@ if((RoadType==205)&&(Distance-Distance200>0.5)){
          Speed_M=0;
          Speed_L=0;
 }
-if(RoadType==206){                      //停车
-         SetSpeed=0;
-         Speed_H=0;
-         Speed_M=0;
-         Speed_L=0;
-}
+
 
 
 if(vol0>16000 && vol1>16000 && vol0<26000 && vol1<26000) //   17900
  {
-   if(ABS(vol0-vol1)<800) //1500,1000
+   if(ABS(vol0-vol1)<800)                               //1500,1000
    { count++; }
-   if(count>5)  //5
+   if(count>5)                                          //5
    {
    RoadType=50;
   // flag_obstacle=1;
@@ -576,14 +531,14 @@ if(vol0>16000 && vol1>16000 && vol0<26000 && vol1<26000) //   17900
    {
       if(i<5)
       {
-            if(edgposition[i]==0) //表示从该行开始往上图像全黑 置为丢线  lost_line=0则舵机正常转向
+            if(edgposition[i]==0)               //表示从该行开始往上图像全黑 置为丢线  lost_line=0则舵机正常转向
         {
             jishu++;
             if(jishu>3)
             {
               uart_putchar(UART0,'V');
               flag=1;
-            //  RoadType=51;    ////////////7月4日，进入转向程序
+              //  RoadType=51;                    //7月4日，进入转向程序
              // Style=0;
               
               jishu=0;
@@ -723,7 +678,7 @@ if(Distance-Distance8>1 && RoadType==200)
 }*/
  
  //以下对十字路口进行补线并且判断不同的路段
- if(RoadType==1)//进一步找准左右两边线的续线行的行数然后补线，为啥两边线判断方式略有不同？？？
+ if(RoadType==1)                //进一步找准左右两边线的续线行的行数然后补线，为啥两边线判断方式略有不同？？？
  {//十字路口
    if(AllWhileEndLine==0||AllWhileEndLine<20)RoadType=0;//表示最后一个全白行还远
    if(continue_line_left!=0)
@@ -744,7 +699,7 @@ if(Distance-Distance8>1 && RoadType==200)
       }
       
       slope=(LMR[0][break_line_left]- LMR[0][continue_line_left])*1.0/(break_line_left-continue_line_left);//计算左边线斜率 应该是负的（x/y）(左边线断线行对应的列数-左边线续线行对应的列数）/（断线行-续线行）
-      for(i=break_line_left;i>=continue_line_left;i--) //开始补线
+      for(i=break_line_left;i>=continue_line_left;i--)                  //开始补线
       {//斜率计算可以优化
         LMR[0][i]= LMR[0][break_line_left]-(int)((break_line_left-i)*slope);//左边线断线行对应的列数加上一个正数
       }
@@ -765,7 +720,7 @@ if(Distance-Distance8>1 && RoadType==200)
       }
       
       slope=(LMR[2][break_line_right]- LMR[2][continue_line_right])*1.0/(break_line_right-continue_line_right);//计算右边线斜率 应该是正的（x/y）(右边线断线行对应的列数-右边线续线行对应的列数）/（断线行-续线行）
-      for(i=break_line_right;i>=continue_line_right;i--) //开始补线
+      for(i=break_line_right;i>=continue_line_right;i--)                //开始补线
       { 
          LMR[2][i]= LMR[2][break_line_right]-(int)((break_line_right-i)*slope);//右边线断线行对应的列数减去一个正数
       }
@@ -782,7 +737,7 @@ if(Distance-Distance8>1 && RoadType==200)
  
  
 
- if(RoadType==0)//判断左边线是否为直线
+ if(RoadType==0)                                        //判断左边线是否为直线
  {
    if(SlopeLeft[0]!=0 && SlopeLeft[1]!=0 && SlopeLeft[2]!=0 && SlopeLeft[3]!=0)
    {
@@ -790,54 +745,54 @@ if(Distance-Distance8>1 && RoadType==200)
      {       
        if(ABS(SlopeLeft[0]-SlopeLeft[1])<SlopeLeftDiff && ABS(SlopeLeft[1]-SlopeLeft[2])<SlopeLeftDiff && ABS(SlopeLeft[2]-SlopeLeft[3])<SlopeLeftDiff )
        {
-         RoadType=2;//左边线为直线
+         RoadType=2;                                    //左边线为直线
         // uart_putchar(UART0,'L');
        }
      }
    }
  }
- if(RoadType==2 || RoadType==12 || RoadType==0)  //2  ，6月29日改
+ if(RoadType==2 || RoadType==12 || RoadType==0)  
  {                                      
   // if(ABS(SlopeLeft[0]-SlopeLeft[2])>=SlopeLeftDiff || ABS(SlopeLeft[1]-SlopeLeft[3])>=SlopeLeftDiff || ABS(SlopeLeft[2]-SlopeLeft[4])>=SlopeLeftDiff)
   //    RoadType=0;  //此处判断存在疑问？？？？？？？？？？？？？？
    if(LMR[2][5]!=80 && LMR[2][7]!=80 && LMR[2][10]!=80 && LMR[2][15]==80 && LMR[2][20]==80 && LMR[2][5]<LMR[2][7] && LMR[2][7]<LMR[2][10] && ABS(LMR[0][15]-LMR[0][22])<5 /*&& ABS(SlopeLeft[0]-SlopeLeft[1])<=SlopeLeftDiff  && ABS(SlopeLeft[1]-SlopeLeft[2])<=SlopeLeftDiff*/)
-   { RoadType=3;//看到第一个朝右丁字路口  //32   34
-      flag_3=1;   //右环第一个路口标志
+   { RoadType=3;                                        //看到第一个朝右丁字路口  //32   34
+      flag_3=1;                                         //右环第一个路口标志
   // uart_putchar(UART0,'F');
    }  
  }
  
- if(RoadType==3)   ///////////6月29日改
+ if(RoadType==3)   
  {
   // if(ABS(SlopeLeft[1]-SlopeLeft[2])>=2.5*SlopeLeftDiff || ABS(SlopeLeft[1]-SlopeLeft[3])>=2.5*SlopeLeftDiff /*|| ABS(SlopeLeft[2]-SlopeLeft[4])>=SlopeLeftDiff*/)
-  //  RoadType=0;
-  //RoadType=4;   if 3 then 4 ,那么连3都不会出现
+  // RoadType=0;
+  // RoadType=4;   if 3 then 4 ,那么连3都不会出现
    if(LMR[2][20]==80 && LMR[2][25]==80 && LMR[2][30]==80  && LMR[2][35]==80 && LMR[0][20]==0  && LMR[0][25]==0  && LMR[0][30]==0 && LMR[0][35]==0)////////7月5日改
-     RoadType=0;//避免路过十字路口变成5，因为出环岛时也是4
+     RoadType=0;                                        //避免路过十字路口变成5，因为出环岛时也是4
    if(LMR[2][5]!=80 && LMR[2][7]!=80 && LMR[2][10]!=80 && LMR[2][15]!=80 && LMR[2][20]!=80 && LMR[2][5]>LMR[2][10] && LMR[2][20]>LMR[2][10] && LMR[0][6]!=0  && LMR[0][7]!=0  && LMR[0][8]!=0 && ABS(SlopeLeft[0]-SlopeLeft[1])<=SlopeLeftDiff  && ABS(SlopeLeft[1]-SlopeLeft[2])<=SlopeLeftDiff/*&& LMR[2][5]>LMR[2][6] && LMR[2][20]>LMR[2][10]*/)  // 34  36    
-   {  RoadType=4;//看到环岛侧边
-      flag_4=1;  //右环侧边标志
+   {  RoadType=4;                                       //看到环岛侧边
+      flag_4=1;                                         //右环侧边标志
   // uart_putchar(UART0,'H');
    }
    
  }
- if(RoadType==4)  //////////////6月29日改
+ if(RoadType==4)  
  {
   //  if(ABS(SlopeLeft[0]-SlopeLeft[2])>=2.5*SlopeLeftDiff || ABS(SlopeLeft[1]-SlopeLeft[3])>=2.5*SlopeLeftDiff || ABS(SlopeLeft[2]-SlopeLeft[4])>=2.5*SlopeLeftDiff)
   //  RoadType=0;
 
    if(LMR[2][5]!=80 && LMR[2][7]!=80 && LMR[2][20]==80 && LMR[2][25]==80 && LMR[2][15]==80 && LMR[2][5]<LMR[2][7] )
    { 
-     RoadType=5;//看到第2个朝右丁字路口
-     flag_right=1; //进入右环标记
-     Distance3=Distance;  //记下进入右环时的距离，判断RoadType6
-     Distance7=Distance;  //记下进入右环时的距离，判断RoadType0
+     RoadType=5;                                        //看到第2个朝右丁字路口
+     flag_right=1;                                      //进入右环标记
+     Distance3=Distance;                                //记下进入右环时的距离，判断RoadType6
+     Distance7=Distance;                                //记下进入右环时的距离，判断RoadType0
     // uart_putchar(UART0,'S');
    }
    if(LMR[2][20]==80 && LMR[2][25]==80 && LMR[2][30]==80  && LMR[2][35]==80 && LMR[0][20]==0  && LMR[0][25]==0  && LMR[0][30]==0 && LMR[0][35]==0)////////7月5日改
-     RoadType=0;//避免路过十字路口变成5，因为出环岛时也是4  ///////////////////斟酌
+     RoadType=0;                                        //避免路过十字路口变成5，因为出环岛时也是4  ，斟酌
  }
-if(i<10)//s 8.5 i不知道哪来的？不是在i循环外了吗？
+if(i<10)
 {
   if(img_edg[j]==255)
   {
@@ -846,7 +801,7 @@ if(i<10)//s 8.5 i不知道哪来的？不是在i循环外了吗？
   {
     if(LMR[2][20]==80 && LMR[2][25]==80 && LMR[2][30]==80  && LMR[2][35]==80 && LMR[0][20]==0  && LMR[0][25]==0  && LMR[0][30]==0 && LMR[0][35]==0)
     {
-      if(Distance-Distance3>3)  //出环判断，必须在环内行驶一定的距离
+      if(Distance-Distance3>3)                                 //出环判断，必须在环内行驶一定的距离
       {RoadType=6;
       jishu1=0;
       }
@@ -917,28 +872,7 @@ if(Distance-Distance4>0.55)
  SlopeRight[3]=-(LMR[2][30]-LMR[2][33])/3.0;
  SlopeRight[4]=-(LMR[2][35]-LMR[2][38])/3.0;  //难道不应该是LMR[2][38]吗//s 8.5 LMR[2][48]->LMR[2][38]
  
-/*
-  uart_putchar(UART0,'0'+((int)SlopeRight[0])%10);
-  uart_putchar(UART0,'.');
-  uart_putchar(UART0,'0'+((int)(SlopeRight[0]*10))%10);//0.1
-  uart_putchar(UART0,'0'+((int)(SlopeRight[0]*100))%10);//0.01
-   my_putchar(' ');
-  uart_putchar(UART0,'0'+((int)SlopeRight[1])%10);
-  uart_putchar(UART0,'.');
-  uart_putchar(UART0,'0'+((int)(SlopeRight[1]*10))%10);//0.1
-  uart_putchar(UART0,'0'+((int)(SlopeRight[1]*100))%10);//0.01
-   my_putchar(' ');
-  uart_putchar(UART0,'0'+((int)SlopeRight[2])%10);
-  uart_putchar(UART0,'.');
-  uart_putchar(UART0,'0'+((int)(SlopeRight[2]*10))%10);//0.1
-  uart_putchar(UART0,'0'+((int)(SlopeRight[2]*100))%10);//0.01
-   my_putchar(' ');
-  uart_putchar(UART0,'0'+((int)SlopeRight[3])%10);
-  uart_putchar(UART0,'.');
-  uart_putchar(UART0,'0'+((int)(SlopeRight[3]*10))%10);//0.1
-  uart_putchar(UART0,'0'+((int)(SlopeRight[3]*100))%10);//0.01
-   my_putchar('\n');
-*/
+
  
 
   
@@ -951,12 +885,12 @@ if(Distance-Distance4>0.55)
      {
        if(ABS(SlopeRight[0]-SlopeRight[1])<SlopeRightDiff && ABS(SlopeRight[1]-SlopeRight[2])<SlopeLeftDiff && ABS(SlopeLeft[2]-SlopeLeft[3])<SlopeLeftDiff )
        {
-         RoadType=12;//右边线为直线
+         RoadType=12;                                   //右边线为直线
        }
      }
    }
  }
- if(RoadType==12 || RoadType==0 || RoadType==2)   //////////////////6月30日改
+ if(RoadType==12 || RoadType==0 || RoadType==2)   
  {  
    if(ABS(SlopeRight[0]-SlopeRight[1])>=1.4*SlopeRightDiff || ABS(SlopeRight[1]-SlopeRight[2])>=1.4*SlopeRightDiff )// 1.4*
       RoadType=0;
@@ -968,12 +902,12 @@ if(Distance-Distance4>0.55)
          && LMR[2][4]<LMR[2][8] && LMR[2][6]<LMR[2][12] && LMR[2][10]<LMR[2][20] )
    
      //LMR[2][5]!=80 && LMR[2][7]!=80 && LMR[2][10]!=80 && LMR[2][15]==80 && LMR[2][20]==80 && LMR[2][5]<LMR[2][7] && LMR[2][7]<LMR[2][10]
-   {RoadType=13;//看到第一个朝左丁字路口
-   flag_13=1; //左环第一个路口标记
+   {RoadType=13;                                        //看到第一个朝左丁字路口
+   flag_13=1;                                           //左环第一个路口标记
    }
  }
  
- if(RoadType==13)      ///////////////////6月30日改
+ if(RoadType==13)      
  {
    //SetSpeed=0.5;
    if(ABS(SlopeRight[0]-SlopeRight[1])>=4*SlopeRightDiff || ABS(SlopeRight[1]-SlopeRight[2])>=4*SlopeRightDiff) //
@@ -986,11 +920,11 @@ if(Distance-Distance4>0.55)
            LMR[2][4]<LMR[2][8] &&LMR[2][6]<LMR[2][12] && LMR[2][10]<LMR[2][20] )
    
      //LMR[2][5]!=80 && LMR[2][7]!=80 && LMR[2][10]!=80 && LMR[2][15]!=80 && LMR[2][20]!=80 && LMR[2][5]>LMR[2][10] && LMR[2][20]>LMR[2][10] && LMR[0][6]!=0  && LMR[0][7]!=0  && LMR[0][8]!=0
-   {RoadType=14;//看到环岛侧边
-   flag_14=1;  //左环侧边标记
+   {RoadType=14;                                        //看到环岛侧边
+   flag_14=1;                                           //左环侧边标记
    }
  }
- if(RoadType==14)   ///////////////6月30日改
+ if(RoadType==14)   
  {
    if(LMR[0][20] == 0 && LMR[0][25] == 0 && LMR[0][30] == 0 && LMR[2][30] == 80 && LMR[2][25] == 80 && LMR[2][20] == 80)
    {
@@ -999,11 +933,11 @@ if(Distance-Distance4>0.55)
    if(LMR[0][4]!=0 && LMR[0][6]!=0 && LMR[0][15]==0 && LMR[0][20]==0 && LMR[0][25]==0 && LMR[0][4]>LMR[0][6]/*&& LMR[2][33]!=80*/)
  //LMR[2][5]!=80 && LMR[2][7]!=80 && LMR[2][20]==80 && LMR[2][25]==80 && LMR[2][15]==80 && LMR[2][5]<LMR[2][7] 
    { 
-     RoadType=15;//看到第2个朝左丁字路口
-     flag_left=1;  //进入左环标记
+     RoadType=15;                                       //看到第2个朝左丁字路口
+     flag_left=1;                                       //进入左环标记
      flag_15=1;
-     Distance3=Distance;  //记下进入左环时的距离，判断RoadType6
-     Distance5=Distance;  //记下进入左环时的距离，判断RoadType0
+     Distance3=Distance;                                //记下进入左环时的距离，判断RoadType6
+     Distance5=Distance;                                //记下进入左环时的距离，判断RoadType0
      
    }             
  }
@@ -1029,7 +963,7 @@ if(Distance-Distance4>0.55)
   {
     if(LMR[2][20]==80 && LMR[2][25]==80 && LMR[2][40]!=80 && LMR[0][20]==0  && LMR[0][25]==0  && LMR[0][30]==0 && LMR[0][35]==0)
     {
-      if(Distance-Distance3>3)  //出环判断，必须在环内行驶一定的距离
+      if(Distance-Distance3>3)                          //出环判断，必须在环内行驶一定的距离
       {RoadType=16;
       jishu1=0;
       }
@@ -1154,163 +1088,7 @@ if(Distance-Distance6>0.6)
       RoadType=0;
     }
    
- // if(RoadType==50)
- //{uart_putchar(UART0,'D');
- //uart_putchar(UART0,'\n');}
- // else
- // {uart_putchar(UART0,'M');
- //uart_putchar(UART0,'\n'); }
-    
- //判断路的类型
- /*if(RoadType==0)
- {uart_putchar(UART0,'Z');
- uart_putchar(UART0,' ');}
-  if(RoadType==1)
- {uart_putchar(UART0,'T');
- uart_putchar(UART0,' ');}
- if(RoadType==2)
- {uart_putchar(UART0,'L');
- uart_putchar(UART0,' ');}
-  if(RoadType==3)
- { uart_putchar(UART0,'R');
-   uart_putchar(UART0,'F');
- uart_putchar(UART0,' ');}
-  if(RoadType==4)
- {uart_putchar(UART0,'R');
-   uart_putchar(UART0,'H');
- uart_putchar(UART0,' ');}
-  if(RoadType==5)
- {uart_putchar(UART0,'R');
-   uart_putchar(UART0,'S');
- uart_putchar(UART0,' ');}
-  if(RoadType==6)
- {uart_putchar(UART0,'R');
-   uart_putchar(UART0,'I');
- uart_putchar(UART0,' ');}
-  if(RoadType==7)
- {uart_putchar(UART0,'R');
-   uart_putchar(UART0,'O');
- uart_putchar(UART0,' ');}
-  if(RoadType==12)
- {uart_putchar(UART0,'R');
- uart_putchar(UART0,' ');}
-  if(RoadType==13)
- {uart_putchar(UART0,'L');
-   uart_putchar(UART0,'F');
- uart_putchar(UART0,' ');} 
-   if(RoadType==14)
- {uart_putchar(UART0,'L');
-   uart_putchar(UART0,'H');
- uart_putchar(UART0,' ');} 
-   if(RoadType==15)
- {uart_putchar(UART0,'L');
-   uart_putchar(UART0,'S');
- uart_putchar(UART0,' ');}
-  if(RoadType==16)
- {uart_putchar(UART0,'L');
-   uart_putchar(UART0,'I');
- uart_putchar(UART0,' ');}
-   if(RoadType==17)
- {uart_putchar(UART0,'L');
-   uart_putchar(UART0,'O');
- uart_putchar(UART0,' ');} 
-   if(RoadType==32)
- {uart_putchar(UART0,'R');
-   uart_putchar(UART0,'J');
- uart_putchar(UART0,' ');} 
-   if(RoadType==33)
- {uart_putchar(UART0,'R');
-   uart_putchar(UART0,'J');
-   uart_putchar(UART0,'I');
- uart_putchar(UART0,' ');}
-   if(RoadType==36)
- {uart_putchar(UART0,'L');
-   uart_putchar(UART0,'J');
- uart_putchar(UART0,' ');}
-    if(RoadType==37)
- {uart_putchar(UART0,'L');
-   uart_putchar(UART0,'J');
-   uart_putchar(UART0,'I');
- uart_putchar(UART0,' ');}
- uart_putchar(UART0,'\n');*/
-    
- //计算左右边线的值以及斜率
- /*uart_putchar(UART0,'0'+((int)LMR[0][5])/10);
-   uart_putchar(UART0,'0'+((int)LMR[0][5])%10);
-   uart_putchar(UART0,' ');
-   uart_putchar(UART0,'0'+((int)LMR[0][7])/10);
-   uart_putchar(UART0,'0'+((int)LMR[0][7])%10);
-   uart_putchar(UART0,' ');
-   uart_putchar(UART0,'0'+((int)LMR[0][10])/10);
-   uart_putchar(UART0,'0'+((int)LMR[0][10])%10);
-   uart_putchar(UART0,' ');
-  // uart_putchar(UART0,'\n');
-   uart_putchar(UART0,'0'+((int)LMR[0][15])/10);
-   uart_putchar(UART0,'0'+((int)LMR[0][15])%10);
-   uart_putchar(UART0,' ');
-   uart_putchar(UART0,'0'+((int)LMR[0][20])/10);
-   uart_putchar(UART0,'0'+((int)LMR[0][20])%10);
-   uart_putchar(UART0,' ');
-   uart_putchar(UART0,'0'+((int)LMR[2][5])/10);
-   uart_putchar(UART0,'0'+((int)LMR[2][5])%10);
-   uart_putchar(UART0,' ');
-   uart_putchar(UART0,'0'+((int)LMR[2][30])/10);
-   uart_putchar(UART0,'0'+((int)LMR[2][30])%10);
-   uart_putchar(UART0,' ');
-   uart_putchar(UART0,'\n');*/
-  /* uart_putchar(UART0,'0'+((int)LMR[2][20])/10);
-   uart_putchar(UART0,'0'+((int)LMR[2][20])%10);
-   uart_putchar(UART0,' ');
-   uart_putchar(UART0,'0'+((int)LMR[2][23])/10);
-   uart_putchar(UART0,'0'+((int)LMR[2][23])%10);
-   uart_putchar(UART0,' ');
-   uart_putchar(UART0,'0'+((int)LMR[2][25])/10);
-   uart_putchar(UART0,'0'+((int)LMR[2][25])%10);
-   uart_putchar(UART0,' ');
-   uart_putchar(UART0,'0'+((int)LMR[2][28])/10);
-   uart_putchar(UART0,'0'+((int)LMR[2][28])%10);
-   uart_putchar(UART0,' ');*/
-   
-   
-  /* uart_putchar(UART0,'0'+((int)LMR[0][28])/10);
-   uart_putchar(UART0,'0'+((int)LMR[0][28])%10);
-   uart_putchar(UART0,' ');
-   uart_putchar(UART0,'\n'); */
-  /* uart_putchar(UART0,'0'+((int)LMR[2][25])/10);
-   uart_putchar(UART0,'0'+((int)LMR[2][25])%10);
-   uart_putchar(UART0,' ');
-   uart_putchar(UART0,'0'+((int)LMR[2][28])/10);
-   uart_putchar(UART0,'0'+((int)LMR[2][28])%10);
-   uart_putchar(UART0,' ');
-   uart_putchar(UART0,'0'+((int)LMR[2][36])/10);
-   uart_putchar(UART0,'0'+((int)LMR[2][36])%10);
-   uart_putchar(UART0,' ');
-   uart_putchar(UART0,'\n');
-     uart_putchar(UART0,'0'+((int)SlopeLeft[0])%10);
-  uart_putchar(UART0,'.');
-  uart_putchar(UART0,'0'+((int)(SlopeLeft[0]*10))%10);//0.1
-  uart_putchar(UART0,'0'+((int)(SlopeLeft[0]*100))%10);//0.01
-   my_putchar(' ');
-  uart_putchar(UART0,'0'+((int)SlopeLeft[1])%10);
-  uart_putchar(UART0,'.');
-  uart_putchar(UART0,'0'+((int)(SlopeLeft[1]*10))%10);//0.1
-  uart_putchar(UART0,'0'+((int)(SlopeLeft[1]*100))%10);//0.01
-   my_putchar(' ');
-  uart_putchar(UART0,'0'+((int)SlopeLeft[2])%10);
-  uart_putchar(UART0,'.');
-  uart_putchar(UART0,'0'+((int)(SlopeLeft[2]*10))%10);//0.1
-  uart_putchar(UART0,'0'+((int)(SlopeLeft[2]*100))%10);//0.01
-   my_putchar(' ');
-  uart_putchar(UART0,'0'+((int)SlopeLeft[3])%10);
-  uart_putchar(UART0,'.');
-  uart_putchar(UART0,'0'+((int)(SlopeLeft[3]*10))%10);//0.1
-  uart_putchar(UART0,'0'+((int)(SlopeLeft[3]*100))%10);//0.01
-
-   uart_putchar(UART0,'\n'); */
-    
- 
-    
-    
+     
  
  Middle_Err_Sum=0;
   for(i=0;i<59;i++)
@@ -1320,25 +1098,25 @@ if(Distance-Distance6>0.6)
        if(LMR[0][i]<(left_line))
           LMR[0][i]=(left_line);
 
-     if(RoadType==5)   //朝右的第二个丁字口
+     if(RoadType==5)                                    //朝右的第二个丁字口
      {
        
           LMR[1][i]=40;
      }
-     else if(RoadType==7)   //朝右出环岛
+     else if(RoadType==7)                               //朝右出环岛
      {
        
-          LMR[1][i]=50;//LMR[2][i]-11;
+          LMR[1][i]=50;                                 //LMR[2][i]-11;
      }
-     else if(RoadType==15)  //朝左的第二个丁字口
+     else if(RoadType==15)                              //朝左的第二个丁字口
      {
        
           LMR[1][i]=25;
      }
-     else if(RoadType==17)  //朝左出环岛
+     else if(RoadType==17)                              //朝左出环岛
      { 
        
-          LMR[1][i]=24;//LMR[0][i]+25;  //6月29日，原来+25，是否需要再改小一点？？？？？？？
+          LMR[1][i]=24;                                 //LMR[0][i]+25;  原来+25，是否需要再改小一点？
      }
 
      else if(RoadType==18 )
@@ -1356,11 +1134,11 @@ if(Distance-Distance6>0.6)
        
           LMR[1][i]=LMR[0][i]+12;
      }
-     else if(RoadType==200)//s 8.1出库左拐
+     else if(RoadType==200)                     //s 8.1出库左拐
      {
           LMR[1][i]=15;
      }
-     else if(RoadType==205)//s 8.1入库左拐
+     else if(RoadType==205)                     //s 8.1入库左拐
      {
           LMR[1][i]=15;
      }
@@ -1397,9 +1175,9 @@ if(Distance-Distance6>0.6)
      
      }*/
 
-     else       //RoadType=0,6，16...
+     else                                               //RoadType=0,6，16...
      {
-       LMR[1][i]=(LMR[0][i]+LMR[2][i])/2-3;//中线  -3
+       LMR[1][i]=(LMR[0][i]+LMR[2][i])/2-3;             //中线  -3
      }
    }
   
@@ -1409,11 +1187,11 @@ if(Distance-Distance6>0.6)
   for(i=0;i<59;i++)
    {
 
-    if(search_end_line<25)//search_end_line 因找不到连通域跳出搜线循环时的行数
-    {//没有无连通域行或者无连通域行在25行以上
+    if(search_end_line<25)                      //search_end_line 因找不到连通域跳出搜线循环时的行数
+    {                                           //没有无连通域行或者无连通域行在25行以上
       if(Style==1)
-      {//不加速
-        if(i>=21&i<=23)  //30  32摄像头低了，所以计算误差要提前，前瞻  '25,27'慢其实挺好  '21,23'快 
+      {                                         //不加速
+        if(i>=21&i<=23)            //30  32摄像头低了，所以计算误差要提前，前瞻  '25,27'慢其实挺好  '21,23'快 
         {//my_putchar('_');
           Middle_Err_Sum=Middle_Err_Sum+ LMR[1][i]-mid_line;
         }//20、21、22这三行的两中间线之差累加（判断出的道路中间线-摄像头对应的中间线）e.g.小车偏左时误差为正
@@ -1450,14 +1228,14 @@ if(Distance-Distance6>0.6)
     {//最下面的无连通域行在25行及以下时
       if((i>=27)&&(i<=29))
       {//my_putchar('|');
-          Middle_Err_Sum=Middle_Err_Sum+ LMR[1][i]-mid_line;//取了30、31、32行的误差
+          Middle_Err_Sum=Middle_Err_Sum+ LMR[1][i]-mid_line;            //取了30、31、32行的误差
       }
     }
    }
-   Middle_Err_Sum=Middle_Err_Sum/3;//取平均
+   Middle_Err_Sum=Middle_Err_Sum/3;                                     //取平均
   
    if(RoadType==1)
-   {//遇到十字路口的情况下，Middle_Err_Sum取全白行前方的且位置在第10行以下的某一行的误差
+   {                    //遇到十字路口的情况下，Middle_Err_Sum取全白行前方的且位置在第10行以下的某一行的误差
       for(i=AllWhileEndLine;i>10;i--)
      {//i从最后一个全白行（顶部）循环到正数第11行
        if(LMR[0][i]!=0&&LMR[2][i]!=(mid_line*2))//经过前面的框定，此时左右边线在0~70范围，对于全白行两个条件正好都不符合，直接进入下一次循环
@@ -1483,19 +1261,19 @@ if(Distance-Distance6>0.6)
    }//这四个变量分别是对应的4行中1的个数
    
    if(line_con==0&&line_con3==0)
-   {//如果中间位置的这两行全黑
-     if(last_err>0)//e.g.小车偏左时误差为正
+   {                                                    //如果中间位置的这两行全黑
+     if(last_err>0)                                     //e.g.小车偏左时误差为正
      {
-        //lost_line=1;//使control.c中让舵机往右，
+        //lost_line=1;                                  //使control.c中让舵机往右，
      }
      if(last_err<0)
      {
-        //lost_line=2;//使control.c中让舵机往左
+        //lost_line=2;                                  //使control.c中让舵机往左
      }
    }
    if(line_con>30&&line_con3>30)
    {
-      lost_line=0;//使control.c中舵机正常工作
+      lost_line=0;                                      //使control.c中舵机正常工作
    }
    
    /*
@@ -1527,12 +1305,12 @@ if(Distance-Distance6>0.6)
 //if(search_end_line>55&&Distance>1) Stop=1;
    if(Middle_Err!=0)//
    {
-      last_err=Middle_Err;  //e.g.小车偏左时误差为正
+      last_err=Middle_Err;                              //e.g.小车偏左时误差为正
    }
 
-  Middle_Err= Middle_Err_Sum;//更新误差 e.g.小车偏左时误差为正
-  Push_And_Pull(Previous_Error,10,Middle_Err);//Middle_Err放入长度为12的数组Previous_Error的首元
-  Delt_error=-10*Slope_Calculate(0,10,Previous_Error);//该变量算出来供在其他文件使用
+  Middle_Err= Middle_Err_Sum;                           //更新误差 e.g.小车偏左时误差为正
+  Push_And_Pull(Previous_Error,10,Middle_Err);          //Middle_Err放入长度为12的数组Previous_Error的首元
+  Delt_error=-10*Slope_Calculate(0,10,Previous_Error);  //该变量算出来供在其他文件使用
   
  // if(flag2 == 1) RoadType = 50;
 }//search()结束

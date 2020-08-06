@@ -282,11 +282,11 @@ void Read_Switch() //0表示ON(左) 1表示OFF(右)
 /*
  * 检测按键是否按下
  */
-void Check_BottonPress()//主函数while(1)中被调用
+void Check_BottonPress()                        //主函数while(1)中被调用
 {
       //显示按键
   
-  if(OLED_Refresh==0&&BT_YES_IN==0)//当显示屏关闭且按键按下时
+  if(OLED_Refresh==0&&BT_YES_IN==0)             //当显示屏关闭且按键按下时
   {
    if(BT_YES_IN==0)
    {
@@ -296,10 +296,10 @@ void Check_BottonPress()//主函数while(1)中被调用
        BEEP_OFF;
       if(BT_YES_IN==0)
       {    
-        if(OLED_Refresh==false)//false=0；true=1
+        if(OLED_Refresh==false)                 //false=0；true=1
         {
          OLED_Init();
-         OLED_Refresh=true;//令主函数while(1)中每次循环都显示OLED
+         OLED_Refresh=true;                     //令主函数while(1)中每次循环都显示OLED
         }
         //else
         //{
@@ -307,12 +307,12 @@ void Check_BottonPress()//主函数while(1)中被调用
         //  OLED_Fill(0x00);       
         //}
       }
-      while(BT_YES_IN==0);  //直到按键松开再运行
+      while(BT_YES_IN==0);                      //直到按键松开再运行
       DELAY_MS(30);
    } 
   }
    //按键1 yes
-   if(BT_YES_IN==0&&OLED_Refresh) //当按键按下且显示屏打开时
+   if(BT_YES_IN==0&&OLED_Refresh)               //当按键按下且显示屏打开时
    {
      //去抖
        BEEP_ON;
@@ -335,11 +335,11 @@ void Check_BottonPress()//主函数while(1)中被调用
       if(Page_Index==1)
       {
          Page_Index=0;
-         OLED_Refresh=false;//OLED屏打开且页号为1时按下按钮关闭OLED
-         OLED_Fill(0x00);     //清屏
+         OLED_Refresh=false;                    //OLED屏打开且页号为1时按下按钮关闭OLED
+         OLED_Fill(0x00);                       //清屏
       }
       
-      while(BT_YES_IN==0); //直到按键松开再运行
+      while(BT_YES_IN==0);                      //直到按键松开再运行
    }
    //按键2 Left_L
    if(BT_LEFT_IN==0)
@@ -353,18 +353,18 @@ void Check_BottonPress()//主函数while(1)中被调用
         if(Para_Checked) 
         {//参数被选中时按下左键，修改步长号
           if(Step_Index==5) 
-          Step_Index=5;   //调节步长号最大为5 对应最大的步长10
+          Step_Index=5;                         //调节步长号最大为5 对应最大的步长10
           else Step_Index++;
         }
         else 
         { 
           Para_Index=0;
-          if(Page_Index==0) Page_Index=5; //当参数没被选中的时候，按左右键翻页
+          if(Page_Index==0) Page_Index=5;       //当参数没被选中的时候，按左右键翻页
           else Page_Index--;
           OLED_Fill(0);//清屏 
         }
       }
-      while(BT_LEFT_IN==0);//直到按键松开再运行
+      while(BT_LEFT_IN==0);                     //直到按键松开再运行
    } 
    //按键6 Right_L
    if(BT_RIGHT_IN==0&&OLED_Refresh)
@@ -378,7 +378,7 @@ void Check_BottonPress()//主函数while(1)中被调用
         if(Para_Checked) 
         {
           if(Step_Index==0) 
-           Step_Index=0;//步长号最小是0，对应最小的步长0.0001
+           Step_Index=0;                        //步长号最小是0，对应最小的步长0.0001
           else
           {
             Step_Index--;
@@ -387,12 +387,12 @@ void Check_BottonPress()//主函数while(1)中被调用
         else 
         { 
           Para_Index=0;
-          if(Page_Index==5) Page_Index=0;//当参数没被选中的时候，按左右键翻页
+          if(Page_Index==5) Page_Index=0;       //当参数没被选中的时候，按左右键翻页
           else Page_Index++;
          OLED_Fill(0);//清屏 
         }
       }
-      while(BT_RIGHT_IN==0);      //直到按键松开再运行
+      while(BT_RIGHT_IN==0);                    //直到按键松开再运行
    }
    //按键3 up
     if(BT_UP_IN==0&&OLED_Refresh)
@@ -422,7 +422,7 @@ void Check_BottonPress()//主函数while(1)中被调用
             Para_Update();
           }
       }  
-      while(BT_UP_IN==0);//直到按键松开再运行  
+      while(BT_UP_IN==0);                       //直到按键松开再运行  
    }
    //按键4 down
    if(BT_DOWN_IN==0)
@@ -435,8 +435,8 @@ void Check_BottonPress()//主函数while(1)中被调用
       if(BT_DOWN_IN==0)
       {
           if(Para_Checked==false)
-          {        //显示屏打开且参数未被选中时按下键，修改参数号
-            if(Para_Index==Para_Index_Limit)Para_Index=0;   //防止序号超出范围
+          {//显示屏打开且参数未被选中时按下键，修改参数号
+            if(Para_Index==Para_Index_Limit)Para_Index=0;          //防止序号超出范围
             else  Para_Index+=1; 
           }
            else 
@@ -470,13 +470,13 @@ void Check_BottonPress()//主函数while(1)中被调用
          ControlSpeed=0;
        }
      }
-     while(BT_DOWN_IN==0);  //直到按键松开再运行
+     while(BT_DOWN_IN==0);                              //直到按键松开再运行
    }
    
 }
 
 
-void Send_Variable()//从未调用  向上位机发送变量
+void Send_Variable()                                    //从未调用  向上位机发送变量
 {
   uint8 i=0,ch=0;
   float temp=0;
@@ -504,7 +504,7 @@ void Send_Variable()//从未调用  向上位机发送变量
 
 
 
-void Modify_Parameter(uint8 *buff)//接受上位机数据UART0_RX_IRQHandler()中被调用
+void Modify_Parameter(uint8 *buff)                      //接受上位机数据UART0_RX_IRQHandler()中被调用
 {
    uint8 i=0,addr=0;
    float temp;

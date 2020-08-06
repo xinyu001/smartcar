@@ -1,18 +1,17 @@
 /*
 减小了框定PID_TURN.OUT的最小值
 
-
 */
 #include "include.h"
 
 //速度类变量
-uint8 Style=1;//1不加速，0加速
+uint8 Style=1;                                  //1不加速，0加速
 float SpeedControlOutNew;
 float SpeedControlOutOld;
 float SpeedControlIntegral=0,Hill_Slow_Ratio;
-uint8  Set_Angle;   //加速前倾角度
+uint8  Set_Angle;                               //加速前倾角度
 int   SpeedCount;
-int   Speed_Filter_Times=50;    //速度平滑输出
+int   Speed_Filter_Times=50;                    //速度平滑输出
 float CarSpeed=0,ControlSpeed=0,AverageSpeed,SetSpeed=0,Distance=0;
 float Speed_H=0,Speed_M=0,Speed_L=0;
 //方向类变量
@@ -25,8 +24,8 @@ float Turn_Out;
 float Turn_Angle_Integral;
 
 /**舵机相关**/
-int sever_middle=230;//112(原)//150  值越大越偏右   230//s 
-int sever_range=55;  //19(实际范围)//25(原)//28  //s 
+int sever_middle=230;                   //值越大越偏右  
+int sever_range=55;                     //19(实际范围)//25(原)//28  //s 
 
 //模糊化系数
 float  Delta_P;
@@ -36,8 +35,8 @@ float  Fuzzy_Kd;
 //PID控制类变量
 PID PID_SPEED,PID_TURN;
 
-float  MotorOut;   //电机输出量          
-uint8   Starting,Stop;//stop=1使电机不输出，Starting=1起跑准备状态
+float  MotorOut;                                //电机输出量          
+uint8   Starting,Stop;                          //stop=1使电机不输出，Starting=1起跑准备状态
 uint8 Encoder_Disable=0;
 
 extern int16 GYRO_OFFSET_Z;
@@ -61,23 +60,15 @@ void Get_Speed()      //可能是4ms执行一次     //5ms执行一次
   leftspeed=0;
   //rightspeed=0;
   
-  Distance+=qd1_result/2500.0;  //转化为4ms内跑过的距离 500线，一圈20cm
-  //CarSpeed=CarSpeed*0.1+0.9*qd1_result*250.0/3100;    //求出车速转换为M/S 4ms一次
-  CarSpeed=CarSpeed*0.1+0.9*qd1_result*0.01; //*250/2500;    //求出车速转换为M/S
+  Distance+=qd1_result/2500.0;                                  //转化为4ms内跑过的距离 500线，一圈20cm
+  //CarSpeed=CarSpeed*0.1+0.9*qd1_result*250.0/3100;            //求出车速转换为M/S 4ms一次
+  CarSpeed=CarSpeed*0.1+0.9*qd1_result*0.01; //*250/2500;       //求出车速转换为M/S
   //disspeed= CarSpeed;
   if(CarSpeed>=4)CarSpeed=4; 
   
-   /* Car=CarSpeed*1000;    
-  
-      uart_putchar(UART0,'0'+ Car/1000);
-      uart_putchar(UART0,'.'); 
-      uart_putchar(UART0,'0'+ Car/100%10);
-      uart_putchar(UART0,'0'+ Car/10%10);
-      uart_putchar(UART0,'0'+ Car%10);
-      uart_putchar(UART0,'\n'); */
 }
 //速度控制量计算  100ms一次
-void Speed_Control(void)  //更新SpeedControlOutOld  计算SpeedControlOutNew
+void Speed_Control(void)                        //更新SpeedControlOutOld  计算SpeedControlOutNew
 {  
   static float PreError[20]={0};
   float  SpeedError;
@@ -87,7 +78,7 @@ void Speed_Control(void)  //更新SpeedControlOutOld  计算SpeedControlOutNew
   //SpeedError=0.42-CarSpeed;//测试
   //现在让小车有变速功能
   if(Style==0)//不加速，1
-    SpeedError=SetSpeed-CarSpeed; //车速偏小 误差为正
+    SpeedError=SetSpeed-CarSpeed;               //车速偏小 误差为正
   else{//加速  
    /*  if(flag==1) //18
     {
@@ -99,39 +90,33 @@ void Speed_Control(void)  //更新SpeedControlOutOld  计算SpeedControlOutNew
     if(RoadType==6 || RoadType==7 || RoadType==16 || RoadType==32 || RoadType==33  || RoadType==36 || RoadType==37) //50
     {
       
-      if(CarSpeed>0.7)//设定值为0.58时，车速通常小于0.4  0.385
+      if(CarSpeed>0.7)                          //设定值为0.58时，车速通常小于0.4  0.385
       {  
-        SpeedError=0.2-CarSpeed; //减速
-       // uart_putchar(UART0,'J');
-      //  uart_putchar(UART0,'\n');
+        SpeedError=0.2-CarSpeed;                //减速
+
       }
       else
       {
-        SpeedError=0.7-CarSpeed; //慢速
-      //  uart_putchar(UART0,'M');
-      //  uart_putchar(UART0,'M');
-      //  uart_putchar(UART0,'\n');
+        SpeedError=0.7-CarSpeed;                //慢速
+
       }
     }
     else if(RoadType==40 || RoadType==41 || RoadType==18)//0是快速
-    { //障碍物  中速
-      if(CarSpeed>0.5)//设定值为0.7时，车速通常小于0.54
+    {                                           //障碍物  中速
+      if(CarSpeed>0.5)                          //设定值为0.7时，车速通常小于0.54
       {  
-        SpeedError=0.2-CarSpeed; //过弯时减速
-      //  uart_putchar(UART0,'J');
-      //  uart_putchar(UART0,'\n');
+        SpeedError=0.2-CarSpeed;                //过弯时减速
+
       }
       else
       {
-        SpeedError=Speed_M-CarSpeed; //中速
-      //  uart_putchar(UART0,'K');
-      //  uart_putchar(UART0,'Z');
-      //  uart_putchar(UART0,'\n');
+        SpeedError=Speed_M-CarSpeed;            //中速
+
       }
     }
     else if(RoadType==3 || RoadType==4 || RoadType==5 || RoadType==13 || RoadType==14  || RoadType==15) //18
     {
-      SpeedError=0.65-CarSpeed; //减速
+      SpeedError=0.65-CarSpeed;                 //减速
      // SpeedError=0.15-CarSpeed; 
      // SpeedError=0; 
      // SetSpeed=0;
@@ -139,31 +124,28 @@ void Speed_Control(void)  //更新SpeedControlOutOld  计算SpeedControlOutNew
     else if(RoadType==100)
     {
     SpeedError=Speed_M-CarSpeed;
-    //SpeedError=0.60-CarSpeed; //减速
+    //SpeedError=0.60-CarSpeed;                 //减速
     
     }
-    else if(RoadType==50 && flag==0) //18
+    else if(RoadType==50 && flag==0)            //18
     {
-    // uart_putchar(UART0,'P');
-     SpeedError=0.45-CarSpeed;  //0.35
+    
+     SpeedError=0.45-CarSpeed;                  //0.35
      }
-    else if(RoadType==50 && flag==1) //18
+    else if(RoadType==50 && flag==1)            //18
     {
-    // uart_putchar(UART0,'Q');
-     SpeedError=0.60-CarSpeed;  //SetSpeed
+    
+     SpeedError=0.60-CarSpeed;                  //SetSpeed
      }
     else if(RoadType==200|| RoadType==205)
     {
       
-    SpeedError=Speed_L-CarSpeed;//出入库 慢速
+    SpeedError=Speed_L-CarSpeed;                //出入库 慢速
     
     }
     
-    else{//RoadType==1,2,7,12,17,18
+    else{                                       //RoadType==1,2,7,12,17,18
       SpeedError=Speed_H-CarSpeed; //快速
-   //  uart_putchar(UART0,'S');
-   //  uart_putchar(UART0,'K');
-   //  uart_putchar(UART0,'\n');
     }
   }
 
@@ -185,7 +167,7 @@ void Speed_Control(void)  //更新SpeedControlOutOld  计算SpeedControlOutNew
   SpeedControlOutNew=PID_SPEED.P*SpeedError+PID_SPEED.I*SpeedControlIntegral;   //PI控制 当CarSpeed增大且向SetSpeed靠近，此变量为正且变小  当CarSpeed减小且向SetSpeed靠近，此变量为负且绝对值变小
 }
 //计算速度控制量PID_SPEED.OUT
-void Speed_Control_Output(void) //2ms一次 每次调用前SpeedCount加1 SpeedCount属于[1,50]
+void Speed_Control_Output(void)                         //2ms一次 每次调用前SpeedCount加1 SpeedCount属于[1,50]
 { 
   float fValue; 
   fValue = SpeedControlOutNew - SpeedControlOutOld; 
@@ -196,43 +178,22 @@ void Speed_Control_Output(void) //2ms一次 每次调用前SpeedCount加1 SpeedCount属于
 void Direction_Control(void)
 {
   static int Calculate_Length=0;
-  Turn_Speed= -0.01*(Get_Z_Gyro() - GYRO_OFFSET_Z);//0.01//GYRO_OFFSET_Z静态Z轴角速度值，在I2C中定为17
+  Turn_Speed= -0.01*(Get_Z_Gyro() - GYRO_OFFSET_Z);     //0.01//GYRO_OFFSET_Z静态Z轴角速度值，在I2C中定为17
   if(Turn_Speed<10&&Turn_Speed>-10)
   {
     Turn_Speed=0;
   }
   
-///////////测试陀螺仪
- /* int16 a,b,c;
-  a=Get_X_Gyro();
-  b=Get_Y_Gyro();
-    c=Get_Z_Gyro();
-      uart_putchar(UART0,'0'+ (a/1000));
-      uart_putchar(UART0,'0'+ (a/100%10));
-      uart_putchar(UART0,'0'+ (a/10%10));
-      uart_putchar(UART0,'0'+ (a%10));
-    uart_putchar(UART0,' ');
-         uart_putchar(UART0,'0'+ (c/1000));
-      uart_putchar(UART0,'0'+ (c/100%10));
-      uart_putchar(UART0,'0'+ (c/10%10));
-      uart_putchar(UART0,'0'+ (c%10));
-    uart_putchar(UART0,' ');
-        uart_putchar(UART0,'0'+ (b/1000));
-      uart_putchar(UART0,'0'+ (b/100%10));
-      uart_putchar(UART0,'0'+ (b/10%10));
-      uart_putchar(UART0,'0'+ (b%10));
-    uart_putchar(UART0,'\n');*/
   
-  
-    Fuzzy(Middle_Err,Delt_error);//得到模糊化系数float  Delta_P;float  Delta_D;
-    Delta_P=Delta_P*Fuzzy_Kp;//Fuzzy_Kp Fuzzy_Kd在founction.c中的参数初始化函数设定值
+    Fuzzy(Middle_Err,Delt_error);                       //得到模糊化系数float  Delta_P;float  Delta_D;
+    Delta_P=Delta_P*Fuzzy_Kp;                           //Fuzzy_Kp Fuzzy_Kd在founction.c中的参数初始化函数设定值
     Delta_D=Delta_D*Fuzzy_Kd;
 
-  PID_TURN.pout=(PID_TURN.P+Delta_P)*Middle_Err;//Middle_Err
+  PID_TURN.pout=(PID_TURN.P+Delta_P)*Middle_Err;        //Middle_Err
   PID_TURN.dout=(PID_TURN.D+Delta_D)*Turn_Speed*0.1;
   Turn_Out= PID_TURN.pout - PID_TURN.dout;
   
-  Turn_Out=Turn_Out_Filter(Turn_Out);         //转动输出滤波 
+  Turn_Out=Turn_Out_Filter(Turn_Out);                   //转动输出滤波 
   
   PID_TURN.OUT=Turn_Out*100;
 
