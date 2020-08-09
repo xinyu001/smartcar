@@ -14,6 +14,8 @@ int   SpeedCount;
 int   Speed_Filter_Times=50;                    //速度平滑输出
 float CarSpeed=0,ControlSpeed=0,AverageSpeed,SetSpeed=0,Distance=0;
 float Speed_H=0,Speed_M=0,Speed_L=0;
+int   Stop_Brake=0;                               //刹车
+int   wycnt=0;
 //方向类变量
 float DirectionControlOutNew;
 float DirectionControlOutOld;
@@ -137,12 +139,13 @@ void Speed_Control(void)                        //更新SpeedControlOutOld  计算Sp
     
      SpeedError=0.60-CarSpeed;                  //SetSpeed
      }
-    else if(RoadType==200|| RoadType==205)
-    {
-      
-    SpeedError=Speed_L-CarSpeed;                //出入库 慢速
-    
-    }
+//    else if(RoadType==200)
+//    {
+//      
+//    SpeedError=Speed_L-CarSpeed;                //出 慢速
+//    
+//    }
+
     
     else{                                       //RoadType==1,2,7,12,17,18
       SpeedError=Speed_H-CarSpeed; //快速
@@ -364,6 +367,7 @@ void Moto_Out() //2ms一次
  PID_SPEED.OUT=-0.8;
  MotorOut=PID_SPEED.OUT;
  
+ 
  //正值限幅，防止减速过大
  
   
@@ -375,6 +379,15 @@ void Moto_Out() //2ms一次
  {
     MotorOut=0;
     LED_BLUE_ON;
+ }
+ if(Stop_Brake==1&&wycnt<=10000){                //终点刹车车轮倒转时间200ms
+   
+   FTM_PWM_Duty(FTM0,FTM_CH0,0);
+     
+   FTM_PWM_Duty(FTM0,FTM_CH1,8000);
+  
+   wycnt++;                      
+  
  }
 
  

@@ -15,6 +15,7 @@ extern float Distance;
 extern float SpeedControlOutOld,SpeedControlOutNew;
 extern float SpeedControlIntegral;
 extern float MotorOut;
+extern int Stop_Brake;
 //模糊化相关
 extern float  Delta_P;
 extern float  Delta_D;
