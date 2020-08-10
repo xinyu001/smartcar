@@ -58,16 +58,16 @@ int AD_val_3;
 int AD_val_4;
 int dis_AD_val_1,dis_AD_val_2,dis_AD_val_3,dis_AD_val_4;
 int disgy_AD_val_1,disgy_AD_val_2,disgy_AD_val_3,disgy_AD_val_4;
-int AD_val_1_max=0;
-int AD_val_2_max=0;
-int AD_val_3_max=0;
-int AD_val_4_max=0;//大概两边相等放中间是40几
-int AD_val_1_min=0;
-int AD_val_2_min=0;
-int AD_val_3_min=0;
-int AD_val_4_min=0;
+int AD_val_1_max=20000;
+int AD_val_2_max=20000;
+int AD_val_3_max=20000;
+int AD_val_4_max=20000;         //大概两边相等放中间是40几
+int AD_val_1_min=20000;
+int AD_val_2_min=20000;
+int AD_val_3_min=20000;
+int AD_val_4_min=20000;
 
-int  Car_State;
+int Car_State;
 int circle_Flag;
 int turn_Flag;
 int turn_Flag2=0;
@@ -340,12 +340,12 @@ void roadturncal()  //转向控制程序
 
 // Voltage = adc_ave(ADC_CHANNEL_AD15,ADC_12BIT,2)*3.81;
   
-    AD_val_3 = adc_ave(ADC1_SE10, ADC_16bit,2);  //左边八字电感  
-    AD_val_4 = adc_ave(ADC1_SE11, ADC_16bit,2); //右边八字电感 
+    AD_val_3 = adc_ave(ADC1_SE10, ADC_16bit,3);  //左边八字电感  
+    AD_val_4 = adc_ave(ADC1_SE11, ADC_16bit,3); //右边八字电感 
  
-  for(i=0;i<2;i++)     //5个电感     
+  for(i=0;i<2;i++)     //左右电感  从小到大排序  
   {
-       for(j=0;j<4;j++)  //五个数据排序
+       for(j=0;j<4;j++)  
        {
           for(k=0;k<4-j;k++)
           {
@@ -393,12 +393,17 @@ void roadturncal()  //转向控制程序
   if(AD_val_2>AD_val_2_max)		AD_val_2=AD_val_2_max;
   if(AD_val_3>AD_val_3_max)		AD_val_3=AD_val_3_max;
   if(AD_val_4>AD_val_4_max)		AD_val_4=AD_val_4_max;
+  if(AD_val_1<AD_val_1_min)		AD_val_1=AD_val_1_min;
+  if(AD_val_2<AD_val_2_min)		AD_val_2=AD_val_2_min;
+  if(AD_val_3<AD_val_3_min)		AD_val_3=AD_val_3_min;
+  if(AD_val_4<AD_val_4_min)		AD_val_4=AD_val_4_min;
+  
   
   //归一化
-  AD_val_1=100*(AD_val_1 )/(AD_val_1_max);
-  AD_val_2=100*(AD_val_2 )/(AD_val_2_max);
-  AD_val_3=100*(AD_val_3 )/(AD_val_3_max);
-  AD_val_4=100*(AD_val_4 )/(AD_val_4_max);
+  AD_val_1=100*(AD_val_1 -AD_val_1_min)/(AD_val_1_max-AD_val_1_min);
+  AD_val_2=100*(AD_val_2 -AD_val_2_min)/(AD_val_2_max-AD_val_2_min);
+  AD_val_3=100*(AD_val_3 -AD_val_3_min)/(AD_val_3_max-AD_val_3_min);
+  AD_val_4=100*(AD_val_4 -AD_val_4_min)/(AD_val_4_max-AD_val_4_min);
  
   disgy_AD_val_1 = AD_val_1;
   disgy_AD_val_2 = AD_val_2;
@@ -407,14 +412,15 @@ void roadturncal()  //转向控制程序
  
 
 
-
 ////////////     四电感法,带圆环    /////////////////////////////
   Inductor_ADC[0]= dis_AD_val_1; //左
   Inductor_ADC[1]= dis_AD_val_2; //右
   Inductor_ADC[2]= dis_AD_val_3; //左八
   Inductor_ADC[3]= dis_AD_val_4; //右八
  // if((Inductor_ADC[0]+Inductor_ADC[1])>200) //有电磁信号，没有丢线  
-    Middle_Err=(float)100*(AD_val_2-AD_val_1)/(AD_val_2+AD_val_1) ;  //归一
+ //Middle_Err=(float)100*(AD_val_2-AD_val_1)/(AD_val_2+AD_val_1) ;  //归一
+ //Middle_Err=Middle_Err*(Middle_Err*Middle_Err/1250.0+2)/10;//s 比例待修正
+      Middle_Err=disgy_AD_val_2-disgy_AD_val_1;
 
   //s 圆环
   
