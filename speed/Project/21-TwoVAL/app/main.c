@@ -22,16 +22,18 @@ unsigned char cmos[60][80]={0};                         //进行处理的数据
 extern int   AD_val_1;
 extern int   AD_val_2;
 extern int   AD_val_3;
-extern int   adtmp1,adtmp2,adtmp3;
-extern int   dis_AD_val_1,dis_AD_val_2,dis_AD_val_3 ;
-extern int   disgy_AD_val_1,disgy_AD_val_2,disgy_AD_val_3 ;
+extern int   AD_val_4;
+extern int   adtmp1,adtmp2,adtmp3,adtmp4;
+extern int   dis_AD_val_1,dis_AD_val_2,dis_AD_val_3,dis_AD_val_4;
+extern int   disgy_AD_val_1,disgy_AD_val_2,disgy_AD_val_3,disgy_AD_val_4;
 extern int   AD_val_1_min;
 extern int   AD_val_2_min;
 extern int   AD_val_3_min;
+extern int   AD_val_4_min;
 extern int   AD_val_1_max;
 extern int   AD_val_2_max;
 extern int   AD_val_3_max;
-
+extern int   AD_val_4_max;
 
 
 
@@ -57,7 +59,7 @@ void  main(void)
    sum=0;
    for(i=0;i<50;i++)                    
    {
-     AD_val_2 =adc_once(ADC1_SE9, ADC_16bit);
+     AD_val_2 =adc_once(ADC1_SE13, ADC_16bit);
      sum+=AD_val_2;
      DELAY_MS(5);
    }
@@ -71,6 +73,14 @@ void  main(void)
    }
    AD_val_3_min=sum/50;
    sum=0;
+   for(i=0;i<50;i++)                    
+   {
+     AD_val_4 =adc_once(ADC1_SE11, ADC_16bit);
+     sum+=AD_val_4;
+     DELAY_MS(5);
+   }
+   AD_val_4_min=sum/50;
+   sum=0;
 
    
    for(i=0;i<150;i++)                   //检测各电感的最大值
@@ -80,7 +90,7 @@ void  main(void)
        AD_val_1_max=AD_val_1;
      DELAY_MS(1);
      
-     AD_val_2 =adc_once(ADC1_SE9, ADC_16bit);
+     AD_val_2 =adc_once(ADC1_SE13, ADC_16bit);
      if(AD_val_2>=AD_val_2_max) 
        AD_val_2_max=AD_val_2;
      DELAY_MS(1);
@@ -89,23 +99,26 @@ void  main(void)
      if(AD_val_3>=AD_val_3_max) 
        AD_val_3_max=AD_val_3;
      DELAY_MS(1);
+     AD_val_4 =adc_once(ADC1_SE11, ADC_16bit);
+     if(AD_val_4>=AD_val_4_max) 
+       AD_val_4_max=AD_val_4;
+     DELAY_MS(1);
    }
   
   }
   while(1)
   {
      
-      //getadval();                               //获取电磁值
       if(Stop){
-      //adc_maxmin_update();                      //更新电磁的最大最小值
-      }
-          
+      adc_maxmin_update();                      //更新电磁的最大最小值
+      } 
+      
       Check_BottonPress();
       if(new_img)                               //此段不超过0.5ms 200ms主频  6ms 或8ms 执行一次
       { 
         
         get_edge();
-        Search();
+        Search();                       //roadturncal() 在Search(); 最后               
         Direction_Control();
         new_img=0;
         

@@ -56,28 +56,24 @@ int AD_val_1;
 int AD_val_2;
 int AD_val_3;
 int AD_val_4;
-int AD_val_5;
-int AD_val_6;
-int dis_AD_val_1,dis_AD_val_2,dis_AD_val_3,dis_AD_val_4,dis_AD_val_5,dis_AD_val_6 ;
-int disgy_AD_val_1,disgy_AD_val_2,disgy_AD_val_3,disgy_AD_val_4,disgy_AD_val_5,disgy_AD_val_6 ;
+int dis_AD_val_1,dis_AD_val_2,dis_AD_val_3,dis_AD_val_4;
+int disgy_AD_val_1,disgy_AD_val_2,disgy_AD_val_3,disgy_AD_val_4;
+int AD_val_1_max=0;
+int AD_val_2_max=0;
+int AD_val_3_max=0;
+int AD_val_4_max=0;//大概两边相等放中间是40几
+int AD_val_1_min=0;
+int AD_val_2_min=0;
+int AD_val_3_min=0;
+int AD_val_4_min=0;
 
-int AD_val_1_max=31000;
-int AD_val_2_max=31000;
-int AD_val_3_max=31000;
-int  AD_val_4_max=31000;
-int  AD_val_5_max=33000;//大概两边相等放中间是40几
-int  AD_val_6_max=33000;
-int   AD_val_1_min=0;
-int   AD_val_2_min=0;
-int   AD_val_3_min=0;
-
-//int  Car_State;
-//int circle_Flag;
-//int turn_Flag;
-//int turn_Flag2=0;
-//int turn_right_Flag=0;
-//int turn_left_Flag=0;
-//int Go_Out_Circle=0;
+int  Car_State;
+int circle_Flag;
+int turn_Flag;
+int turn_Flag2=0;
+int turn_right_Flag=0;
+int turn_left_Flag=0;
+int Go_Out_Circle=0;
 void roadturncal();
 
 
@@ -218,7 +214,6 @@ void Direction_Control(void)
     Turn_Speed=0;
   }
   
-  roadturncal();                       //电磁方向控制；
     Fuzzy(Middle_Err,Delt_error);                       //得到模糊化系数float  Delta_P;float  Delta_D;
     Delta_P=Delta_P*Fuzzy_Kp;                           //Fuzzy_Kp Fuzzy_Kd在founction.c中的参数初始化函数设定值
     Delta_D=Delta_D*Fuzzy_Kd;
@@ -298,10 +293,10 @@ void Moto_Out() //2ms一次
      //my_putchar('B');
   }
  
- //s 电机反转测试代码
+//s 电机反转测试代码
  
-//     FTM_PWM_Duty(FTM0,FTM_CH0,2000);
-//     FTM_PWM_Duty(FTM0,FTM_CH1,0);
+//     FTM_PWM_Duty(FTM0,FTM_CH0,0);
+//     FTM_PWM_Duty(FTM0,FTM_CH1,2000);
 }
  
 
@@ -345,8 +340,8 @@ void roadturncal()  //转向控制程序
 
 // Voltage = adc_ave(ADC_CHANNEL_AD15,ADC_12BIT,2)*3.81;
   
-    AD_val_3 = adc_ave(ADC1_SE9, ADC_16bit,2);  //左边八字电感  
-    AD_val_4 = adc_ave(ADC1_SE12, ADC_16bit,2); //右边八字电感 
+    AD_val_3 = adc_ave(ADC1_SE10, ADC_16bit,2);  //左边八字电感  
+    AD_val_4 = adc_ave(ADC1_SE11, ADC_16bit,2); //右边八字电感 
  
   for(i=0;i<2;i++)     //5个电感     
   {
@@ -410,8 +405,7 @@ void roadturncal()  //转向控制程序
   disgy_AD_val_3 = AD_val_3;
   disgy_AD_val_4 = AD_val_4;
  
-  if(AD_val_1 == 0 && AD_val_2 == 0 )
-    Stop=1;
+
 
 
 ////////////     四电感法,带圆环    /////////////////////////////
@@ -419,7 +413,7 @@ void roadturncal()  //转向控制程序
   Inductor_ADC[1]= dis_AD_val_2; //右
   Inductor_ADC[2]= dis_AD_val_3; //左八
   Inductor_ADC[3]= dis_AD_val_4; //右八
-  if((Inductor_ADC[0]+Inductor_ADC[1])>200) //有电磁信号，没有丢线  
+ // if((Inductor_ADC[0]+Inductor_ADC[1])>200) //有电磁信号，没有丢线  
     Middle_Err=(float)100*(AD_val_2-AD_val_1)/(AD_val_2+AD_val_1) ;  //归一
 
   //s 圆环
@@ -487,7 +481,7 @@ void roadturncal()  //转向控制程序
 //  if( (Inductor_ADC[0]<4) && ((Inductor_ADC[1] - Inductor_ADC[0]) < 450) && ((Inductor_ADC[1] - Inductor_ADC[0]) > 350) )  Middle_Err = 80;
 //  if( (Inductor_ADC[1]<4) && ((Inductor_ADC[0] - Inductor_ADC[1]) < 450) && ((Inductor_ADC[0] - Inductor_ADC[1]) > 350) )  Middle_Err = -80; 
   */
-   //Middle_Err=Middle_Err*(Middle_Err*Middle_Err/1250.0+2)/10;
+   //Middle_Err=Middle_Err*(Middle_Err*Middle_Err/1250.0+2)/10;//s 比例待修正
    
 //   Push_And_Pull(DirectionErr,8,Middle_Err);
 //   if(Calculate_Length<8) 

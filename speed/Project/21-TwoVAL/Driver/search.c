@@ -417,7 +417,8 @@ if((RoadType==205)&&(Distance-Distance200>1)){
          Distance200=1000;
          RoadType=206;
 //       Stop_Brake=1;          //刹车
-//       SetSpeed=0;
+         
+//       SetSpeed=0;                    //s 暂时与205重复
 //       Speed_H=0;
 //       Speed_M=0;
 //       Speed_L=0;
@@ -925,6 +926,9 @@ if(flag_17==1)
    }
 
   Middle_Err= Middle_Err_Sum;                           //更新误差 e.g.小车偏左时误差为正
+  
+  roadturncal();                                        //电磁方向控制
+  
   Push_And_Pull(Previous_Error,10,Middle_Err);          //Middle_Err放入长度为12的数组Previous_Error的首元
   Delt_error=-10*Slope_Calculate(0,10,Previous_Error);  //该变量算出来供在其他文件使用
   

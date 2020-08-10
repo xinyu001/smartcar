@@ -18,16 +18,18 @@ extern uint8 Style;                             //7月7日加
 extern int   AD_val_1;
 extern int   AD_val_2;
 extern int   AD_val_3;
-int   adtmp1,adtmp2,adtmp3;
-extern int   dis_AD_val_1,dis_AD_val_2,dis_AD_val_3 ;
-extern int   disgy_AD_val_1,disgy_AD_val_2,disgy_AD_val_3 ;
+extern int   AD_val_4;
+int  adtmp1,adtmp2,adtmp3,adtmp4;
+extern int   dis_AD_val_1,dis_AD_val_2,dis_AD_val_3,dis_AD_val_4  ;
+extern int   disgy_AD_val_1,disgy_AD_val_2,disgy_AD_val_3,disgy_AD_val_4;
 extern int   AD_val_1_min;
 extern int   AD_val_2_min;
 extern int   AD_val_3_min;
+extern int   AD_val_4_min;
 extern int   AD_val_1_max;
 extern int   AD_val_2_max;
 extern int   AD_val_3_max; 
-
+extern int   AD_val_4_max; 
 
 void init()
 {  
@@ -190,72 +192,46 @@ float adc_ave(ADCn_Ch_e adcn_ch, ADC_nbit bit, int N) //均值滤波
 }
 
 void adc_maxmin_update(){  
-  //显示当前电感归一化值，查看归一化值是否正确，等待按鍵PE5按下后小车出发
-      adtmp1=0;
-      adtmp2=0;
-      adtmp3=0;
-      int i;
-      for(i=0;i<50;i++)
-      {
-        AD_val_1 = adc_ave(ADC1_SE8, ADC_16bit,50);
-        AD_val_2 = adc_ave(ADC1_SE9, ADC_16bit,50); 
-        AD_val_3 = adc_ave(ADC1_SE10, ADC_16bit,50);
-        
-        adtmp1= adtmp1+ AD_val_1;
-        adtmp2= adtmp2+ AD_val_2;
-        adtmp3= adtmp3+ AD_val_3;
-      } 
-      AD_val_1 = adtmp1/50;
-      AD_val_2 = adtmp2/50;
-      AD_val_3 = adtmp3/50;
+//  //显示当前电感归一化值，查看归一化值是否正确，等待按鍵PE5按下后小车出发
+//      adtmp1=0;
+//      adtmp2=0;
+//      adtmp3=0;
+//      adtmp4=0;
+//      int i;
+//      for(i=0;i<10;i++)
+//      {
+//        AD_val_1 = adc_ave(ADC1_SE8, ADC_16bit,30);
+//        AD_val_2 = adc_ave(ADC1_SE13, ADC_16bit,30); 
+//        AD_val_3 = adc_ave(ADC1_SE10, ADC_16bit,30);
+//        AD_val_4 = adc_ave(ADC1_SE11, ADC_16bit,30);
+//        adtmp1= adtmp1+ AD_val_1;
+//        adtmp2= adtmp2+ AD_val_2;
+//        adtmp3= adtmp3+ AD_val_3;
+//        adtmp4= adtmp4+ AD_val_4;
+//      } 
+//      AD_val_1 = adtmp1/10;
+//      AD_val_2 = adtmp2/10;
+//      AD_val_3 = adtmp3/10;
+//      AD_val_4 = adtmp4/10;
       //更新最大最小值
       if(AD_val_1>AD_val_1_max)		AD_val_1_max=AD_val_1;
       if(AD_val_2>AD_val_2_max)		AD_val_2_max=AD_val_2;
       if(AD_val_3>AD_val_3_max)		AD_val_3_max=AD_val_3;
+      if(AD_val_4>AD_val_4_max)		AD_val_4_max=AD_val_4;
 			
       if(AD_val_1<AD_val_1_min)		AD_val_1_min=AD_val_1;
       if(AD_val_2<AD_val_2_min)		AD_val_2_min=AD_val_2;			  
       if(AD_val_3<AD_val_3_min)		AD_val_3_min=AD_val_3;
-		
+      if(AD_val_4<AD_val_4_min)		AD_val_4_min=AD_val_4;	
        //归一化
-      AD_val_1=100*(AD_val_1 - AD_val_1_min)/(AD_val_1_max-AD_val_1_min);
-      AD_val_2=100*(AD_val_2 - AD_val_2_min)/(AD_val_2_max-AD_val_2_min);
-      AD_val_3=100*(AD_val_3 - AD_val_3_min)/(AD_val_3_max-AD_val_3_min);
-  
-  disgy_AD_val_1 = AD_val_1;
-  disgy_AD_val_2 = AD_val_2;
-  disgy_AD_val_3 = AD_val_3;
+//      AD_val_1=100*(AD_val_1 - AD_val_1_min)/(AD_val_1_max-AD_val_1_min);
+//      AD_val_2=100*(AD_val_2 - AD_val_2_min)/(AD_val_2_max-AD_val_2_min);
+//      AD_val_3=100*(AD_val_3 - AD_val_3_min)/(AD_val_3_max-AD_val_3_min);
+//      AD_val_4=100*(AD_val_4 - AD_val_4_min)/(AD_val_4_max-AD_val_4_min);
+//      disgy_AD_val_1 = AD_val_1;
+//      disgy_AD_val_2 = AD_val_2;
+//      disgy_AD_val_3 = AD_val_3;
+//      disgy_AD_val_4 = AD_val_4;
 }
 
-//s 放到control中获取，函数未用到了
-/*void getadval()
-{
-  
-  
-  AD_val_1 = adc_ave(ADC1_SE8, ADC_16bit,10);                      
-  AD_val_2 = adc_ave(ADC1_SE9, ADC_16bit,10);                   
-  AD_val_3 = adc_ave(ADC1_SE10, ADC_16bit,10);   
-  dis_AD_val_1=AD_val_1;
-  dis_AD_val_2=AD_val_2;
-  dis_AD_val_3=AD_val_3;
- 
-  //限幅
-  if(AD_val_1>AD_val_1_max)		AD_val_1=AD_val_1_max;
-  if(AD_val_2>AD_val_2_max)		AD_val_2=AD_val_2_max;
-  if(AD_val_3>AD_val_3_max)		AD_val_3=AD_val_3_max;
- 
-  if(AD_val_1<AD_val_1_min)		AD_val_1=AD_val_1_min;
-  if(AD_val_2<AD_val_2_min)		AD_val_2=AD_val_2_min;			  
-  if(AD_val_3<AD_val_3_min)		AD_val_3=AD_val_3_min;
-  
-  //归一化
-  AD_val_1=100*(AD_val_1 - AD_val_1_min)/(AD_val_1_max-AD_val_1_min);
-  AD_val_2=100*(AD_val_2 - AD_val_2_min)/(AD_val_2_max-AD_val_2_min);
-  AD_val_3=100*(AD_val_3 - AD_val_3_min)/(AD_val_3_max-AD_val_3_min);
-  
-  disgy_AD_val_1 = AD_val_1;
-  disgy_AD_val_2 = AD_val_2;
-  disgy_AD_val_3 = AD_val_3;
-}
 
-*/

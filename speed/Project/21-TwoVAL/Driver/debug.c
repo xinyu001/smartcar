@@ -28,10 +28,10 @@ extern uint8  LMR[3][CAMERA_H];
 extern uint8 Style;
 
 
-extern int   dis_AD_val_1,dis_AD_val_2,dis_AD_val_3 ;
-extern int   disgy_AD_val_1,disgy_AD_val_2,disgy_AD_val_3 ;
-extern int   AD_val_1_min,AD_val_2_min,AD_val_3_min;
-extern int   AD_val_1_max,AD_val_2_max,AD_val_3_max;
+extern int   dis_AD_val_1,dis_AD_val_2,dis_AD_val_3,dis_AD_val_4;
+extern int   disgy_AD_val_1,disgy_AD_val_2,disgy_AD_val_3,disgy_AD_val_4;
+extern int   AD_val_1_min,AD_val_2_min,AD_val_3_min,AD_val_4_min;
+extern int   AD_val_1_max,AD_val_2_max,AD_val_3_max,AD_val_4_max;
 
 void my_putchar(char temp)
 {
@@ -184,18 +184,19 @@ void OLED_Draw_UI()  //画出界面
     OLED_P6x8Str(0,1,"RoadType");
     OLED_PrintValueF(72, 1,RoadType,4);
     
-    OLED_P6x8Str(0,2,"val_1:");
-    OLED_PrintValueF(72, 2,dis_AD_val_1,4);
-    OLED_P6x8Str(0,3,"val_2:");
-    OLED_PrintValueF(72, 3,dis_AD_val_2,4);
-    OLED_P6x8Str(0,4,"val_3:");
-    OLED_PrintValueF(72, 4,dis_AD_val_3,4);
-    OLED_P6x8Str(0,5,"val_1:");
-    OLED_PrintValueF(72, 5,disgy_AD_val_1,4);
-    OLED_P6x8Str(0,6,"val_2:");
-    OLED_PrintValueF(72, 6,disgy_AD_val_2,4);
-    OLED_P6x8Str(0,7,"val_3:");
-    OLED_PrintValueF(72, 7,disgy_AD_val_3,4);
+    OLED_P6x8Str(0,2,"v1:");
+    OLED_PrintValueF(40, 2,dis_AD_val_1,4);
+    OLED_PrintValueF(80, 2,disgy_AD_val_1,4);
+    OLED_P6x8Str(0,3,"v2:");
+    OLED_PrintValueF(40, 3,dis_AD_val_2,4);
+    OLED_PrintValueF(80, 3,disgy_AD_val_2,4);
+    OLED_P6x8Str(0,4,"v3:");
+    OLED_PrintValueF(40, 4,dis_AD_val_3,4);
+    OLED_PrintValueF(80, 4,disgy_AD_val_3,4);
+    OLED_P6x8Str(0,5,"v4:");
+    OLED_PrintValueF(40, 5,dis_AD_val_4,4);
+    OLED_PrintValueF(80, 5,disgy_AD_val_3,4);
+
     
     OLED_Set_Pos(122,7);
     OLED_P6x8Char(Page_Index+48); 
@@ -219,26 +220,38 @@ void OLED_Draw_UI()  //画出界面
     OLED_P6x8Str(0,1,"RoadType");
     OLED_PrintValueF(72, 1,RoadType,4);
     
-    OLED_P6x8Str(0,2,"v1_min:");
-    OLED_PrintValueF(72, 2,AD_val_1_min,4);
-    OLED_P6x8Str(0,3,"v2_min:");
-    OLED_PrintValueF(72, 3,AD_val_2_min,4);
-    OLED_P6x8Str(0,4,"v3_min:");
-    OLED_PrintValueF(72, 4,AD_val_3_min,4);
-    OLED_P6x8Str(0,5,"v1_max:");
-    OLED_PrintValueF(72, 5,AD_val_1_max,4);
-    OLED_P6x8Str(0,6,"v2_max:");
-    OLED_PrintValueF(72, 6,AD_val_2_max,4);
-    OLED_P6x8Str(0,7,"v3_max:");
-    OLED_PrintValueF(72, 7,AD_val_3_max,4);
+    OLED_P6x8Str(0,2,"v1:");
+    OLED_PrintValueF(30, 2,AD_val_1_min,4);
+    OLED_PrintValueF(70, 2,AD_val_1_max,4);
+    OLED_P6x8Str(0,3,"v2:");
+    OLED_PrintValueF(30, 3,AD_val_2_min,4);
+    OLED_PrintValueF(70, 3,AD_val_2_max,4);
+    OLED_P6x8Str(0,4,"v3:");
+    OLED_PrintValueF(30, 4,AD_val_3_min,4);
+    OLED_PrintValueF(70, 4,AD_val_3_max,4);
+    OLED_P6x8Str(0,5,"v4:");
+    OLED_PrintValueF(30, 5,AD_val_4_min,4);  
+    OLED_PrintValueF(70, 5,AD_val_4_max,4);
+
     
     OLED_Set_Pos(122,7);
     OLED_P6x8Char(Page_Index+48); 
   
 }
-///第六页数据
+//第六页数据
     else if(Page_Index==5){
       
+    OLED_P6x8Str(0,2,"Distance");
+    OLED_PrintValueF(72, 2,Distance,4);
+    OLED_P6x8Str(0,3,"RunTime");
+    OLED_PrintValueF(72, 3,RunTime,4);
+    OLED_P6x8Str(0,4,"Average_Spd");
+    OLED_PrintValueF(72, 4,AverageSpeed,4);  
+    OLED_P6x8Str(0,5,"GYRO_OFF_Z");
+    OLED_PrintValueF(72, 5,Middle_Err,4);  
+    OLED_P6x8Str(0,6,"NowSPEED");
+    OLED_PrintValueF(72, 6,CarSpeed,4);
+ 
     OLED_Set_Pos(122,7);
     OLED_P6x8Char(Page_Index+48); 
     }
