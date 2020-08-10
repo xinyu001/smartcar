@@ -26,7 +26,7 @@ float Turn_Out;
 float Turn_Angle_Integral;
 
 /**舵机相关**/
-int sever_middle=230;                   //值越大越偏右  
+int sever_middle=228;                   //值越大越偏右  
 int sever_range=55;                     //19(实际范围)//25(原)//28  //s 
 
 //模糊化系数
@@ -49,6 +49,37 @@ extern int flag,flag_obstacle;
 
 float Distance1=10000;
 uint8 flag2=0,flag_100;
+
+// 电磁转向AD控制参数
+uint16   AD_Value[2][5],AD_Value1[2],AD_V[2][5];
+int AD_val_1;
+int AD_val_2;
+int AD_val_3;
+int AD_val_4;
+int AD_val_5;
+int AD_val_6;
+int dis_AD_val_1,dis_AD_val_2,dis_AD_val_3,dis_AD_val_4,dis_AD_val_5,dis_AD_val_6 ;
+int disgy_AD_val_1,disgy_AD_val_2,disgy_AD_val_3,disgy_AD_val_4,disgy_AD_val_5,disgy_AD_val_6 ;
+
+int AD_val_1_max=31000;
+int AD_val_2_max=31000;
+int AD_val_3_max=31000;
+int  AD_val_4_max=31000;
+int  AD_val_5_max=33000;//大概两边相等放中间是40几
+int  AD_val_6_max=33000;
+int   AD_val_1_min=0;
+int   AD_val_2_min=0;
+int   AD_val_3_min=0;
+
+//int  Car_State;
+//int circle_Flag;
+//int turn_Flag;
+//int turn_Flag2=0;
+//int turn_right_Flag=0;
+//int turn_left_Flag=0;
+//int Go_Out_Circle=0;
+void roadturncal();
+
 
 void Get_Speed()      //可能是4ms执行一次     //5ms执行一次
 {  
@@ -187,7 +218,7 @@ void Direction_Control(void)
     Turn_Speed=0;
   }
   
-  
+  roadturncal();                       //电磁方向控制；
     Fuzzy(Middle_Err,Delt_error);                       //得到模糊化系数float  Delta_P;float  Delta_D;
     Delta_P=Delta_P*Fuzzy_Kp;                           //Fuzzy_Kp Fuzzy_Kd在founction.c中的参数初始化函数设定值
     Delta_D=Delta_D*Fuzzy_Kd;
@@ -218,140 +249,15 @@ void Direction_Control(void)
     if(lost_line==1)
     {
        FTM_PWM_Duty(FTM1,FTM_CH0,270);    //right  139
-       uart_putchar(UART0,'Y');
+       //uart_putchar(UART0,'Y');
     }
     else if(lost_line==2)
     {
        FTM_PWM_Duty(FTM1,FTM_CH0,190);    //left  85
-       uart_putchar(UART0,'Z');
+       //uart_putchar(UART0,'Z');
     }
   }
- /* if(RoadType==100)
-  {
-    if(Display2<45000 || Display1>Display2)
-      {
-          FTM_PWM_Duty(FTM1,FTM_CH0,190);
-      }
-    else if(Display1<57200)
-      {
-          if(Display2-Display1>500)
-            {
-                FTM_PWM_Duty(FTM1,FTM_CH0,250);
-            }
-      }
- else if(Display1>57300)
-     {
-         if(Display2-Display1<300)
-          {
-            FTM_PWM_Duty(FTM1,FTM_CH0,190);
-          } 
-      }
-  }*/
   
-/*if(RoadType==100)
-{
- // FTM_PWM_Duty(FTM1,FTM_CH0,250);
-  if(ABS(Display1-Display2)<5000)
- {FTM_PWM_Duty(FTM1,FTM_CH0,230);}
-  else if(Display2-Display1>8000)
-  {
-    FTM_PWM_Duty(FTM1,FTM_CH0,250);
-  if(Display1<10000)
-  {SetSpeed=0.30;}
-  }
-  else if(Display1-Display2>10000)
-  {FTM_PWM_Duty(FTM1,FTM_CH0,190);}
-}*/
-  
-    if(RoadType==50 && flag==1)
-  //if(flag==1)
-     {
-     //  flag2=1;
-    //   SetSpeed=0.3;
-      if(vol0>15000)
-      {
-
-       FTM_PWM_Duty(FTM1,FTM_CH0,190);   //190，270往左
-     //  RoadType=50;
-       if(vol0>16000 && vol0<18000) //25500
-       {Distance1=Distance;
-       //flag_100=1;
-       uart_putchar(UART0,'X');
-       }
-      }
-     }
-       if(RoadType==50 && flag==1)
-     // if(flag==1)
-     {
-       if((Distance-Distance1)<=0.9 && (Distance-Distance1)>0)  //1.8
-        { FTM_PWM_Duty(FTM1,FTM_CH0,190);   
-        uart_putchar(UART0,'A');
-        }
-        else if((Distance-Distance1)>0.9 && (Distance-Distance1)<=1.7)
-        { FTM_PWM_Duty(FTM1,FTM_CH0,250); 
-        uart_putchar(UART0,'B');
-        }
-        else if ((Distance-Distance1)>1.7 && (Distance-Distance1)<=2.5)
-        { FTM_PWM_Duty(FTM1,FTM_CH0,230);
-       uart_putchar(UART0,'C'); 
-        }
-        else if ((Distance-Distance1)>2.5 && (Distance-Distance1)<=3.3)
-        { FTM_PWM_Duty(FTM1,FTM_CH0,250);
-        uart_putchar(UART0,'D'); 
-        }
-        else if ((Distance-Distance1)>3.3 && (Distance-Distance1)<=3.9)
-        { FTM_PWM_Duty(FTM1,FTM_CH0,190); 
-       uart_putchar(UART0,'E'); 
-        if((Distance-Distance1)>3.8)
-        {RoadType=0;
-       // flag=0;
-        flag_obstacle=0;}
-        }
-    /*    else if((Distance-Distance1)>4.2)
-        { RoadType=0;
-        flag=0;
-        Style=1;
-        uart_putchar(UART0,'F'); 
-       // flag2=0;
-        }*/
-       /* else
-        {
-          RoadType=0;
-          flag=0;
-          uart_putchar(UART0,'G'); 
-          FTM_PWM_Duty(FTM1,FTM_CH0,sever_middle + PID_TURN.OUT);   //舵机的值在0-180 反复变化
-        } */
-  //   }
-    }
-     /* if(RoadType==50 && flag==1)
-      { 
-       if((Distance-Distance1)>5)
-        {
-          uart_putchar(UART0,'G'); 
-          RoadType=0;
-          flag=0;
-        }
-      }*/
-if(RoadType==100)
-{
- // FTM_PWM_Duty(FTM1,FTM_CH0,250);
-  if(ABS(Display1-Display2)<2000)
- {FTM_PWM_Duty(FTM1,FTM_CH0,230);}
- else if(((Display1-Display2)>-5000) && ((Display1-Display2)<-1000))
- {FTM_PWM_Duty(FTM1,FTM_CH0,235);}
-  else if(Display2-Display1>8000)
-  {
-    FTM_PWM_Duty(FTM1,FTM_CH0,250);
-  if(Display1<10000)
-  {SetSpeed=0.30;}
-  }
-  else if((Display1-Display2>5500) && (Display1-Display2>10000))
-  {FTM_PWM_Duty(FTM1,FTM_CH0,200);}
-  else if(Display1-Display2>10000)
-  {FTM_PWM_Duty(FTM1,FTM_CH0,190);}
-}
-
-//   FTM_PWM_Duty(FTM1,FTM_CH0,sever_middle);
 }
 
 
@@ -368,10 +274,7 @@ void Moto_Out() //2ms一次
  MotorOut=PID_SPEED.OUT;
  
  
- //正值限幅，防止减速过大
- 
-  
-  if(MotorOut>0.99)MotorOut=0.99;                     
+  if(MotorOut>0.99)MotorOut=0.99;               //正值限幅，防止减速过大       
   if(MotorOut<-0.99)MotorOut=-0.99; 
  
 
@@ -380,18 +283,7 @@ void Moto_Out() //2ms一次
     MotorOut=0;
     LED_BLUE_ON;
  }
- if(Stop_Brake==1&&wycnt<=10000){                //终点刹车车轮倒转时间200ms
-   
-   FTM_PWM_Duty(FTM0,FTM_CH0,0);
-     
-   FTM_PWM_Duty(FTM0,FTM_CH1,8000);
-  
-   wycnt++;                      
-  
- }
 
- 
- 
    if(MotorOut>=0) //正转
   {
      FTM_PWM_Duty(FTM0,FTM_CH0,MotorOut*10000);//占空比精度为10000  第三个参数为占空比分子
@@ -405,7 +297,11 @@ void Moto_Out() //2ms一次
      FTM_PWM_Duty(FTM0,FTM_CH1,-MotorOut*10000);
      //my_putchar('B');
   }
-
+ 
+ //s 电机反转测试代码
+ 
+//     FTM_PWM_Duty(FTM0,FTM_CH0,2000);
+//     FTM_PWM_Duty(FTM0,FTM_CH1,0);
 }
  
 
@@ -431,3 +327,196 @@ float  Middle_Err_Filter(float middle_err)    //中心偏差滤波    从未使用
   Middle_Err_Fltered=Pre3_Error[0]*0.4+Pre3_Error[1]*0.3+Pre3_Error[2]*0.2+Pre3_Error[3]*0.1;
   return Middle_Err_Fltered;
 }
+
+//电磁部分
+void roadturncal()  //转向控制程序  
+{ static uint8 turn_Flag2;
+  uint16 temp,i,j,k,ad_sum[2],AD_sum[2]; 
+  int16 Inductor_ADC[4];
+  float err;
+// 电感AD值滤波程序，比较慢 ，底层采集数据自动进行非负处理
+  for(i=0;i<5;i++)
+  {
+
+
+     AD_Value[0][i] = adc_ave(ADC1_SE8, ADC_16bit,3);  //左电感  
+     AD_Value[1][i] = adc_ave(ADC1_SE13, ADC_16bit,3);  //右电感 
+  }
+
+// Voltage = adc_ave(ADC_CHANNEL_AD15,ADC_12BIT,2)*3.81;
+  
+    AD_val_3 = adc_ave(ADC1_SE9, ADC_16bit,2);  //左边八字电感  
+    AD_val_4 = adc_ave(ADC1_SE12, ADC_16bit,2); //右边八字电感 
+ 
+  for(i=0;i<2;i++)     //5个电感     
+  {
+       for(j=0;j<4;j++)  //五个数据排序
+       {
+          for(k=0;k<4-j;k++)
+          {
+             if(AD_Value[i][k] > AD_Value[i][k+1])  //前面的比后面的大  则进行交换
+             {
+                temp = AD_Value[i][k+1];
+                AD_Value[i][k+1] = AD_Value[i][k];
+                AD_Value[i][k] = temp;
+             }
+          }
+       }
+  }
+  for(i=0;i<2;i++)    //求中间三项的和
+    {
+       ad_sum[i] = AD_Value[i][1] + AD_Value[i][2] + AD_Value[i][3];       
+       AD_Value1[i] = (int16)(ad_sum[i] / 3);
+    }
+  
+  for(i = 0;i < 4;i++)
+    {
+        AD_V[0][i] = AD_V[0][i + 1];
+        AD_V[1][i] = AD_V[1][i + 1];
+    }
+    for(i=0;i<2;i++)
+    {
+        AD_V[i][4] =  AD_Value1[i];
+    }
+    AD_sum[0]=0;
+    AD_sum[1]=0;
+    for(i = 0;i < 5;i ++)
+    {
+        AD_sum[0] += AD_V[0][i];
+        AD_sum[1] += AD_V[1][i];
+    }
+  AD_val_1=AD_sum[0]/5;  //左电感
+  AD_val_2=AD_sum[1]/5;  //右电感
+  
+  dis_AD_val_1=AD_val_1;  //左
+  dis_AD_val_2=AD_val_2;  //右
+  dis_AD_val_3=AD_val_3;  //左八
+  dis_AD_val_4=AD_val_4;  //右八 
+  
+  //限幅
+  if(AD_val_1>AD_val_1_max)		AD_val_1=AD_val_1_max;
+  if(AD_val_2>AD_val_2_max)		AD_val_2=AD_val_2_max;
+  if(AD_val_3>AD_val_3_max)		AD_val_3=AD_val_3_max;
+  if(AD_val_4>AD_val_4_max)		AD_val_4=AD_val_4_max;
+  
+  //归一化
+  AD_val_1=100*(AD_val_1 )/(AD_val_1_max);
+  AD_val_2=100*(AD_val_2 )/(AD_val_2_max);
+  AD_val_3=100*(AD_val_3 )/(AD_val_3_max);
+  AD_val_4=100*(AD_val_4 )/(AD_val_4_max);
+ 
+  disgy_AD_val_1 = AD_val_1;
+  disgy_AD_val_2 = AD_val_2;
+  disgy_AD_val_3 = AD_val_3;
+  disgy_AD_val_4 = AD_val_4;
+ 
+  if(AD_val_1 == 0 && AD_val_2 == 0 )
+    Stop=1;
+
+
+////////////     四电感法,带圆环    /////////////////////////////
+  Inductor_ADC[0]= dis_AD_val_1; //左
+  Inductor_ADC[1]= dis_AD_val_2; //右
+  Inductor_ADC[2]= dis_AD_val_3; //左八
+  Inductor_ADC[3]= dis_AD_val_4; //右八
+  if((Inductor_ADC[0]+Inductor_ADC[1])>200) //有电磁信号，没有丢线  
+    Middle_Err=(float)100*(AD_val_2-AD_val_1)/(AD_val_2+AD_val_1) ;  //归一
+
+  //s 圆环
+  
+  /*
+  //下面的各个判定参数需要实际测量来修正
+  if(circle_Flag==0&&((Inductor_ADC[0]>2500 && Inductor_ADC[1]>1300 && Inductor_ADC[3]>800) || (Inductor_ADC[1]>2500 && Inductor_ADC[0]>1300 && Inductor_ADC[2]>800)))//(Inductor_ADC[0]>3000||Inductor_ADC[1]>3000)&&
+  {
+     circle_Flag=1;  //前言可能是圆环
+     if(Inductor_ADC[0]>Inductor_ADC[1]&&Inductor_ADC[2]<Inductor_ADC[3])  //左圆环
+     {
+        turn_left_Flag=1;
+     }
+     if(Inductor_ADC[1]>Inductor_ADC[0]&&Inductor_ADC[2]>Inductor_ADC[3])  //右圆环
+     {
+        turn_right_Flag=1;
+     }
+     if(turn_right_Flag==0&&turn_left_Flag==0) //误判
+     {
+        circle_Flag=0;
+     }
+  }
+  err=Inductor_ADC[3]-Inductor_ADC[2]; //八字电感决定进圆环
+  if(ABS(err)<150&&circle_Flag==1&&turn_Flag==0 && Inductor_ADC[2]>1800 && Inductor_ADC[3]>1800)
+  {
+     turn_Flag=1; //进入圆环
+     //BEEP_ON;
+  }
+  if(turn_Flag==1 && turn_Flag2==0) //圆环内部
+  {
+        if(turn_left_Flag==1)
+        {
+           if((Inductor_ADC[0]+Inductor_ADC[3])>100)
+            Middle_Err=(float)100*(AD_val_4-AD_val_1)/(AD_val_4+AD_val_1) ;
+        }
+        if(turn_right_Flag==1)
+        {
+          if((Inductor_ADC[1]+Inductor_ADC[2])>100)
+            Middle_Err=(float)100*(AD_val_2-AD_val_3)/(AD_val_2+AD_val_3) ;
+        }
+  }
+  if(turn_left_Flag==1&&(Inductor_ADC[0]>Inductor_ADC[1])&&turn_Flag==1&&Inductor_ADC[3]<360)
+  {
+     turn_Flag2=1;  //准备出环
+  }
+  if(turn_right_Flag==1&&(Inductor_ADC[0]<Inductor_ADC[1])&&turn_Flag==1&&Inductor_ADC[2]<360)
+  {
+     turn_Flag2=1;  //准备出环
+  }
+  if(turn_Flag2==1 && ((turn_left_Flag==1 && Inductor_ADC[0]>2500 && Inductor_ADC[1]>1000) || (turn_right_Flag==1 && Inductor_ADC[1]>2500 && Inductor_ADC[0]>1000)))
+  {
+    Go_Out_Circle=1;  //出环
+  }
+  if(Go_Out_Circle==2) //完成一次圆环动作//s 2？不是1吗？？？
+  {
+     turn_Flag=0; 
+     turn_Flag2=0;
+     turn_right_Flag=0;
+     turn_left_Flag=0;
+     circle_Flag=0;
+     Go_Out_Circle=0;
+     //BEEP_OFF;
+  }
+  ///偏离很大时
+//  if( (Inductor_ADC[0]<4) && ((Inductor_ADC[1] - Inductor_ADC[0]) < 450) && ((Inductor_ADC[1] - Inductor_ADC[0]) > 350) )  Middle_Err = 80;
+//  if( (Inductor_ADC[1]<4) && ((Inductor_ADC[0] - Inductor_ADC[1]) < 450) && ((Inductor_ADC[0] - Inductor_ADC[1]) > 350) )  Middle_Err = -80; 
+  */
+   //Middle_Err=Middle_Err*(Middle_Err*Middle_Err/1250.0+2)/10;
+   
+//   Push_And_Pull(DirectionErr,8,Middle_Err);
+//   if(Calculate_Length<8) 
+//   {  
+//     Calculate_Length++;
+//   }
+//   else
+//   {
+//     Error_Delta = -10*Slope_Calculate(0,Calculate_Length,DirectionErr);//求得斜率
+//   }
+//   DuoP=PID_TURN_Lie.P*ABS(Middle_Err);
+//   if(DuoP > 0.035)
+//      DuoP=0.035;
+//   //PID_TURN.pout= DuoP * Middle_Err;  //P=0.055
+//   //PID_TURN.dout= PID_TURN_Lie.D * Error_Delta;  //D=0.006
+//   Turn_Out =DuoP * Middle_Err + PID_TURN_Lie.D * Error_Delta + PID_TURN.D * Turn_Speed;
+//   Error_Delta_Deceleration=0.7;
+//  if(Turn_Out >= TURNPWM_MAX) 
+//  {
+//    Turn_Out=TURNPWM_MAX;
+//  }
+//  if(Turn_Out <= -TURNPWM_MAX) 
+//  {
+//    Turn_Out=-TURNPWM_MAX;
+//  }
+// //////////////  四电感法结束   /////////////////////////////  
+//  
+//  PID_TURN_Lie.OUT=Turn_Out;
+}
+
+
+

@@ -46,7 +46,7 @@ void  main(void)
   int sum;
   int i;
     
-
+  if(1){                        //检测电感最大最小值
    for(i=0;i<50;i++)                    //检测各电感的最小值
    {
      AD_val_1 =adc_once(ADC1_SE8, ADC_16bit);
@@ -91,13 +91,13 @@ void  main(void)
      DELAY_MS(1);
    }
   
-  
+  }
   while(1)
   {
      
-      getadval();                               //获取电磁值
+      //getadval();                               //获取电磁值
       if(Stop){
-      adc_maxmin_update();                      //更新电磁的最大最小值
+      //adc_maxmin_update();                      //更新电磁的最大最小值
       }
           
       Check_BottonPress();
@@ -194,6 +194,7 @@ void PIT_IRQHandler()  //2ms一次中断
         Starting=0;
         Stop=0;                                 //Stop=1电机不输出
         RoadType=200;                           //s 起步时赛道类型为200，出库
+        RoadType=100;                           //s 测试电磁
         LED_BLUE_OFF;
         LED_GREEN_OFF;
         BEEP_OFF;                               //蜂鸣器响一段时间关掉

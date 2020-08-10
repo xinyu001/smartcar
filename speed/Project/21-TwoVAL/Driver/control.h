@@ -3,6 +3,14 @@
 typedef struct PID{float P,pout,I,iout,D,dout,OUT;}PID;
 extern  PID PID_SPEED,PID_TURN;
 
+//µÁ¥≈œ‡πÿ
+extern int   AD_val_1_min;
+extern int   AD_val_2_min;
+extern int   AD_val_3_min;
+extern int   AD_val_1_max;
+extern int   AD_val_2_max;
+extern int   AD_val_3_max; 
+
 extern uint8 Style;
 extern int Speed_Filter_Times;
 extern int SpeedCount;

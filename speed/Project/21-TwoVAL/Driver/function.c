@@ -15,26 +15,18 @@ extern float Control_Para[15];
 extern uint8 Style;                             //7月7日加
 
 //s  电磁参数
-int   AD_val_1=0;
-int   AD_val_2=0;
-int   AD_val_3=0;
+extern int   AD_val_1;
+extern int   AD_val_2;
+extern int   AD_val_3;
 int   adtmp1,adtmp2,adtmp3;
-int   dis_AD_val_1,dis_AD_val_2,dis_AD_val_3 ;
-int   disgy_AD_val_1,disgy_AD_val_2,disgy_AD_val_3 ;
-int   AD_val_1_min=0;
-int   AD_val_2_min=0;
-int   AD_val_3_min=0;
-int   AD_val_1_max=0;
-int   AD_val_2_max=0;
-int   AD_val_3_max=0; 
-unsigned char  Dir_last=0;
-int  dir_error_pre=0;
-int  dir_error=0;
-int dis_error;
-unsigned char zz;
-
-
-
+extern int   dis_AD_val_1,dis_AD_val_2,dis_AD_val_3 ;
+extern int   disgy_AD_val_1,disgy_AD_val_2,disgy_AD_val_3 ;
+extern int   AD_val_1_min;
+extern int   AD_val_2_min;
+extern int   AD_val_3_min;
+extern int   AD_val_1_max;
+extern int   AD_val_2_max;
+extern int   AD_val_3_max; 
 
 
 void init()
@@ -235,8 +227,8 @@ void adc_maxmin_update(){
   disgy_AD_val_3 = AD_val_3;
 }
 
-
-void getadval()
+//s 放到control中获取，函数未用到了
+/*void getadval()
 {
   
   
@@ -266,4 +258,4 @@ void getadval()
   disgy_AD_val_3 = AD_val_3;
 }
 
-
+*/
