@@ -36,7 +36,7 @@ extern int   AD_val_3_max;
 
 
 
-void  main(void)
+ void  main(void)
 { //unsigned char xx,yy;
   uart_init(UART0,9600);
   uart_putchar(UART0,'O');
@@ -96,7 +96,7 @@ void  main(void)
   while(1)
   {
      
-      getadval();                               //获取电磁值
+      //getadval();                               //获取电磁值
       if(Stop){
       adc_maxmin_update();                      //更新电磁的最大最小值
       }
@@ -215,7 +215,7 @@ void PIT_IRQHandler()  //2ms一次中断
    Speed_Control_Output();//2ms一次 计算速度控制量PID_SPEED.OUT
    Moto_Out();//2ms一次
    
-   if(Stop_Brake==1 && wycnt<=100)//终点刹车车轮倒转时间200ms
+   if(Stop_Brake==1 && wycnt<=250)//终点刹车车轮倒转时间200ms
   {
     wycnt++;                      
   }

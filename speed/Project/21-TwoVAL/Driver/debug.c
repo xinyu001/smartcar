@@ -240,8 +240,8 @@ void OLED_Draw_UI()  //画出界面
 ///第六页数据
     else if(Page_Index==5){
   
-    OLED_P6x8Str(0,1,"Distance");
-    OLED_PrintValueF(72, 1,Distance,4);
+    OLED_P6x8Str(0,1,"Turn_Speed");
+    OLED_PrintValueF(72, 1,Turn_Speed,4);
     OLED_P6x8Str(0,2,"RunTime");
     OLED_PrintValueF(72, 2,RunTime,4);
     OLED_P6x8Str(0,3,"Average_Spd");
@@ -251,10 +251,14 @@ void OLED_Draw_UI()  //画出界面
     OLED_P6x8Str(0,5,"NowSPEED");
     OLED_PrintValueF(72, 5,CarSpeed,4);
     
-    OLED_PrintValueF(72, 6,Stop_Brake,4);
-    OLED_PrintValueF(72, 7,wycnt,4);
-    
+//    OLED_PrintValueF(72, 6,Stop_Brake,4);
+//    OLED_PrintValueF(72, 7,wycnt,4);
+    OLED_P6x8Str(0,6,"PID_TURN.OUT");
+    OLED_PrintValueF(72, 6,PID_TURN.OUT,4);
+    OLED_P6x8Str(0,7,"PID_SPEED.OUT");
+    OLED_PrintValueF(72, 7,PID_SPEED.OUT,4);
 
+    
     OLED_Set_Pos(122,7);
     OLED_P6x8Char(Page_Index+48); 
     }
