@@ -26,7 +26,7 @@ float Turn_Out;
 float Turn_Angle_Integral;
 
 /**舵机相关**/
-int sever_middle=225;                   //值越大越偏右 225ganghao 
+int sever_middle=166;                   //值越大越偏右 225ganghao 
 int sever_range=30;                     //19(实际范围)//25(原)//28  //s 55
 
 //模糊化系数
@@ -77,7 +77,6 @@ void Speed_Control(void)                        //更新SpeedControlOutOld  计算Sp
   uint8 i;
   
   
-  //SpeedError=0.42-CarSpeed;//测试
   //现在让小车有变速功能
   if(Style==0)//不加速，1
     SpeedError=SetSpeed-CarSpeed;               //车速偏小 误差为正
@@ -99,7 +98,7 @@ void Speed_Control(void)                        //更新SpeedControlOutOld  计算Sp
       }
       else
       {
-        SpeedError=0.7-CarSpeed;                //慢速
+        SpeedError=Speed_M-CarSpeed;                //中速
 
       }
     }
@@ -118,7 +117,7 @@ void Speed_Control(void)                        //更新SpeedControlOutOld  计算Sp
     }
     else if(RoadType==3 || RoadType==4 || RoadType==5 || RoadType==13 || RoadType==14  || RoadType==15) //18
     {
-      SpeedError=0.65-CarSpeed;                 //减速
+      SpeedError=Speed_M-CarSpeed;                 //减速
      // SpeedError=0.15-CarSpeed; 
      // SpeedError=0; 
      // SetSpeed=0;
@@ -148,7 +147,7 @@ void Speed_Control(void)                        //更新SpeedControlOutOld  计算Sp
 
     
     else{                                       //RoadType==1,2,7,12,17,18
-      SpeedError=Speed_M-CarSpeed; //速
+      SpeedError=Speed_L-CarSpeed; //高速
     }
   }
 
@@ -187,14 +186,14 @@ void Direction_Control(void)
     Turn_Speed=0;
   }
   
-  
+    
     Fuzzy(Middle_Err,Delt_error);                       //得到模糊化系数float  Delta_P;float  Delta_D;
     Delta_P=Delta_P*Fuzzy_Kp;                           //Fuzzy_Kp Fuzzy_Kd在founction.c中的参数初始化函数设定值
     Delta_D=Delta_D*Fuzzy_Kd;
 
   PID_TURN.pout=(PID_TURN.P+Delta_P)*Middle_Err;        //Middle_Err
   PID_TURN.dout=(PID_TURN.D+Delta_D)*Turn_Speed*0.1;
-  Turn_Out= PID_TURN.pout + PID_TURN.dout;
+  Turn_Out= PID_TURN.pout - PID_TURN.dout;
   
   Turn_Out=Turn_Out_Filter(Turn_Out);                   //转动输出滤波 
   
@@ -332,24 +331,25 @@ void Direction_Control(void)
           flag=0;
         }
       }*/
-if(RoadType==100)
-{
- // FTM_PWM_Duty(FTM1,FTM_CH0,250);
-  if(ABS(Display1-Display2)<2000)
- {FTM_PWM_Duty(FTM1,FTM_CH0,230);}
- else if(((Display1-Display2)>-5000) && ((Display1-Display2)<-1000))
- {FTM_PWM_Duty(FTM1,FTM_CH0,235);}
-  else if(Display2-Display1>8000)
-  {
-    FTM_PWM_Duty(FTM1,FTM_CH0,250);
-  if(Display1<10000)
-  {SetSpeed=0.30;}
-  }
-  else if((Display1-Display2>5500) && (Display1-Display2>10000))
-  {FTM_PWM_Duty(FTM1,FTM_CH0,200);}
-  else if(Display1-Display2>10000)
-  {FTM_PWM_Duty(FTM1,FTM_CH0,190);}
-}
+  //s 8.11注释
+//if(RoadType==100)
+//{
+// // FTM_PWM_Duty(FTM1,FTM_CH0,250);
+//  if(ABS(Display1-Display2)<2000)
+// {FTM_PWM_Duty(FTM1,FTM_CH0,230);}
+// else if(((Display1-Display2)>-5000) && ((Display1-Display2)<-1000))
+// {FTM_PWM_Duty(FTM1,FTM_CH0,235);}
+//  else if(Display2-Display1>8000)
+//  {
+//    FTM_PWM_Duty(FTM1,FTM_CH0,250);
+//  if(Display1<10000)
+//  {SetSpeed=0.30;}
+//  }
+//  else if((Display1-Display2>5500) && (Display1-Display2>10000))
+//  {FTM_PWM_Duty(FTM1,FTM_CH0,200);}
+//  else if(Display1-Display2>10000)
+//  {FTM_PWM_Duty(FTM1,FTM_CH0,190);}
+//}
 
 //   FTM_PWM_Duty(FTM1,FTM_CH0,sever_middle);
 }
