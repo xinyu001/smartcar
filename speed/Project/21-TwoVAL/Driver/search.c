@@ -294,6 +294,7 @@ void Search()
           
           RoadType=205;                                 //s 8.1 看到起跑线，准备入库
           Distance200=Distance;                         //记录当前距离
+          Stop_Brake=1;          //刹车
           SetSpeed=0;
           Speed_H=0;
           Speed_M=0;
@@ -501,7 +502,7 @@ if((RoadType==200)&&(Distance>1)){
 if((RoadType==205)&&(Distance-Distance200>1)){
          Distance200=1000;
          RoadType=206;
-//       Stop_Brake=1;          //刹车
+//         Stop_Brake=0;          //停止刹车
 //       SetSpeed=0;
 //       Speed_H=0;
 //       Speed_M=0;
@@ -510,52 +511,52 @@ if((RoadType==205)&&(Distance-Distance200>1)){
 
 
 
-if(vol0>16000 && vol1>16000 && vol0<26000 && vol1<26000) //   17900
- {
-   if(ABS(vol0-vol1)<800)                               //1500,1000
-   { count++; }
-   if(count>5)                                          //5
-   {
-   RoadType=50;
-  // flag_obstacle=1;
-   count=0;
-   }
-  // else if(ABS(vol0-vol1)<3000 && ABS(vol0-vol1)>1000)
-  // RoadType=51;
-  // if(abs(vol0-vol1)<6000)////////////7月4日，区分坡道和横断
-   //   flag=1;  //////////7月4日，提前判断横断路障，减速
-   //  if(vol0<18200 && vol1<14200)
-   //   RoadType=51;
- //  else
- //    flag=0;
- //  if(flag==1)
-   if(RoadType==50)
-   {
-      if(i<5)
-      {
-            if(edgposition[i]==0)               //表示从该行开始往上图像全黑 置为丢线  lost_line=0则舵机正常转向
-        {
-            jishu++;
-            if(jishu>3)
-            {
-              uart_putchar(UART0,'V');
-              flag=1;
-              //  RoadType=51;                    //7月4日，进入转向程序
-             // Style=0;
-              
-              jishu=0;
-             
-            }
-        }
-      }
-   }
-}
-
- if(RoadType==50)
- {
-
-    lost_line=3;
- }
+//if(vol0>16000 && vol1>16000 && vol0<26000 && vol1<26000) //   17900
+// {
+//   if(ABS(vol0-vol1)<800)                               //1500,1000
+//   { count++; }
+//   if(count>5)                                          //5
+//   {
+//   RoadType=50;
+//  // flag_obstacle=1;
+//   count=0;
+//   }
+//  // else if(ABS(vol0-vol1)<3000 && ABS(vol0-vol1)>1000)
+//  // RoadType=51;
+//  // if(abs(vol0-vol1)<6000)////////////7月4日，区分坡道和横断
+//   //   flag=1;  //////////7月4日，提前判断横断路障，减速
+//   //  if(vol0<18200 && vol1<14200)
+//   //   RoadType=51;
+// //  else
+// //    flag=0;
+// //  if(flag==1)
+//   if(RoadType==50)
+//   {
+//      if(i<5)
+//      {
+//            if(edgposition[i]==0)               //表示从该行开始往上图像全黑 置为丢线  lost_line=0则舵机正常转向
+//        {
+//            jishu++;
+//            if(jishu>3)
+//            {
+//              uart_putchar(UART0,'V');
+//              flag=1;
+//              //  RoadType=51;                    //7月4日，进入转向程序
+//             // Style=0;
+//              
+//              jishu=0;
+//             
+//            }
+//        }
+//      }
+//   }
+//}
+//
+// if(RoadType==50)
+// {
+//
+//    lost_line=3;
+// }
 
  
  /*else

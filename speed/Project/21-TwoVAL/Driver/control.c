@@ -27,7 +27,7 @@ float Turn_Angle_Integral;
 
 /**舵机相关**/
 int sever_middle=230;                   //值越大越偏右  
-int sever_range=55;                     //19(实际范围)//25(原)//28  //s 
+int sever_range=55;                     //19(实际范围)//25(原)//28  //s 55
 
 //模糊化系数
 float  Delta_P;
@@ -380,18 +380,20 @@ void Moto_Out() //2ms一次
     MotorOut=0;
     LED_BLUE_ON;
  }
- if(Stop_Brake==1&&wycnt<=10000){                //终点刹车车轮倒转时间200ms
+ if(Stop_Brake==1 && wycnt<=100 ){                //终点刹车车轮倒转
    
-   FTM_PWM_Duty(FTM0,FTM_CH0,0);
-     
-   FTM_PWM_Duty(FTM0,FTM_CH1,8000);
-  
-   wycnt++;                      
-  
+   FTM_PWM_Duty(FTM0,FTM_CH0,0);     
+   FTM_PWM_Duty(FTM0,FTM_CH1,2220); 
  }
+  if(wycnt>100 ){                //终点刹车车轮倒转
+   
+   FTM_PWM_Duty(FTM0,FTM_CH0,0);     
+   FTM_PWM_Duty(FTM0,FTM_CH1,0); 
+ }
+ 
 
- 
- 
+
+ if(!Stop_Brake){
    if(MotorOut>=0) //正转
   {
      FTM_PWM_Duty(FTM0,FTM_CH0,MotorOut*10000);//占空比精度为10000  第三个参数为占空比分子
@@ -405,7 +407,8 @@ void Moto_Out() //2ms一次
      FTM_PWM_Duty(FTM0,FTM_CH1,-MotorOut*10000);
      //my_putchar('B');
   }
-
+ }
+ 
 }
  
 

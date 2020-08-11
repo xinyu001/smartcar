@@ -32,7 +32,7 @@ extern int sever_middle;
 extern int sever_range;
 
 extern uint8 Starting,Stop;
-
+extern int wycnt;
 void Get_Attitude();
 void Get_Speed();
 void Strong_Turn();
