@@ -17,8 +17,7 @@ void sendimg();
 extern uint8 Style;
 extern uint8 RoadType;
 unsigned char cmos[60][80]={0};                         //进行处理的数据
-extern int wycnt;
-extern int Stop_Brake;
+
                                                         //电磁参数 s 8.5
 extern int   AD_val_1;
 extern int   AD_val_2;
@@ -195,7 +194,6 @@ void PIT_IRQHandler()  //2ms一次中断
         Starting=0;
         Stop=0;                                 //Stop=1电机不输出
         RoadType=200;                           //s 起步时赛道类型为200，出库
-        
         LED_BLUE_OFF;
         LED_GREEN_OFF;
         BEEP_OFF;                               //蜂鸣器响一段时间关掉
@@ -214,12 +212,6 @@ void PIT_IRQHandler()  //2ms一次中断
    SpeedCount++;//1~50  Speed_Control_Output()调用次数   100ms进行一次速度控制量计算（SpeedControlOutOld 、SpeedControlOutNew）后被清零
    Speed_Control_Output();//2ms一次 计算速度控制量PID_SPEED.OUT
    Moto_Out();//2ms一次
-   
-   if(Stop_Brake==1 && wycnt<=100)//终点刹车车轮倒转时间200ms
-  {
-    wycnt++;                      
-  }
-
 }
 
 
