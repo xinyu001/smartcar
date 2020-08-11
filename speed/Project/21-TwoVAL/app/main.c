@@ -43,64 +43,63 @@ extern int   AD_val_3_max;
   uart_putchar(UART0,'K');
   init();
   Stop=1;
-  Style=0;
   
-//  int sum;
-//  int i;
-//    
-//
-//   for(i=0;i<50;i++)                    //检测各电感的最小值
-//   {
-//     AD_val_1 =adc_once(ADC1_SE8, ADC_16bit);
-//     sum+=AD_val_1;
-//     DELAY_MS(5);
-//   }
-//   AD_val_1_min=sum/50;
-//   sum=0;
-//   for(i=0;i<50;i++)                    
-//   {
-//     AD_val_2 =adc_once(ADC1_SE9, ADC_16bit);
-//     sum+=AD_val_2;
-//     DELAY_MS(5);
-//   }
-//   AD_val_2_min=sum/50;
-//   sum=0;
-//   for(i=0;i<50;i++)                    
-//   {
-//     AD_val_3 =adc_once(ADC1_SE10, ADC_16bit);
-//     sum+=AD_val_3;
-//     DELAY_MS(5);
-//   }
-//   AD_val_3_min=sum/50;
-//   sum=0;
-//
-//   
-//   for(i=0;i<150;i++)                   //检测各电感的最大值
-//   {
-//     AD_val_1 =adc_once(ADC1_SE8, ADC_16bit);
-//     if(AD_val_1>=AD_val_1_max) 
-//       AD_val_1_max=AD_val_1;
-//     DELAY_MS(1);
-//     
-//     AD_val_2 =adc_once(ADC1_SE9, ADC_16bit);
-//     if(AD_val_2>=AD_val_2_max) 
-//       AD_val_2_max=AD_val_2;
-//     DELAY_MS(1);
-//    	
-//     AD_val_3 =adc_once(ADC1_SE10, ADC_16bit);
-//     if(AD_val_3>=AD_val_3_max) 
-//       AD_val_3_max=AD_val_3;
-//     DELAY_MS(1);
-//   }
+  int sum;
+  int i;
+    
+
+   for(i=0;i<50;i++)                    //检测各电感的最小值
+   {
+     AD_val_1 =adc_once(ADC1_SE8, ADC_16bit);
+     sum+=AD_val_1;
+     DELAY_MS(5);
+   }
+   AD_val_1_min=sum/50;
+   sum=0;
+   for(i=0;i<50;i++)                    
+   {
+     AD_val_2 =adc_once(ADC1_SE9, ADC_16bit);
+     sum+=AD_val_2;
+     DELAY_MS(5);
+   }
+   AD_val_2_min=sum/50;
+   sum=0;
+   for(i=0;i<50;i++)                    
+   {
+     AD_val_3 =adc_once(ADC1_SE10, ADC_16bit);
+     sum+=AD_val_3;
+     DELAY_MS(5);
+   }
+   AD_val_3_min=sum/50;
+   sum=0;
+
+   
+   for(i=0;i<150;i++)                   //检测各电感的最大值
+   {
+     AD_val_1 =adc_once(ADC1_SE8, ADC_16bit);
+     if(AD_val_1>=AD_val_1_max) 
+       AD_val_1_max=AD_val_1;
+     DELAY_MS(1);
+     
+     AD_val_2 =adc_once(ADC1_SE9, ADC_16bit);
+     if(AD_val_2>=AD_val_2_max) 
+       AD_val_2_max=AD_val_2;
+     DELAY_MS(1);
+    	
+     AD_val_3 =adc_once(ADC1_SE10, ADC_16bit);
+     if(AD_val_3>=AD_val_3_max) 
+       AD_val_3_max=AD_val_3;
+     DELAY_MS(1);
+   }
   
   
   while(1)
   {
      
       //getadval();                               //获取电磁值
-//      if(Stop){
-//      adc_maxmin_update();                      //更新电磁的最大最小值
-//      }
+      if(Stop){
+      adc_maxmin_update();                      //更新电磁的最大最小值
+      }
           
       Check_BottonPress();
       if(new_img)                               //此段不超过0.5ms 200ms主频  6ms 或8ms 执行一次

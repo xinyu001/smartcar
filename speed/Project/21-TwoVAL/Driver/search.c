@@ -499,7 +499,7 @@ if((RoadType==200)&&(Distance>1.5)){
 
 }
 //s 8.1 Èë¿â½áÊø£¬Í£³µ
-if((RoadType==205)&&(Distance-Distance200>0.4)){
+if((RoadType==205)&&(Distance-Distance200>1)){
          Distance200=1000;
          RoadType=206;
 //         Stop_Brake=0;          //Í£Ö¹É²³µ
@@ -1148,7 +1148,7 @@ if(flag_17==1)
      }
      else if(RoadType==205)                     //s 8.1Èë¿â×ó¹Õ
      {
-          LMR[1][i]=15;
+          LMR[1][i]=10;
      }
   /*   else if(RoadType==50 && flag==1)
      {
