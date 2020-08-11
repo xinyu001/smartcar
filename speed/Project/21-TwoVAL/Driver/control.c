@@ -26,8 +26,8 @@ float Turn_Out;
 float Turn_Angle_Integral;
 
 /**舵机相关**/
-int sever_middle=225;                   //值越大越偏右 225ganghao 
-int sever_range=30;                     //19(实际范围)//25(原)//28  //s 55
+int sever_middle=230;                   //值越大越偏右  
+int sever_range=55;                     //19(实际范围)//25(原)//28  //s 55
 
 //模糊化系数
 float  Delta_P;
@@ -123,22 +123,22 @@ void Speed_Control(void)                        //更新SpeedControlOutOld  计算Sp
      // SpeedError=0; 
      // SetSpeed=0;
     }
-//    else if(RoadType==100)
-//    {
-//    SpeedError=Speed_M-CarSpeed;
-//    //SpeedError=0.60-CarSpeed;                 //减速
-//    
-//    }
-//    else if(RoadType==50 && flag==0)            //18
-//    {
-//    
-//     SpeedError=0.45-CarSpeed;                  //0.35
-//     }
-//    else if(RoadType==50 && flag==1)            //18
-//    {
-//    
-//     SpeedError=0.60-CarSpeed;                  //SetSpeed
-//     }
+    else if(RoadType==100)
+    {
+    SpeedError=Speed_M-CarSpeed;
+    //SpeedError=0.60-CarSpeed;                 //减速
+    
+    }
+    else if(RoadType==50 && flag==0)            //18
+    {
+    
+     SpeedError=0.45-CarSpeed;                  //0.35
+     }
+    else if(RoadType==50 && flag==1)            //18
+    {
+    
+     SpeedError=0.60-CarSpeed;                  //SetSpeed
+     }
 //    else if(RoadType==200)
 //    {
 //      
@@ -148,7 +148,7 @@ void Speed_Control(void)                        //更新SpeedControlOutOld  计算Sp
 
     
     else{                                       //RoadType==1,2,7,12,17,18
-      SpeedError=Speed_M-CarSpeed; //速
+      SpeedError=Speed_H-CarSpeed; //快速
     }
   }
 
@@ -194,7 +194,7 @@ void Direction_Control(void)
 
   PID_TURN.pout=(PID_TURN.P+Delta_P)*Middle_Err;        //Middle_Err
   PID_TURN.dout=(PID_TURN.D+Delta_D)*Turn_Speed*0.1;
-  Turn_Out= PID_TURN.pout + PID_TURN.dout;
+  Turn_Out= PID_TURN.pout - PID_TURN.dout;
   
   Turn_Out=Turn_Out_Filter(Turn_Out);                   //转动输出滤波 
   
@@ -380,12 +380,12 @@ void Moto_Out() //2ms一次
     MotorOut=0;
     LED_BLUE_ON;
  }
- if(Stop_Brake==1 && wycnt<=250 ){                //终点刹车车轮倒转
+ if(Stop_Brake==1 && wycnt<=100 ){                //终点刹车车轮倒转
    
    FTM_PWM_Duty(FTM0,FTM_CH0,0);     
    FTM_PWM_Duty(FTM0,FTM_CH1,2220); 
  }
-  if(wycnt>250 ){                //终点刹车车轮倒转
+  if(wycnt>100 ){                //终点刹车车轮倒转
    
    FTM_PWM_Duty(FTM0,FTM_CH0,0);     
    FTM_PWM_Duty(FTM0,FTM_CH1,0); 

@@ -94,13 +94,13 @@ void Para_Init()
   if(Style==0)
     SetSpeed=0.25;                              //0.9  原来0.6
   if(Style==1)
-    SetSpeed=0.45;                               //0.6//s
+    SetSpeed=0.5;                               //0.6//s
   Fuzzy_Kp=0.0065;                              //0.014
   Fuzzy_Kd=0.005;                               //0
   PID_SPEED.P=0.13;                             //0.13  0.18  原来是0.13
   PID_SPEED.I=0.02;                             //0.013  原来0.02
   PID_TURN.P=0.006;                             //0.005
-  PID_TURN.D=0.003;                            //0.001 0.003
+  PID_TURN.D=0.0028;                            //0.001 0.003
   Set_Angle=50;
   
   Control_Para[0]= SetSpeed;                    //Set_SPEED

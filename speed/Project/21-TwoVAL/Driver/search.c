@@ -21,7 +21,7 @@ static int last_err[2]改成了单个变量static int last_err，这两个元素始终相等
 */
 #include "include.h"
 #define SlopeLeftDiff 0.4
-#define SlopeRightDiff 0.4
+#define SlopeRightDiff 0.3
 extern uint8 flag2;
 float SlopeRight[6]={0},SlopeLeft[6]={0};
 float Distance_0,Distance_1,Distance2,Distance4,Distance5,Distance6,Distance7;
@@ -220,12 +220,12 @@ void Search()
   //从底部往上搜线
       
       //judgeblack();                           //s 切换电磁
-//      vol0=adc_once(ADC1_SE7a, ADC_16bit);
-//      vol1=adc_once(ADC1_SE13, ADC_16bit);              //7月4日
-//
-//      Display1=adc_once(ADC1_SE8, ADC_16bit);
-//      Display2=adc_once(ADC1_SE13, ADC_16bit);
-//      Display3=adc_once(ADC1_SE10, ADC_16bit);
+      vol0=adc_once(ADC1_SE7a, ADC_16bit);
+      vol1=adc_once(ADC1_SE13, ADC_16bit);              //7月4日
+
+      Display1=adc_once(ADC1_SE8, ADC_16bit);
+      Display2=adc_once(ADC1_SE13, ADC_16bit);
+      Display3=adc_once(ADC1_SE10, ADC_16bit);
       
 
   
@@ -263,7 +263,7 @@ void Search()
  
    
     //起跑线
-   if(i==35 &&  Distance>55)  //Distance>60即保证车是在第二次经过起跑线时才执行  原i==55
+   if(i==30 &&  Distance>50)  //Distance>60即保证车是在第二次经过起跑线时才执行  原i==55
     {
 
         for(j=1;j<8;j++)
@@ -493,7 +493,7 @@ void Search()
  
 
 //s 出库，开始正常行驶
-if((RoadType==200)&&(Distance>1.5)){
+if((RoadType==200)&&(Distance>1)){
         
          RoadType=0;
 
@@ -896,10 +896,10 @@ if(Distance-Distance4>0.55)
    if(ABS(SlopeRight[0]-SlopeRight[1])>=1.4*SlopeRightDiff || ABS(SlopeRight[1]-SlopeRight[2])>=1.4*SlopeRightDiff )
       RoadType=0;
    
-   else if(LMR[0][5]!=0 && LMR[0][7]!=0 && //LMR[0][9]!=0 && 
-           LMR[0][11]<5 && LMR[0][13]<5 && 
+   else if(LMR[0][5]!=0 && LMR[0][7]!=0 && LMR[0][9]!=0 && 
+           LMR[0][11]==0 && LMR[0][12]==0 && 
            LMR[0][18]!=0 && LMR[0][20]!=0 && LMR[0][22]!=0 && 
-           LMR[0][5]>LMR[0][7] && LMR[0][7]>LMR[0][8]&& 
+           LMR[0][5]>LMR[0][7] && LMR[0][7]>LMR[0][9]&& 
            LMR[2][4]<LMR[2][8] && LMR[2][6]<LMR[2][12] && LMR[2][10]<LMR[2][20] )
    
    {
@@ -944,7 +944,7 @@ if(RoadType==13)
     // Distance4=Distance;                                //记下进入左环时的距离，判断RoadType6     
    }             
  }
- if(flag_15=1&&(Distance-Distance3>3.1)){
+ if(flag_15=1&&(Distance-Distance3>3.2)){
    
     RoadType=15; 
     flag_left=1;
@@ -1124,7 +1124,7 @@ if(flag_17==1)
      else if(RoadType==17)                              //出左环岛
      { 
        
-          LMR[1][i]=26;                                 
+          LMR[1][i]=24;                                 
      }
 
      else if(RoadType==18 )
@@ -1185,7 +1185,7 @@ if(flag_17==1)
 
      else                                               //RoadType=0,6，16...
      {
-       LMR[1][i]=(LMR[0][i]+LMR[2][i])/2;             //中线  -3
+       LMR[1][i]=(LMR[0][i]+LMR[2][i])/2-3;             //中线  -3
      }
    }
   
