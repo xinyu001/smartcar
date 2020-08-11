@@ -492,7 +492,7 @@ void Search()
  
 
 //s 出库，开始正常行驶
-if((RoadType==200)&&(Distance>1)){
+if((RoadType==200)&&(Distance>1.1)){
         
          RoadType=0;
 
@@ -501,7 +501,7 @@ if((RoadType==200)&&(Distance>1)){
 if((RoadType==205)&&(Distance-Distance200>1)){
          Distance200=1000;
          RoadType=206;
-//       Stop_Brake=1;          //刹车
+       Stop_Brake=1;          //刹车
 //       SetSpeed=0;
 //       Speed_H=0;
 //       Speed_M=0;
@@ -510,52 +510,52 @@ if((RoadType==205)&&(Distance-Distance200>1)){
 
 
 
-if(vol0>16000 && vol1>16000 && vol0<26000 && vol1<26000) //   17900
- {
-   if(ABS(vol0-vol1)<800)                               //1500,1000
-   { count++; }
-   if(count>5)                                          //5
-   {
-   RoadType=50;
-  // flag_obstacle=1;
-   count=0;
-   }
-  // else if(ABS(vol0-vol1)<3000 && ABS(vol0-vol1)>1000)
-  // RoadType=51;
-  // if(abs(vol0-vol1)<6000)////////////7月4日，区分坡道和横断
-   //   flag=1;  //////////7月4日，提前判断横断路障，减速
-   //  if(vol0<18200 && vol1<14200)
-   //   RoadType=51;
- //  else
- //    flag=0;
- //  if(flag==1)
-   if(RoadType==50)
-   {
-      if(i<5)
-      {
-            if(edgposition[i]==0)               //表示从该行开始往上图像全黑 置为丢线  lost_line=0则舵机正常转向
-        {
-            jishu++;
-            if(jishu>3)
-            {
-              uart_putchar(UART0,'V');
-              flag=1;
-              //  RoadType=51;                    //7月4日，进入转向程序
-             // Style=0;
-              
-              jishu=0;
-             
-            }
-        }
-      }
-   }
-}
-
- if(RoadType==50)
- {
-
-    lost_line=3;
- }
+//if(vol0>16000 && vol1>16000 && vol0<26000 && vol1<26000) //   17900
+// {
+//   if(ABS(vol0-vol1)<800)                               //1500,1000
+//   { count++; }
+//   if(count>5)                                          //5
+//   {
+//   RoadType=50;
+//  // flag_obstacle=1;
+//   count=0;
+//   }
+//  // else if(ABS(vol0-vol1)<3000 && ABS(vol0-vol1)>1000)
+//  // RoadType=51;
+//  // if(abs(vol0-vol1)<6000)////////////7月4日，区分坡道和横断
+//   //   flag=1;  //////////7月4日，提前判断横断路障，减速
+//   //  if(vol0<18200 && vol1<14200)
+//   //   RoadType=51;
+// //  else
+// //    flag=0;
+// //  if(flag==1)
+//   if(RoadType==50)
+//   {
+//      if(i<5)
+//      {
+//            if(edgposition[i]==0)               //表示从该行开始往上图像全黑 置为丢线  lost_line=0则舵机正常转向
+//        {
+//            jishu++;
+//            if(jishu>3)
+//            {
+//              uart_putchar(UART0,'V');
+//              flag=1;
+//              //  RoadType=51;                    //7月4日，进入转向程序
+//             // Style=0;
+//              
+//              jishu=0;
+//             
+//            }
+//        }
+//      }
+//   }
+//}
+//
+// if(RoadType==50)
+// {
+//
+//    lost_line=3;
+// }
 
  
  /*else
@@ -878,11 +878,11 @@ if(Distance-Distance4>0.55)
  
  if(RoadType==0)
  {
-   if(SlopeRight[0]!=0 && SlopeRight[1]!=0 && SlopeRight[2]!=0 && SlopeRight[3]!=0)
+   if(SlopeRight[0]!=0 && SlopeRight[1]!=0 && SlopeRight[2]!=0 )
    {
      if(SlopeRight[0]<4 && SlopeRight[1]<4 && SlopeRight[2]<4 )
      {
-       if(ABS(SlopeRight[0]-SlopeRight[1])<SlopeRightDiff && ABS(SlopeRight[1]-SlopeRight[2])<SlopeLeftDiff && ABS(SlopeLeft[2]-SlopeLeft[3])<SlopeLeftDiff )
+       if(ABS(SlopeRight[0]-SlopeRight[1])<1.4*SlopeRightDiff && ABS(SlopeRight[1]-SlopeRight[2])<1.4*SlopeLeftDiff )
        {
          RoadType=12;                                   //右边线为直线
        }
@@ -895,11 +895,11 @@ if(Distance-Distance4>0.55)
    if(ABS(SlopeRight[0]-SlopeRight[1])>=1.4*SlopeRightDiff || ABS(SlopeRight[1]-SlopeRight[2])>=1.4*SlopeRightDiff )
       RoadType=0;
    
-   else if(LMR[0][5]!=0 && LMR[0][7]!=0 && LMR[0][9]!=0 && 
-           LMR[0][11]==0 && LMR[0][12]==0 && 
-           LMR[0][18]!=0 && LMR[0][20]!=0 && LMR[0][22]!=0 && 
-           LMR[0][5]>LMR[0][7] && LMR[0][7]>LMR[0][9]&& 
-           LMR[2][4]<LMR[2][8] && LMR[2][6]<LMR[2][12] && LMR[2][10]<LMR[2][20] )
+   else if(LMR[0][5]!=0 && LMR[0][7]!=0 && 
+           (LMR[0][13]==0 || LMR[0][14]==0 || LMR[0][15]==0 || LMR[0][16]==0 ) && 
+           LMR[0][18]!=0 && LMR[0][20]!=0 &&
+           LMR[0][5]>LMR[0][7] && LMR[0][6]>LMR[0][8]&& 
+           LMR[2][4]<LMR[2][8] && LMR[2][6]<LMR[2][10] && LMR[2][10]<LMR[2][12] )
    
    {
       RoadType=13;                                        //看到第一个朝左丁字路口
@@ -1123,7 +1123,7 @@ if(flag_17==1)
      else if(RoadType==17)                              //出左环岛
      { 
        
-          LMR[1][i]=24;                                 
+          LMR[1][i]=26;                                 
      }
 
      else if(RoadType==18 )
@@ -1143,11 +1143,11 @@ if(flag_17==1)
      }
      else if(RoadType==200)                     //s 8.1出库左拐
      {
-          LMR[1][i]=15;
+          LMR[1][i]=20;
      }
      else if(RoadType==205)                     //s 8.1入库左拐
      {
-          LMR[1][i]=10;
+          LMR[1][i]=15;
      }
   /*   else if(RoadType==50 && flag==1)
      {
@@ -1184,7 +1184,7 @@ if(flag_17==1)
 
      else                                               //RoadType=0,6，16...
      {
-       LMR[1][i]=(LMR[0][i]+LMR[2][i])/2-3;             //中线  -3
+       LMR[1][i]=(LMR[0][i]+LMR[2][i])/2;             //中线  -3
      }
    }
   

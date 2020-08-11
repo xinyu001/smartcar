@@ -26,8 +26,8 @@ float Turn_Out;
 float Turn_Angle_Integral;
 
 /**舵机相关**/
-int sever_middle=230;                   //值越大越偏右  
-int sever_range=55;                     //19(实际范围)//25(原)//28  //s 
+int sever_middle=166;                   //值越大越偏右  
+int sever_range=35;                     //19(实际范围)//25(原)//28  //s 
 
 //模糊化系数
 float  Delta_P;
@@ -99,7 +99,7 @@ void Speed_Control(void)                        //更新SpeedControlOutOld  计算Sp
       }
       else
       {
-        SpeedError=0.7-CarSpeed;                //慢速
+        SpeedError=Speed_H-CarSpeed;                //慢速
 
       }
     }
@@ -263,93 +263,93 @@ void Direction_Control(void)
   {FTM_PWM_Duty(FTM1,FTM_CH0,190);}
 }*/
   
-    if(RoadType==50 && flag==1)
-  //if(flag==1)
-     {
-     //  flag2=1;
-    //   SetSpeed=0.3;
-      if(vol0>15000)
-      {
-
-       FTM_PWM_Duty(FTM1,FTM_CH0,190);   //190，270往左
-     //  RoadType=50;
-       if(vol0>16000 && vol0<18000) //25500
-       {Distance1=Distance;
-       //flag_100=1;
-       uart_putchar(UART0,'X');
-       }
-      }
-     }
-       if(RoadType==50 && flag==1)
-     // if(flag==1)
-     {
-       if((Distance-Distance1)<=0.9 && (Distance-Distance1)>0)  //1.8
-        { FTM_PWM_Duty(FTM1,FTM_CH0,190);   
-        uart_putchar(UART0,'A');
-        }
-        else if((Distance-Distance1)>0.9 && (Distance-Distance1)<=1.7)
-        { FTM_PWM_Duty(FTM1,FTM_CH0,250); 
-        uart_putchar(UART0,'B');
-        }
-        else if ((Distance-Distance1)>1.7 && (Distance-Distance1)<=2.5)
-        { FTM_PWM_Duty(FTM1,FTM_CH0,230);
-       uart_putchar(UART0,'C'); 
-        }
-        else if ((Distance-Distance1)>2.5 && (Distance-Distance1)<=3.3)
-        { FTM_PWM_Duty(FTM1,FTM_CH0,250);
-        uart_putchar(UART0,'D'); 
-        }
-        else if ((Distance-Distance1)>3.3 && (Distance-Distance1)<=3.9)
-        { FTM_PWM_Duty(FTM1,FTM_CH0,190); 
-       uart_putchar(UART0,'E'); 
-        if((Distance-Distance1)>3.8)
-        {RoadType=0;
-       // flag=0;
-        flag_obstacle=0;}
-        }
-    /*    else if((Distance-Distance1)>4.2)
-        { RoadType=0;
-        flag=0;
-        Style=1;
-        uart_putchar(UART0,'F'); 
-       // flag2=0;
-        }*/
-       /* else
-        {
-          RoadType=0;
-          flag=0;
-          uart_putchar(UART0,'G'); 
-          FTM_PWM_Duty(FTM1,FTM_CH0,sever_middle + PID_TURN.OUT);   //舵机的值在0-180 反复变化
-        } */
-  //   }
-    }
-     /* if(RoadType==50 && flag==1)
-      { 
-       if((Distance-Distance1)>5)
-        {
-          uart_putchar(UART0,'G'); 
-          RoadType=0;
-          flag=0;
-        }
-      }*/
-if(RoadType==100)
-{
- // FTM_PWM_Duty(FTM1,FTM_CH0,250);
-  if(ABS(Display1-Display2)<2000)
- {FTM_PWM_Duty(FTM1,FTM_CH0,230);}
- else if(((Display1-Display2)>-5000) && ((Display1-Display2)<-1000))
- {FTM_PWM_Duty(FTM1,FTM_CH0,235);}
-  else if(Display2-Display1>8000)
-  {
-    FTM_PWM_Duty(FTM1,FTM_CH0,250);
-  if(Display1<10000)
-  {SetSpeed=0.30;}
-  }
-  else if((Display1-Display2>5500) && (Display1-Display2>10000))
-  {FTM_PWM_Duty(FTM1,FTM_CH0,200);}
-  else if(Display1-Display2>10000)
-  {FTM_PWM_Duty(FTM1,FTM_CH0,190);}
-}
+//    if(RoadType==50 && flag==1)
+//  //if(flag==1)
+//     {
+//     //  flag2=1;
+//    //   SetSpeed=0.3;
+//      if(vol0>15000)
+//      {
+//
+//       FTM_PWM_Duty(FTM1,FTM_CH0,190);   //190，270往左
+//     //  RoadType=50;
+//       if(vol0>16000 && vol0<18000) //25500
+//       {Distance1=Distance;
+//       //flag_100=1;
+//       uart_putchar(UART0,'X');
+//       }
+//      }
+//     }
+//       if(RoadType==50 && flag==1)
+//     // if(flag==1)
+//     {
+//       if((Distance-Distance1)<=0.9 && (Distance-Distance1)>0)  //1.8
+//        { FTM_PWM_Duty(FTM1,FTM_CH0,190);   
+//        uart_putchar(UART0,'A');
+//        }
+//        else if((Distance-Distance1)>0.9 && (Distance-Distance1)<=1.7)
+//        { FTM_PWM_Duty(FTM1,FTM_CH0,250); 
+//        uart_putchar(UART0,'B');
+//        }
+//        else if ((Distance-Distance1)>1.7 && (Distance-Distance1)<=2.5)
+//        { FTM_PWM_Duty(FTM1,FTM_CH0,230);
+//       uart_putchar(UART0,'C'); 
+//        }
+//        else if ((Distance-Distance1)>2.5 && (Distance-Distance1)<=3.3)
+//        { FTM_PWM_Duty(FTM1,FTM_CH0,250);
+//        uart_putchar(UART0,'D'); 
+//        }
+//        else if ((Distance-Distance1)>3.3 && (Distance-Distance1)<=3.9)
+//        { FTM_PWM_Duty(FTM1,FTM_CH0,190); 
+//       uart_putchar(UART0,'E'); 
+//        if((Distance-Distance1)>3.8)
+//        {RoadType=0;
+//       // flag=0;
+//        flag_obstacle=0;}
+//        }
+//    /*    else if((Distance-Distance1)>4.2)
+//        { RoadType=0;
+//        flag=0;
+//        Style=1;
+//        uart_putchar(UART0,'F'); 
+//       // flag2=0;
+//        }*/
+//       /* else
+//        {
+//          RoadType=0;
+//          flag=0;
+//          uart_putchar(UART0,'G'); 
+//          FTM_PWM_Duty(FTM1,FTM_CH0,sever_middle + PID_TURN.OUT);   //舵机的值在0-180 反复变化
+//        } */
+//  //   }
+//    }
+//     /* if(RoadType==50 && flag==1)
+//      { 
+//       if((Distance-Distance1)>5)
+//        {
+//          uart_putchar(UART0,'G'); 
+//          RoadType=0;
+//          flag=0;
+//        }
+//      }*/
+//if(RoadType==100)
+//{
+// // FTM_PWM_Duty(FTM1,FTM_CH0,250);
+//  if(ABS(Display1-Display2)<2000)
+// {FTM_PWM_Duty(FTM1,FTM_CH0,230);}
+// else if(((Display1-Display2)>-5000) && ((Display1-Display2)<-1000))
+// {FTM_PWM_Duty(FTM1,FTM_CH0,235);}
+//  else if(Display2-Display1>8000)
+//  {
+//    FTM_PWM_Duty(FTM1,FTM_CH0,250);
+//  if(Display1<10000)
+//  {SetSpeed=0.30;}
+//  }
+//  else if((Display1-Display2>5500) && (Display1-Display2>10000))
+//  {FTM_PWM_Duty(FTM1,FTM_CH0,200);}
+//  else if(Display1-Display2>10000)
+//  {FTM_PWM_Duty(FTM1,FTM_CH0,190);}
+//}
 
 //   FTM_PWM_Duty(FTM1,FTM_CH0,sever_middle);
 }
@@ -380,18 +380,24 @@ void Moto_Out() //2ms一次
     MotorOut=0;
     LED_BLUE_ON;
  }
- if(Stop_Brake==1&&wycnt<=10000){                //终点刹车车轮倒转时间200ms
+ if(Stop_Brake==1 && wycnt<=250){                //终点刹车车轮倒转时间200ms
    
    FTM_PWM_Duty(FTM0,FTM_CH0,0);
      
-   FTM_PWM_Duty(FTM0,FTM_CH1,8000);
+   FTM_PWM_Duty(FTM0,FTM_CH1,2000);
   
    wycnt++;                      
   
  }
+  if(wycnt>250){ 
+    
+   FTM_PWM_Duty(FTM0,FTM_CH0,0);
+   FTM_PWM_Duty(FTM0,FTM_CH1,0);
+                        
+ }
 
  
- 
+ if(!Stop_Brake){
    if(MotorOut>=0) //正转
   {
      FTM_PWM_Duty(FTM0,FTM_CH0,MotorOut*10000);//占空比精度为10000  第三个参数为占空比分子
@@ -405,7 +411,7 @@ void Moto_Out() //2ms一次
      FTM_PWM_Duty(FTM0,FTM_CH1,-MotorOut*10000);
      //my_putchar('B');
   }
-
+ }
 }
  
 
