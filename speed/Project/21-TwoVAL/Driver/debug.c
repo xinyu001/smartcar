@@ -238,33 +238,6 @@ void OLED_Draw_UI()  //画出界面
 }
 ///第六页数据
     else if(Page_Index==5){
-    
-    OLED_PrintValueF(0, 1,LMR[0][5],4);
-    OLED_PrintValueF(0, 2,LMR[0][6],4);
-    OLED_PrintValueF(0, 3,LMR[0][7],4);
-    OLED_PrintValueF(0, 4,LMR[0][8],4);
-    OLED_PrintValueF(0, 5,LMR[0][9],4);
-    OLED_PrintValueF(0, 6,LMR[0][10],4);
-    OLED_PrintValueF(0, 7,LMR[0][11],4);
-    
-    OLED_PrintValueF(36, 1,LMR[0][12],4);
-    OLED_PrintValueF(36, 2,LMR[0][13],4);
-    OLED_PrintValueF(36, 3,LMR[0][14],4);
-    OLED_PrintValueF(36, 4,LMR[0][15],4);
-    OLED_PrintValueF(36, 5,LMR[0][16],4);
-    OLED_PrintValueF(36, 6,LMR[0][17],4);
-    OLED_PrintValueF(36, 7,LMR[0][18],4);
-    
-    
-    OLED_PrintValueF(72, 1,LMR[0][20],4);
-    OLED_PrintValueF(72, 2,LMR[0][21],4);
-    OLED_PrintValueF(72, 3,LMR[0][22],4);
-    OLED_PrintValueF(72, 4,LMR[0][23],4);
-    OLED_PrintValueF(72, 5,LMR[0][24],4);
-    OLED_PrintValueF(72, 6,LMR[0][25],4);
-    OLED_PrintValueF(72, 7,RoadType,4);
-      
-      
       
     OLED_Set_Pos(122,7);
     OLED_P6x8Char(Page_Index+48); 
