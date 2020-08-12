@@ -32,7 +32,7 @@ ITMportsTermIO=0
 ITMportsLogFile=0
 ITMlogFile=$PROJ_DIR$\ITM.log
 [DebugChecksum]
-Checksum=1793915491
+Checksum=1837520568
 [Exceptions]
 StopOnUncaught=_ 0
 StopOnThrow=_ 0
@@ -117,9 +117,6 @@ Count=0
 LoggingEnabled=_ 0
 LogFile=_ ""
 Category=_ 0
-[TermIOLog]
-LoggingEnabled=_ 0
-LogFile=_ ""
 [Aliases]
 Count=0
 SuppressDialog=0
@@ -131,3 +128,6 @@ Mode=1
 Graph=0
 Symbiont=0
 Exclusions=
+[TermIOLog]
+LoggingEnabled=_ 0
+LogFile=_ ""

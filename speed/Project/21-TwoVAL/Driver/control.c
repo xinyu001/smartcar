@@ -26,7 +26,7 @@ float Turn_Out;
 float Turn_Angle_Integral;
 
 /**舵机相关**/
-int sever_middle=166;                   //值越大越偏右  
+int sever_middle=124;                   //值越大越偏右  
 int sever_range=35;                     //19(实际范围)//25(原)//28  //s 
 
 //模糊化系数
@@ -384,7 +384,7 @@ void Moto_Out() //2ms一次
    
    FTM_PWM_Duty(FTM0,FTM_CH0,0);
      
-   FTM_PWM_Duty(FTM0,FTM_CH1,2000);
+   FTM_PWM_Duty(FTM0,FTM_CH1,3000);
   
    wycnt++;                      
   
