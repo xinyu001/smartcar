@@ -196,7 +196,8 @@ void OLED_Draw_UI()  //画出界面
     OLED_P6x8Str(0,5,"v4:");
     OLED_PrintValueF(40, 5,dis_AD_val_4,4);
     OLED_PrintValueF(80, 5,disgy_AD_val_3,4);
-
+    OLED_P6x8Str(0,6,"Middle_Err");
+    OLED_PrintValueF(72, 6,Middle_Err,4);
     
     OLED_Set_Pos(122,7);
     OLED_P6x8Char(Page_Index+48); 
@@ -247,7 +248,7 @@ void OLED_Draw_UI()  //画出界面
     OLED_PrintValueF(72, 3,RunTime,4);
     OLED_P6x8Str(0,4,"Average_Spd");
     OLED_PrintValueF(72, 4,AverageSpeed,4);  
-    OLED_P6x8Str(0,5,"GYRO_OFF_Z");
+    OLED_P6x8Str(0,5,"Middle_Err");
     OLED_PrintValueF(72, 5,Middle_Err,4);  
     OLED_P6x8Str(0,6,"NowSPEED");
     OLED_PrintValueF(72, 6,CarSpeed,4);
@@ -269,7 +270,7 @@ void Read_Switch() //0表示ON(左) 1表示OFF(右)
   }
   else           
   {
-    
+    Style=0;
   }
 
   if(gpio_get(SW2)==0)   //拨码开关2功能

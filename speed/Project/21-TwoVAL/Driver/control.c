@@ -26,8 +26,8 @@ float Turn_Out;
 float Turn_Angle_Integral;
 
 /**舵机相关**/
-int sever_middle=228;                   //值越大越偏右  
-int sever_range=55;                     //19(实际范围)//25(原)//28  //s 
+int sever_middle=124;                   //值越大越偏右  
+int sever_range=35;                     //19(实际范围)//25(原)//28  //s 
 
 //模糊化系数
 float  Delta_P;
@@ -126,7 +126,7 @@ void Speed_Control(void)                        //更新SpeedControlOutOld  计算Sp
       }
       else
       {
-        SpeedError=0.7-CarSpeed;                //慢速
+        SpeedError=Speed_L-CarSpeed;                //慢速
 
       }
     }
@@ -145,7 +145,7 @@ void Speed_Control(void)                        //更新SpeedControlOutOld  计算Sp
     }
     else if(RoadType==3 || RoadType==4 || RoadType==5 || RoadType==13 || RoadType==14  || RoadType==15) //18
     {
-      SpeedError=0.65-CarSpeed;                 //减速
+      SpeedError=Speed_M-CarSpeed;                 //减速
      // SpeedError=0.15-CarSpeed; 
      // SpeedError=0; 
      // SetSpeed=0;
@@ -156,16 +156,16 @@ void Speed_Control(void)                        //更新SpeedControlOutOld  计算Sp
     //SpeedError=0.60-CarSpeed;                 //减速
     
     }
-    else if(RoadType==50 && flag==0)            //18
-    {
-    
-     SpeedError=0.45-CarSpeed;                  //0.35
-     }
-    else if(RoadType==50 && flag==1)            //18
-    {
-    
-     SpeedError=0.60-CarSpeed;                  //SetSpeed
-     }
+//    else if(RoadType==50 && flag==0)            //18
+//    {
+//    
+//     SpeedError=0.45-CarSpeed;                  //0.35
+//     }
+//    else if(RoadType==50 && flag==1)            //18
+//    {
+//    
+//     SpeedError=0.60-CarSpeed;                  //SetSpeed
+//     }
 //    else if(RoadType==200)
 //    {
 //      
