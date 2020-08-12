@@ -897,12 +897,11 @@ if(Distance-Distance4>0.55)
    if(ABS(SlopeRight[0]-SlopeRight[1])>=1.4*SlopeRightDiff || ABS(SlopeRight[1]-SlopeRight[2])>=1.4*SlopeRightDiff )
       RoadType=0;
    
-   else if(LMR[0][5]!=0 && LMR[0][7]!=0 &&
-          ( (LMR[0][8]<=3 && LMR[0][9]<=3 && LMR[0][10]<=3) || LMR[0][8]==0 || LMR[0][9]==0 || LMR[0][10]==0)&& 
-           LMR[0][16]!=0 && LMR[0][18]!=0 &&
-           LMR[0][5]>LMR[0][7] && LMR[0][4]>LMR[0][6]&& 
-           LMR[0][13]>LMR[0][15] && LMR[0][15]>LMR[0][17]&&
-           LMR[2][4]<LMR[2][8] && LMR[2][6]<LMR[2][10] && LMR[2][10]<LMR[2][12])
+   else if(LMR[0][5]!=0 && LMR[0][7]!=0 && LMR[0][9]!=0 
+           (LMR[0][13]==0 || LMR[0][14]==0 || LMR[0][15]==0 || LMR[0][16]==0 ) && 
+           LMR[0][18]!=0 && LMR[0][20]!=0 &&
+           LMR[0][5]>LMR[0][7] && LMR[0][6]>LMR[0][8]&& 
+           LMR[2][4]<LMR[2][8] && LMR[2][6]<LMR[2][10] && LMR[2][10]<LMR[2][12] )
    
    {
       RoadType=13;                                        //看到第一个朝左丁字路口
@@ -946,7 +945,7 @@ if(RoadType==13)
     // Distance4=Distance;                                //记下进入左环时的距离，判断RoadType6     
    }             
  }
- if(flag_15=1&&(Distance-Distance3>3.5)){
+ if(flag_15=1&&(Distance-Distance3>3.2)){
    
     RoadType=15; 
     flag_left=1;
@@ -1187,7 +1186,7 @@ if(flag_17==1)
 
      else                                               //RoadType=0,6，16...
      {
-       LMR[1][i]=(LMR[0][i]+LMR[2][i])/2-2;             //中线  -3
+       LMR[1][i]=(LMR[0][i]+LMR[2][i])/2;             //中线  -3
      }
    }
   
