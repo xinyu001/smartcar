@@ -26,7 +26,7 @@ extern uint8 flag2;
 float SlopeRight[6]={0},SlopeLeft[6]={0};
 float Distance_0,Distance_1,Distance2,Distance4,Distance5,Distance6,Distance7;
 float Distance14,Distance15,Distance16,Distance17;
-float Distance13;
+float Distance13=1000;
 float Distance200;                      //s 8.1入库时距离判断
 float Distance3=1000,Distance8=1000;
 float distance_test;
@@ -222,12 +222,12 @@ void Search()
   //从底部往上搜线
       
       //judgeblack();                           //s 切换电磁
-      vol0=adc_once(ADC1_SE7a, ADC_16bit);
-      vol1=adc_once(ADC1_SE13, ADC_16bit);              //7月4日
-
-      Display1=adc_once(ADC1_SE8, ADC_16bit);
-      Display2=adc_once(ADC1_SE13, ADC_16bit);
-      Display3=adc_once(ADC1_SE10, ADC_16bit);
+//      vol0=adc_once(ADC1_SE7a, ADC_16bit);
+//      vol1=adc_once(ADC1_SE13, ADC_16bit);              //7月4日
+//
+//      Display1=adc_once(ADC1_SE8, ADC_16bit);
+//      Display2=adc_once(ADC1_SE13, ADC_16bit);
+//      Display3=adc_once(ADC1_SE10, ADC_16bit);
       
 
   
@@ -907,7 +907,7 @@ if(Distance-Distance4>0.55)
    {
       RoadType=13;                                        //看到第一个朝左丁字路口
       flag_13=1;                                           //左环第一个路口标记
-      Distance3=Distance;                                //s 记下第一次看到左环时的距离，判断RoadType15
+      Distance13=Distance;                                //s 记下第一次看到左环时的距离，判断RoadType15
       
    }
  }
@@ -946,26 +946,26 @@ if(RoadType==13)
     // Distance4=Distance;                                //记下进入左环时的距离，判断RoadType6     
    }             
  }
- if(flag_15=1&&(Distance-Distance3>3.5)){
+ if(flag_15=1&&(Distance-Distance13>3.5)){
    
     RoadType=15; 
     flag_left=1;
-    Distance3=1000;
-    Distance4=Distance;
+    Distance13=1000;
+    Distance15=Distance;
  }
  
  //进环后变RoadType16
 if(RoadType==15)//;flag_15==1)
 {
   //RoadType==15;
-  if(Distance-Distance4>1)
+  if(Distance-Distance15>1)
   {
     RoadType=16;
     flag_16=1;
     flag_13=0;
     flag_14=0;
     flag_15=0;
-    Distance5=Distance;//记下环内行驶的距离，判断RoadType17
+    Distance16=Distance;//记下环内行驶的距离，判断RoadType17
   }
 }
  
@@ -973,12 +973,12 @@ if(RoadType==15)//;flag_15==1)
 if(flag_16==1)
 {
   RoadType==16;
-  if(flag_left==1 && Distance-Distance5>4.5 )
+  if(flag_left==1 && Distance-Distance16>4.5 )
   { 
     flag_16=0;  
     RoadType=17;
     flag_17=1;
-    Distance6=Distance;     //记录出环时距离
+    Distance17=Distance;     //记录出环时距离，一段时间后恢复正常行驶。
    }                      
 }
 
@@ -986,7 +986,7 @@ if(flag_16==1)
 if(flag_17==1)
 {
   RoadType=17;
-  if(Distance-Distance6>2)
+  if(Distance-Distance17>2)
   {
     RoadType=0;
     flag_left=0;
