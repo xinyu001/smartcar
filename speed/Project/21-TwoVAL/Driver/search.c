@@ -25,8 +25,10 @@ static int last_err[2]改成了单个变量static int last_err，这两个元素始终相等
 extern uint8 flag2;
 float SlopeRight[6]={0},SlopeLeft[6]={0};
 float Distance_0,Distance_1,Distance2,Distance4,Distance5,Distance6,Distance7;
+float Distance12,Distance14,Distance15,Distance16,Distance17;
 float Distance200;//s 8.1
 float Distance3=1000,Distance8=1000;
+float Distance13=1000;
 float distance_test;
 uint8  RoadType=0;//路况标志，默认0，1十字路口
 float Previous_Error[10];
@@ -729,12 +731,12 @@ if(Distance-Distance8>1 && RoadType==200)
       
    }   
  }
-
- SlopeLeft[0]=(LMR[0][15]-LMR[0][18])/3.0;
- SlopeLeft[1]=(LMR[0][20]-LMR[0][23])/3.0;
- SlopeLeft[2]=(LMR[0][25]-LMR[0][28])/3.0;
- SlopeLeft[3]=(LMR[0][30]-LMR[0][33])/3.0;
- SlopeLeft[4]=(LMR[0][35]-LMR[0][38])/3.0;
+ SlopeLeft[0]=(LMR[0][10]-LMR[0][13])/3.0;
+ SlopeLeft[1]=(LMR[0][15]-LMR[0][18])/3.0;
+ SlopeLeft[2]=(LMR[0][20]-LMR[0][23])/3.0;
+ SlopeLeft[3]=(LMR[0][25]-LMR[0][28])/3.0;
+ SlopeLeft[4]=(LMR[0][30]-LMR[0][33])/3.0;
+// SlopeLeft[4]=(LMR[0][35]-LMR[0][38])/3.0;
  
  
  
@@ -867,12 +869,12 @@ if(Distance-Distance4>0.55)
    }   
  } */
 
- 
- SlopeRight[0]=-(LMR[2][15]-LMR[2][18])/3.0;
- SlopeRight[1]=-(LMR[2][20]-LMR[2][23])/3.0;
- SlopeRight[2]=-(LMR[2][25]-LMR[2][28])/3.0;
- SlopeRight[3]=-(LMR[2][30]-LMR[2][33])/3.0;
- SlopeRight[4]=-(LMR[2][35]-LMR[2][38])/3.0;  
+ SlopeRight[0]=-(LMR[2][10]-LMR[2][13])/3.0;
+ SlopeRight[1]=-(LMR[2][15]-LMR[2][18])/3.0;
+ SlopeRight[2]=-(LMR[2][20]-LMR[2][23])/3.0;
+ SlopeRight[3]=-(LMR[2][25]-LMR[2][28])/3.0;
+ SlopeRight[4]=-(LMR[2][30]-LMR[2][33])/3.0;
+ //SlopeRight[4]=-(LMR[2][35]-LMR[2][38])/3.0;  
  
 
  
@@ -882,7 +884,7 @@ if(Distance-Distance4>0.55)
    {
      if(SlopeRight[0]<4 && SlopeRight[1]<4 && SlopeRight[2]<4 )
      {
-       if(ABS(SlopeRight[0]-SlopeRight[1])<1.4*SlopeRightDiff && ABS(SlopeRight[1]-SlopeRight[2])<1.4*SlopeLeftDiff )
+       if(ABS(SlopeRight[0]-SlopeRight[1])<1.1*SlopeRightDiff && ABS(SlopeRight[1]-SlopeRight[2])<1.1*SlopeLeftDiff )
        {
          RoadType=12;                                   //右边线为直线
        }
@@ -894,17 +896,22 @@ if(Distance-Distance4>0.55)
  {  
    if(ABS(SlopeRight[0]-SlopeRight[1])>=1.4*SlopeRightDiff || ABS(SlopeRight[1]-SlopeRight[2])>=1.4*SlopeRightDiff )
       RoadType=0;
+   if(LMR[0][8]==0 &&LMR[0][10]==0 && LMR[0][12]==0 &&LMR[0][14]==0 && LMR[0][16]==0 &&LMR[0][18]==0 && LMR[0][22]==0 ){
+     RoadType=0;
+   }
    
    else if(LMR[0][5]!=0 && LMR[0][7]!=0 && 
-           (LMR[0][13]==0 || LMR[0][14]==0 || LMR[0][15]==0 || LMR[0][16]==0 ) && 
-           LMR[0][18]!=0 && LMR[0][20]!=0 &&
-           LMR[0][5]>LMR[0][7] && LMR[0][6]>LMR[0][8]&& 
-           LMR[2][4]<LMR[2][8] && LMR[2][6]<LMR[2][10] && LMR[2][10]<LMR[2][12] )
+           (LMR[0][7]==0 || LMR[0][8]==0 || LMR[0][9]==0 ) && 
+           LMR[0][13]!=0 && LMR[0][15]!=0 &&
+           LMR[0][5]>LMR[0][6] && LMR[0][4]>LMR[0][5]&&
+           LMR[0][12]>LMR[0][14]&&LMR[0][14]>LMR[0][16]&&
+           LMR[2][4]<LMR[2][8] && LMR[2][6]<LMR[2][10] && LMR[2][10]<LMR[2][20] 
+           )
    
    {
       RoadType=13;                                        //看到第一个朝左丁字路口
       flag_13=1;                                           //左环第一个路口标记
-      Distance3=Distance;                                //s 记下第一次看到左环时的距离，判断RoadType15
+      Distance13=Distance;                                //s 记下第一次看到左环时的距离，判断RoadType15
       
    }
  }
@@ -913,17 +920,20 @@ if(RoadType==13)
 {
    
    //SetSpeed=0.5;
-   if(ABS(SlopeRight[0]-SlopeRight[1])>=4*SlopeRightDiff || ABS(SlopeRight[1]-SlopeRight[2])>=4*SlopeRightDiff) //
-      RoadType=0;
+   if(ABS(SlopeRight[0]-SlopeRight[1])>=1.2*SlopeRightDiff || ABS(SlopeRight[1]-SlopeRight[2])>=1.2*SlopeRightDiff) //
+   {RoadType=0;
+   flag_13=0;}
 
 
    
-   else if( LMR[0][2]!=0 && LMR[0][4]!=0 && LMR[0][6]!=0 && LMR[0][18]!=0 && LMR[0][20]!=0 &&
-           LMR[0][12]<LMR[0][6] && LMR[0][12]<LMR[0][18] &&
-           LMR[2][4]<LMR[2][8] &&LMR[2][6]<LMR[2][12] && LMR[2][10]<LMR[2][20] )
+   else if( LMR[0][2]!=0 && LMR[0][4]!=0 && LMR[0][6]!=0 &&
+          LMR[0][13]==0 && LMR[0][14]==0 && LMR[0][16]==0 && LMR[0][18]==0 &&LMR[0][20]==0 && LMR[0][22]==0 &&
+          LMR[0][4]>LMR[0][6] && LMR[0][6]>LMR[0][8] &&
+          LMR[2][4]<LMR[2][8] &&LMR[2][6]<LMR[2][12] && LMR[2][8]<LMR[2][12])
    {
-     RoadType=14;                                         //看到环岛侧边
+     RoadType=14;                                         //看到环岛侧边,左边一大片白的
      flag_14=1;                                           //左环侧边标记
+     //Distance14=Distance;                              
    }
 }
  
@@ -932,6 +942,7 @@ if(RoadType==13)
    if(LMR[0][10] == 0 && LMR[0][15] == 0 && LMR[0][20] == 0 && LMR[2][20] == 80 && LMR[2][15] == 80 && LMR[2][10] == 80)
    {
      RoadType=0;
+     flag_15=0;
    }
    
    if(LMR[0][4]!=0 && LMR[0][6]!=0 && LMR[0][15]==0 && LMR[0][20]==0 &&
@@ -940,29 +951,29 @@ if(RoadType==13)
      //RoadType=15;                                       //看到第2个朝左丁字路口
      //flag_left=1;                                       //进入左环标记
      flag_15=1;
-    // Distance4=Distance;                                //记下进入左环时的距离，判断RoadType6     
+    // Distance14=Distance;                                //记下进入左环时的距离，判断RoadType6     
    }             
  }
- if(flag_15=1&&(Distance-Distance3>3.2)){
+ if(flag_15=1 &&(Distance-Distance13>2.5)){
    
     RoadType=15; 
     flag_left=1;
-    Distance3=1000;
-    Distance4=Distance;
+    Distance13=1000;
+    Distance15=Distance;
  }
  
  //进环后变RoadType16
 if(RoadType==15)//;flag_15==1)
 {
   //RoadType==15;
-  if(Distance-Distance4>1)
+  if(Distance-Distance15>1)
   {
     RoadType=16;
     flag_16=1;
     flag_13=0;
     flag_14=0;
     flag_15=0;
-    Distance5=Distance;//记下环内行驶的距离，判断RoadType17
+    Distance16=Distance;//记下环内行驶的距离，判断RoadType17
   }
 }
  
@@ -970,12 +981,12 @@ if(RoadType==15)//;flag_15==1)
 if(flag_16==1)
 {
   RoadType==16;
-  if(flag_left==1 && Distance-Distance5>4.5 )
+  if(flag_left==1 && Distance-Distance16>4.5 )
   { 
     flag_16=0;  
     RoadType=17;
     flag_17=1;
-    Distance6=Distance;     //记录出环时距离
+    Distance17=Distance;     //记录出环时距离
    }                      
 }
 
@@ -983,7 +994,7 @@ if(flag_16==1)
 if(flag_17==1)
 {
   RoadType=17;
-  if(Distance-Distance6>2)
+  if(Distance-Distance17>2)
   {
     RoadType=0;
     flag_left=0;
@@ -1184,7 +1195,7 @@ if(flag_17==1)
 
      else                                               //RoadType=0,6，16...
      {
-       LMR[1][i]=(LMR[0][i]+LMR[2][i])/2;             //中线  -3
+       LMR[1][i]=(LMR[0][i]+LMR[2][i])/2-2;             //中线  -3
      }
    }
   
