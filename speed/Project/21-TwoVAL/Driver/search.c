@@ -500,7 +500,7 @@ if((RoadType==200)&&(Distance>1.1)){
 
 }
 //s 8.1 入库结束，停车
-if((RoadType==205)&&(Distance-Distance200>1)){
+if((RoadType==205)&&(Distance-Distance200>0.7)){
          Distance200=1000;
          RoadType=206;
          Stop_Brake=1;          //刹车
@@ -946,7 +946,7 @@ if(RoadType==13)
     // Distance4=Distance;                                //记下进入左环时的距离，判断RoadType6     
    }             
  }
- if(flag_15=1&&(Distance-Distance13>3.5)){
+ if(flag_15=1&&(Distance-Distance13>3.3)){
    
     RoadType=15; 
     flag_left=1;
