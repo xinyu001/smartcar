@@ -393,11 +393,11 @@ void roadturncal()  //转向控制程序
   if(AD_val_2>AD_val_2_max)		AD_val_2=AD_val_2_max;
   if(AD_val_3>AD_val_3_max)		AD_val_3=AD_val_3_max;
   if(AD_val_4>AD_val_4_max)		AD_val_4=AD_val_4_max;
-  if(AD_val_1<AD_val_1_min)		AD_val_1=AD_val_1_min;
-  if(AD_val_2<AD_val_2_min)		AD_val_2=AD_val_2_min;
-  if(AD_val_3<AD_val_3_min)		AD_val_3=AD_val_3_min;
-  if(AD_val_4<AD_val_4_min)		AD_val_4=AD_val_4_min;
-  
+//  if(AD_val_1<AD_val_1_min)		AD_val_1=AD_val_1_min;
+//  if(AD_val_2<AD_val_2_min)		AD_val_2=AD_val_2_min;
+//  if(AD_val_3<AD_val_3_min)		AD_val_3=AD_val_3_min;
+//  if(AD_val_4<AD_val_4_min)		AD_val_4=AD_val_4_min;
+//  
   
   //归一化
   AD_val_1=100*(AD_val_1 -AD_val_1_min)/(AD_val_1_max-AD_val_1_min);
@@ -418,9 +418,9 @@ void roadturncal()  //转向控制程序
   Inductor_ADC[2]= dis_AD_val_3; //左八
   Inductor_ADC[3]= dis_AD_val_4; //右八
  // if((Inductor_ADC[0]+Inductor_ADC[1])>200) //有电磁信号，没有丢线  
- //Middle_Err=(float)100*(AD_val_2-AD_val_1)/(AD_val_2+AD_val_1) ;  //归一
- //Middle_Err=Middle_Err*(Middle_Err*Middle_Err/1250.0+2)/10;//s 比例待修正
-      Middle_Err=disgy_AD_val_2-disgy_AD_val_1;
+ Middle_Err=(float)100*(AD_val_2-AD_val_1)/(AD_val_2+AD_val_1) ;  //归一
+ Middle_Err=Middle_Err*(Middle_Err*Middle_Err/1250.0+2)/10;
+   //   Middle_Err=disgy_AD_val_2-disgy_AD_val_1;
 
   //s 圆环
   

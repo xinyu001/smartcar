@@ -10,6 +10,9 @@ extern int   AD_val_3_min;
 extern int   AD_val_1_max;
 extern int   AD_val_2_max;
 extern int   AD_val_3_max; 
+extern int AD_val_1,AD_val_2,AD_val_3,AD_val_4;
+extern int dis_AD_val_1,dis_AD_val_2,dis_AD_val_3,dis_AD_val_4;
+extern int disgy_AD_val_1,disgy_AD_val_2,disgy_AD_val_3,disgy_AD_val_4;
 
 extern uint8 Style;
 extern int Speed_Filter_Times;

@@ -28,10 +28,13 @@ extern uint8  LMR[3][CAMERA_H];
 extern uint8 Style;
 
 
-extern int   dis_AD_val_1,dis_AD_val_2,dis_AD_val_3,dis_AD_val_4;
-extern int   disgy_AD_val_1,disgy_AD_val_2,disgy_AD_val_3,disgy_AD_val_4;
-extern int   AD_val_1_min,AD_val_2_min,AD_val_3_min,AD_val_4_min;
-extern int   AD_val_1_max,AD_val_2_max,AD_val_3_max,AD_val_4_max;
+extern int AD_val_1,AD_val_2,AD_val_3,AD_val_4;
+extern int dis_AD_val_1,dis_AD_val_2,dis_AD_val_3,dis_AD_val_4;
+extern int disgy_AD_val_1,disgy_AD_val_2,disgy_AD_val_3,disgy_AD_val_4;
+extern int AD_val_1_min,AD_val_2_min,AD_val_3_min,AD_val_4_min;
+extern int AD_val_1_max,AD_val_2_max,AD_val_3_max,AD_val_4_max;
+extern float display1,display2,display3;
+extern float display4,display5,display6;
 
 void my_putchar(char temp)
 {
@@ -242,17 +245,32 @@ void OLED_Draw_UI()  //画出界面
 //第六页数据
     else if(Page_Index==5){
       
-    OLED_P6x8Str(0,2,"Distance");
-    OLED_PrintValueF(72, 2,Distance,4);
-    OLED_P6x8Str(0,3,"RunTime");
-    OLED_PrintValueF(72, 3,RunTime,4);
-    OLED_P6x8Str(0,4,"Average_Spd");
-    OLED_PrintValueF(72, 4,AverageSpeed,4);  
-    OLED_P6x8Str(0,5,"Middle_Err");
-    OLED_PrintValueF(72, 5,Middle_Err,4);  
-    OLED_P6x8Str(0,6,"NowSPEED");
-    OLED_PrintValueF(72, 6,CarSpeed,4);
+//    OLED_P6x8Str(0,2,"Distance");
+//    OLED_PrintValueF(72, 2,Distance,4);
+//    OLED_P6x8Str(0,3,"RunTime");
+//    OLED_PrintValueF(72, 3,RunTime,4);
+//    OLED_P6x8Str(0,4,"Average_Spd");
+//    OLED_PrintValueF(72, 4,AverageSpeed,4);  
+//    OLED_P6x8Str(0,5,"Middle_Err");
+//    OLED_PrintValueF(72, 5,Middle_Err,4);  
+//    OLED_P6x8Str(0,6,"NowSPEED");
+//    OLED_PrintValueF(72, 6,CarSpeed,4);
  
+      
+    OLED_P6x8Str(0,2,"1:");
+    OLED_PrintValueF(30, 2,display1,4);
+    OLED_P6x8Str(0,3,"2:");
+    OLED_PrintValueF(30, 3,display2,4);
+    OLED_P6x8Str(0,4,"3:");
+    OLED_PrintValueF(30, 4,display3,4);
+    OLED_P6x8Str(0,5,"1:");
+    OLED_PrintValueF(30, 5,display4,4);
+    OLED_P6x8Str(0,6,"2:");
+    OLED_PrintValueF(30, 6,display5,4);
+    OLED_P6x8Str(0,7,"3:");
+    OLED_PrintValueF(30, 7,display6,4);
+    
+    
     OLED_Set_Pos(122,7);
     OLED_P6x8Char(Page_Index+48); 
     }
