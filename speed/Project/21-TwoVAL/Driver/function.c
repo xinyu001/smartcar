@@ -15,21 +15,22 @@ extern float Control_Para[15];
 extern uint8 Style;                             //7月7日加
 
 //s  电磁参数
-extern int   AD_val_1;
-extern int   AD_val_2;
-extern int   AD_val_3;
-extern int   AD_val_4;
-int  adtmp1,adtmp2,adtmp3,adtmp4;
-extern int   dis_AD_val_1,dis_AD_val_2,dis_AD_val_3,dis_AD_val_4  ;
-extern int   disgy_AD_val_1,disgy_AD_val_2,disgy_AD_val_3,disgy_AD_val_4;
-extern int   AD_val_1_min;
-extern int   AD_val_2_min;
-extern int   AD_val_3_min;
-extern int   AD_val_4_min;
-extern int   AD_val_1_max;
-extern int   AD_val_2_max;
-extern int   AD_val_3_max; 
-extern int   AD_val_4_max; 
+//extern int   AD_val_1;
+//extern int   AD_val_2;
+//extern int   AD_val_3;
+//extern int   AD_val_4;
+float v1,v2,v3,v4;
+float  adtmp1,adtmp2,adtmp3,adtmp4;
+//extern int   dis_AD_val_1,dis_AD_val_2,dis_AD_val_3,dis_AD_val_4  ;
+//extern int   disgy_AD_val_1,disgy_AD_val_2,disgy_AD_val_3,disgy_AD_val_4;
+extern float   AD_val_1_min;
+extern float   AD_val_2_min;
+extern float   AD_val_3_min;
+extern float   AD_val_4_min;
+extern float   AD_val_1_max;
+extern float   AD_val_2_max;
+extern float   AD_val_3_max; 
+extern float   AD_val_4_max; 
 
 void init()
 {  
@@ -88,7 +89,7 @@ void Para_Init()
   if(Style==0)
     SetSpeed=0.5;                              //0.9  原来0.6
   if(Style==1)
-    SetSpeed=0.4;                               //0.6//s 0.5
+    SetSpeed=0.5;                               //0.6//s 0.5
   Fuzzy_Kp=0.0065;                              //0.014
   Fuzzy_Kd=0.005;                               //0
   PID_SPEED.P=0.13;                             //0.13  
@@ -200,29 +201,50 @@ void adc_maxmin_update(){
       int i;
       for(i=0;i<10;i++)
       {
-        AD_val_1 = adc_ave(ADC1_SE8, ADC_16bit,8);
-        AD_val_2 = adc_ave(ADC1_SE13, ADC_16bit,8); 
-        AD_val_3 = adc_ave(ADC1_SE10, ADC_16bit,8);
-        AD_val_4 = adc_ave(ADC1_SE11, ADC_16bit,8);
-        adtmp1= adtmp1+ AD_val_1;
-        adtmp2= adtmp2+ AD_val_2;
-        adtmp3= adtmp3+ AD_val_3;
-        adtmp4= adtmp4+ AD_val_4;
+//        AD_val_1 = adc_ave(ADC1_SE8, ADC_16bit,8);
+//        AD_val_2 = adc_ave(ADC1_SE13, ADC_16bit,8); 
+//        AD_val_3 = adc_ave(ADC1_SE10, ADC_16bit,8);
+//        AD_val_4 = adc_ave(ADC1_SE11, ADC_16bit,8);
+        v1 = adc_ave(ADC1_SE8, ADC_16bit,2);
+        v2 = adc_ave(ADC1_SE13, ADC_16bit,2); 
+        v3 = adc_ave(ADC1_SE10, ADC_16bit,2);
+        v4 = adc_ave(ADC1_SE11, ADC_16bit,2);
+//        adtmp1= adtmp1+ AD_val_1;
+//        adtmp2= adtmp2+ AD_val_2;
+//        adtmp3= adtmp3+ AD_val_3;
+//        adtmp4= adtmp4+ AD_val_4;
+        adtmp1= adtmp1+ v1;
+        adtmp2= adtmp2+ v2;
+        adtmp3= adtmp3+ v3;
+        adtmp4= adtmp4+ v4;
       } 
-      AD_val_1 = adtmp1/10;
-      AD_val_2 = adtmp2/10;
-      AD_val_3 = adtmp3/10;
-      AD_val_4 = adtmp4/10;
+//      AD_val_1 = adtmp1/10;
+//      AD_val_2 = adtmp2/10;
+//      AD_val_3 = adtmp3/10;
+//      AD_val_4 = adtmp4/10;
+      v1 = adtmp1/10;
+      v2 = adtmp2/10;
+      v3 = adtmp3/10;
+      v4 = adtmp4/10;
       //更新最大最小值
-      if(AD_val_1>AD_val_1_max)		AD_val_1_max=AD_val_1;
-      if(AD_val_2>AD_val_2_max)		AD_val_2_max=AD_val_2;
-      if(AD_val_3>AD_val_3_max)		AD_val_3_max=AD_val_3;
-      if(AD_val_4>AD_val_4_max)		AD_val_4_max=AD_val_4;
+//      if(AD_val_1>AD_val_1_max)		AD_val_1_max=AD_val_1;
+//      if(AD_val_2>AD_val_2_max)		AD_val_2_max=AD_val_2;
+//      if(AD_val_3>AD_val_3_max)		AD_val_3_max=AD_val_3;
+//      if(AD_val_4>AD_val_4_max)		AD_val_4_max=AD_val_4;
+//			
+//      if(AD_val_1<AD_val_1_min)		AD_val_1_min=AD_val_1;
+//      if(AD_val_2<AD_val_2_min)		AD_val_2_min=AD_val_2;			  
+//      if(AD_val_3<AD_val_3_min)		AD_val_3_min=AD_val_3;
+//      if(AD_val_4<AD_val_4_min)		AD_val_4_min=AD_val_4;	
+      if(v1>AD_val_1_max)		AD_val_1_max=v1;
+      if(v2>AD_val_2_max)		AD_val_2_max=v2;
+      if(v3>AD_val_3_max)		AD_val_3_max=v3;
+      if(v4>AD_val_4_max)		AD_val_4_max=v4;
 			
-      if(AD_val_1<AD_val_1_min)		AD_val_1_min=AD_val_1;
-      if(AD_val_2<AD_val_2_min)		AD_val_2_min=AD_val_2;			  
-      if(AD_val_3<AD_val_3_min)		AD_val_3_min=AD_val_3;
-      if(AD_val_4<AD_val_4_min)		AD_val_4_min=AD_val_4;	
+      if(v1<AD_val_1_min)		AD_val_1_min=v1;
+      if(v2<AD_val_2_min)		AD_val_2_min=v2;			  
+      if(v3<AD_val_3_min)		AD_val_3_min=v3;
+      if(v4<AD_val_4_min)		AD_val_4_min=v4;	
        //归一化
 //      AD_val_1=100*(AD_val_1 - AD_val_1_min)/(AD_val_1_max-AD_val_1_min);
 //      AD_val_2=100*(AD_val_2 - AD_val_2_min)/(AD_val_2_max-AD_val_2_min);

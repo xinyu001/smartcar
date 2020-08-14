@@ -28,11 +28,11 @@ extern uint8  LMR[3][CAMERA_H];
 extern uint8 Style;
 
 
-extern int AD_val_1,AD_val_2,AD_val_3,AD_val_4;
-extern int dis_AD_val_1,dis_AD_val_2,dis_AD_val_3,dis_AD_val_4;
-extern int disgy_AD_val_1,disgy_AD_val_2,disgy_AD_val_3,disgy_AD_val_4;
-extern int AD_val_1_min,AD_val_2_min,AD_val_3_min,AD_val_4_min;
-extern int AD_val_1_max,AD_val_2_max,AD_val_3_max,AD_val_4_max;
+extern float AD_val_1,AD_val_2,AD_val_3,AD_val_4;
+extern float dis_AD_val_1,dis_AD_val_2,dis_AD_val_3,dis_AD_val_4;
+extern float disgy_AD_val_1,disgy_AD_val_2,disgy_AD_val_3,disgy_AD_val_4;
+extern float AD_val_1_min,AD_val_2_min,AD_val_3_min,AD_val_4_min;
+extern float AD_val_1_max,AD_val_2_max,AD_val_3_max,AD_val_4_max;
 extern float display1,display2,display3;
 extern float display4,display5,display6;
 
@@ -188,17 +188,17 @@ void OLED_Draw_UI()  //画出界面
     OLED_PrintValueF(72, 1,RoadType,4);
     
     OLED_P6x8Str(0,2,"v1:");
-    OLED_PrintValueF(40, 2,dis_AD_val_1,4);
+    OLED_PrintValueF(30, 2,dis_AD_val_1,4);
     OLED_PrintValueF(80, 2,disgy_AD_val_1,4);
     OLED_P6x8Str(0,3,"v2:");
-    OLED_PrintValueF(40, 3,dis_AD_val_2,4);
+    OLED_PrintValueF(30, 3,dis_AD_val_2,4);
     OLED_PrintValueF(80, 3,disgy_AD_val_2,4);
     OLED_P6x8Str(0,4,"v3:");
-    OLED_PrintValueF(40, 4,dis_AD_val_3,4);
+    OLED_PrintValueF(30, 4,dis_AD_val_3,4);
     OLED_PrintValueF(80, 4,disgy_AD_val_3,4);
     OLED_P6x8Str(0,5,"v4:");
-    OLED_PrintValueF(40, 5,dis_AD_val_4,4);
-    OLED_PrintValueF(80, 5,disgy_AD_val_3,4);
+    OLED_PrintValueF(30, 5,dis_AD_val_4,4);
+    OLED_PrintValueF(80, 5,disgy_AD_val_4,4);
     OLED_P6x8Str(0,6,"Middle_Err");
     OLED_PrintValueF(72, 6,Middle_Err,4);
     
@@ -263,11 +263,11 @@ void OLED_Draw_UI()  //画出界面
     OLED_PrintValueF(30, 3,display2,4);
     OLED_P6x8Str(0,4,"3:");
     OLED_PrintValueF(30, 4,display3,4);
-    OLED_P6x8Str(0,5,"1:");
+    OLED_P6x8Str(0,5,"4:");
     OLED_PrintValueF(30, 5,display4,4);
-    OLED_P6x8Str(0,6,"2:");
+    OLED_P6x8Str(0,6,"5:");
     OLED_PrintValueF(30, 6,display5,4);
-    OLED_P6x8Str(0,7,"3:");
+    OLED_P6x8Str(0,7,"6:");
     OLED_PrintValueF(30, 7,display6,4);
     
     

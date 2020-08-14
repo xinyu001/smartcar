@@ -51,21 +51,21 @@ float Distance1=10000;
 uint8 flag2=0,flag_100;
 
 // 电磁转向AD控制参数
-uint16   AD_Value[2][5],AD_Value1[2],AD_V[2][5];
-int AD_val_1;
-int AD_val_2;
-int AD_val_3;
-int AD_val_4;
-int dis_AD_val_1,dis_AD_val_2,dis_AD_val_3,dis_AD_val_4;
-int disgy_AD_val_1,disgy_AD_val_2,disgy_AD_val_3,disgy_AD_val_4;
-int AD_val_1_max=20000;
-int AD_val_2_max=20000;
-int AD_val_3_max=20000;
-int AD_val_4_max=20000;         //大概两边相等放中间是40几
-int AD_val_1_min=20000;
-int AD_val_2_min=20000;
-int AD_val_3_min=20000;
-int AD_val_4_min=20000;
+float   AD_Value[2][5],AD_Value1[2],AD_V[2][5];
+float AD_val_1;
+float AD_val_2;
+float AD_val_3;
+float AD_val_4;
+float dis_AD_val_1,dis_AD_val_2,dis_AD_val_3,dis_AD_val_4;
+float disgy_AD_val_1,disgy_AD_val_2,disgy_AD_val_3,disgy_AD_val_4;
+float AD_val_1_max=0;
+float AD_val_2_max=0;
+float AD_val_3_max=0;
+float AD_val_4_max=0;         //大概两边相等放中间是40几
+float AD_val_1_min=50000;
+float AD_val_2_min=50000;
+float AD_val_3_min=50000;
+float AD_val_4_min=50000;
 
 int Car_State;
 int circle_Flag;
@@ -75,7 +75,7 @@ int turn_right_Flag=0;
 int turn_left_Flag=0;
 int Go_Out_Circle=0;
 void roadturncal();
-
+float adc_ave();
 
 void Get_Speed()      //可能是4ms执行一次     //5ms执行一次
 {  
@@ -326,8 +326,9 @@ float  Middle_Err_Filter(float middle_err)    //中心偏差滤波    从未使用
 //电磁部分
 void roadturncal()  //转向控制程序  
 { static uint8 turn_Flag2;
-  uint16 temp,i,j,k,ad_sum[2],AD_sum[2]; 
-  int16 Inductor_ADC[4];
+  uint16 i,j,k; 
+  float temp,ad_sum[2],AD_sum[2]; 
+  float Inductor_ADC[4];
   float err;
 // 电感AD值滤波程序，比较慢 ，底层采集数据自动进行非负处理
   for(i=0;i<5;i++)
@@ -340,8 +341,8 @@ void roadturncal()  //转向控制程序
 
 // Voltage = adc_ave(ADC_CHANNEL_AD15,ADC_12BIT,2)*3.81;
   
-    AD_val_3 = adc_ave(ADC1_SE10, ADC_16bit,3);  //左边八字电感  
-    AD_val_4 = adc_ave(ADC1_SE11, ADC_16bit,3); //右边八字电感 
+    AD_val_3 = adc_ave(ADC1_SE10, ADC_16bit,2);  //左边八字电感  
+    AD_val_4 = adc_ave(ADC1_SE11, ADC_16bit,2); //右边八字电感 
  
   for(i=0;i<2;i++)     //左右电感  从小到大排序  
   {
@@ -361,7 +362,7 @@ void roadturncal()  //转向控制程序
   for(i=0;i<2;i++)    //求中间三项的和
     {
        ad_sum[i] = AD_Value[i][1] + AD_Value[i][2] + AD_Value[i][3];       
-       AD_Value1[i] = (int16)(ad_sum[i] / 3);
+       AD_Value1[i] =ad_sum[i] / 3;
     }
   
   for(i = 0;i < 4;i++)
@@ -393,17 +394,18 @@ void roadturncal()  //转向控制程序
   if(AD_val_2>AD_val_2_max)		AD_val_2=AD_val_2_max;
   if(AD_val_3>AD_val_3_max)		AD_val_3=AD_val_3_max;
   if(AD_val_4>AD_val_4_max)		AD_val_4=AD_val_4_max;
-//  if(AD_val_1<AD_val_1_min)		AD_val_1=AD_val_1_min;
-//  if(AD_val_2<AD_val_2_min)		AD_val_2=AD_val_2_min;
-//  if(AD_val_3<AD_val_3_min)		AD_val_3=AD_val_3_min;
-//  if(AD_val_4<AD_val_4_min)		AD_val_4=AD_val_4_min;
+  
+  if(AD_val_1<AD_val_1_min)		AD_val_1=AD_val_1_min;
+  if(AD_val_2<AD_val_2_min)		AD_val_2=AD_val_2_min;
+  if(AD_val_3<AD_val_3_min)		AD_val_3=AD_val_3_min;
+  if(AD_val_4<AD_val_4_min)		AD_val_4=AD_val_4_min;
 //  
   
   //归一化
-  AD_val_1=100*(AD_val_1 -AD_val_1_min)/(AD_val_1_max-AD_val_1_min);
-  AD_val_2=100*(AD_val_2 -AD_val_2_min)/(AD_val_2_max-AD_val_2_min);
-  AD_val_3=100*(AD_val_3 -AD_val_3_min)/(AD_val_3_max-AD_val_3_min);
-  AD_val_4=100*(AD_val_4 -AD_val_4_min)/(AD_val_4_max-AD_val_4_min);
+  AD_val_1=(100*(AD_val_1 -AD_val_1_min))/(AD_val_1_max-AD_val_1_min);
+  AD_val_2=(100*(AD_val_2 -AD_val_2_min))/(AD_val_2_max-AD_val_2_min);
+  AD_val_3=(100*(AD_val_3 -AD_val_3_min))/(AD_val_3_max-AD_val_3_min);
+  AD_val_4=(100*(AD_val_4 -AD_val_4_min))/(AD_val_4_max-AD_val_4_min);
  
   disgy_AD_val_1 = AD_val_1;
   disgy_AD_val_2 = AD_val_2;
@@ -417,12 +419,11 @@ void roadturncal()  //转向控制程序
   Inductor_ADC[1]= dis_AD_val_2; //右
   Inductor_ADC[2]= dis_AD_val_3; //左八
   Inductor_ADC[3]= dis_AD_val_4; //右八
- // if((Inductor_ADC[0]+Inductor_ADC[1])>200) //有电磁信号，没有丢线  
- Middle_Err=(float)100*(AD_val_2-AD_val_1)/(AD_val_2+AD_val_1) ;  //归一
- Middle_Err=Middle_Err*(Middle_Err*Middle_Err/1250.0+2)/10;
-   //   Middle_Err=disgy_AD_val_2-disgy_AD_val_1;
+  if((Inductor_ADC[0]+Inductor_ADC[1])>200) //有电磁信号，没有丢线  
+//  Middle_Err=(float)100*(AD_val_2-AD_val_1)/(AD_val_2+AD_val_1) ;  //归一
+    Middle_Err=disgy_AD_val_2-disgy_AD_val_1;
+    Middle_Err=Middle_Err*(Middle_Err*Middle_Err/1250+2)/10;
 
-  //s 圆环
   
   /*
   //下面的各个判定参数需要实际测量来修正
@@ -487,35 +488,12 @@ void roadturncal()  //转向控制程序
 //  if( (Inductor_ADC[0]<4) && ((Inductor_ADC[1] - Inductor_ADC[0]) < 450) && ((Inductor_ADC[1] - Inductor_ADC[0]) > 350) )  Middle_Err = 80;
 //  if( (Inductor_ADC[1]<4) && ((Inductor_ADC[0] - Inductor_ADC[1]) < 450) && ((Inductor_ADC[0] - Inductor_ADC[1]) > 350) )  Middle_Err = -80; 
   */
-   //Middle_Err=Middle_Err*(Middle_Err*Middle_Err/1250.0+2)/10;//s 比例待修正
+  
+  
+  // Middle_Err=Middle_Err*(Middle_Err*Middle_Err/1250.0+2)/10;
    
-//   Push_And_Pull(DirectionErr,8,Middle_Err);
-//   if(Calculate_Length<8) 
-//   {  
-//     Calculate_Length++;
-//   }
-//   else
-//   {
-//     Error_Delta = -10*Slope_Calculate(0,Calculate_Length,DirectionErr);//求得斜率
-//   }
-//   DuoP=PID_TURN_Lie.P*ABS(Middle_Err);
-//   if(DuoP > 0.035)
-//      DuoP=0.035;
-//   //PID_TURN.pout= DuoP * Middle_Err;  //P=0.055
-//   //PID_TURN.dout= PID_TURN_Lie.D * Error_Delta;  //D=0.006
-//   Turn_Out =DuoP * Middle_Err + PID_TURN_Lie.D * Error_Delta + PID_TURN.D * Turn_Speed;
-//   Error_Delta_Deceleration=0.7;
-//  if(Turn_Out >= TURNPWM_MAX) 
-//  {
-//    Turn_Out=TURNPWM_MAX;
-//  }
-//  if(Turn_Out <= -TURNPWM_MAX) 
-//  {
-//    Turn_Out=-TURNPWM_MAX;
-//  }
-// //////////////  四电感法结束   /////////////////////////////  
-//  
-//  PID_TURN_Lie.OUT=Turn_Out;
+
+// //////////////  四电感法结束   ///////////////////////////
 }
 
 

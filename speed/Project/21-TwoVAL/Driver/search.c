@@ -47,6 +47,8 @@ uint16 cont;
 int jishu1,jishu2,jishu,jishu3;
 int count;
 
+void roadturncal();
+
 void judgeblack();
 void Push_And_Pull(float *buff,int len,float newdata)
 {//新的数据放入第一个元素，其他元素整体后移
@@ -409,14 +411,14 @@ void Search()
 //s 出库，开始正常行驶
 if((RoadType==200)&&(Distance>1)){
         
-         RoadType=0;
+         RoadType=100;
 
 }
 //s 8.1 入库结束，停车
-if((RoadType==205)&&(Distance-Distance200>1)){
+if((RoadType==205)&&(Distance-Distance200>0.75)){
          Distance200=1000;
          RoadType=206;
-//       Stop_Brake=1;          //刹车
+         Stop_Brake=1;          //刹车
          
 //       SetSpeed=0;                    //s 暂时与205重复
 //       Speed_H=0;
@@ -688,7 +690,7 @@ if(RoadType==15)//;flag_15==1)
  //出环岛
 if(flag_16==1)
 {
-  RoadType==16;
+  RoadType=16;
   if(flag_left==1 && Distance-Distance5>4.5 )
   { 
     flag_16=0;  
@@ -926,8 +928,11 @@ if(flag_17==1)
    }
 
   Middle_Err= Middle_Err_Sum;                           //更新误差 e.g.小车偏左时误差为正
+ //s 测试
+  roadturncal();
   
- // roadturncal();                                        //电磁方向控制
+//  if(RoadType==100)
+//    roadturncal();                                        //电磁方向控制，算出middle-err；
   
   Push_And_Pull(Previous_Error,10,Middle_Err);          //Middle_Err放入长度为12的数组Previous_Error的首元
   Delt_error=-10*Slope_Calculate(0,10,Previous_Error);  //该变量算出来供在其他文件使用
