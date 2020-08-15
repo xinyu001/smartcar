@@ -13,6 +13,13 @@ extern float   AD_val_3_max;
 extern float AD_val_1,AD_val_2,AD_val_3,AD_val_4;
 extern float dis_AD_val_1,dis_AD_val_2,dis_AD_val_3,dis_AD_val_4;
 extern float disgy_AD_val_1,disgy_AD_val_2,disgy_AD_val_3,disgy_AD_val_4;
+extern int circle_Flag;
+extern int turn_Flag;
+extern int turn_Flag2;
+extern int turn_right_Flag;
+extern int turn_left_Flag;
+extern int Go_Out_Circle;
+
 
 extern uint8 Style;
 extern int Speed_Filter_Times;

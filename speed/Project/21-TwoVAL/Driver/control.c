@@ -46,7 +46,7 @@ extern int16 leftspeed,rightspeed;
 //extern int16 disspeed;
 extern uint8 lost_line;
 extern int flag,flag_obstacle;
-
+extern uint8 RoadType;
 float Distance1=10000;
 uint8 flag2=0,flag_100;
 
@@ -67,13 +67,14 @@ float AD_val_2_min=50000;
 float AD_val_3_min=50000;
 float AD_val_4_min=50000;
 
-int Car_State;
+
 int circle_Flag;
 int turn_Flag;
 int turn_Flag2=0;
 int turn_right_Flag=0;
 int turn_left_Flag=0;
 int Go_Out_Circle=0;
+float Distance101,Distance102,Distance103,Distance104;
 void roadturncal();
 float adc_ave();
 
@@ -335,14 +336,14 @@ void roadturncal()  //转向控制程序
   {
 
 
-     AD_Value[0][i] = adc_ave(ADC1_SE8, ADC_16bit,3);  //左电感  
-     AD_Value[1][i] = adc_ave(ADC1_SE13, ADC_16bit,3);  //右电感 
+     AD_Value[0][i] = adc_ave(ADC1_SE10, ADC_16bit,3);  //左电感  
+     AD_Value[1][i] = adc_ave(ADC1_SE11, ADC_16bit,3);  //右电感 
   }
 
 // Voltage = adc_ave(ADC_CHANNEL_AD15,ADC_12BIT,2)*3.81;
   
-    AD_val_3 = adc_ave(ADC1_SE10, ADC_16bit,2);  //左边八字电感  
-    AD_val_4 = adc_ave(ADC1_SE11, ADC_16bit,2); //右边八字电感 
+    AD_val_3 = adc_ave(ADC1_SE8, ADC_16bit,2);  //左边八字电感  
+    AD_val_4 = adc_ave(ADC1_SE13, ADC_16bit,2); //右边八字电感 
  
   for(i=0;i<2;i++)     //左右电感  从小到大排序  
   {
@@ -415,14 +416,84 @@ void roadturncal()  //转向控制程序
 
 
 ////////////     四电感法,带圆环    /////////////////////////////
-  Inductor_ADC[0]= dis_AD_val_1; //左
-  Inductor_ADC[1]= dis_AD_val_2; //右
-  Inductor_ADC[2]= dis_AD_val_3; //左八
-  Inductor_ADC[3]= dis_AD_val_4; //右八
-  if((Inductor_ADC[0]+Inductor_ADC[1])>200) //有电磁信号，没有丢线  
-//  Middle_Err=(float)100*(AD_val_2-AD_val_1)/(AD_val_2+AD_val_1) ;  //归一
-    Middle_Err=disgy_AD_val_2-disgy_AD_val_1;
-    Middle_Err=Middle_Err*(Middle_Err*Middle_Err/1250+2)/10;
+  Inductor_ADC[0]= disgy_AD_val_1; //左
+  Inductor_ADC[1]= disgy_AD_val_2; //右
+  Inductor_ADC[2]= disgy_AD_val_3; //左八
+  Inductor_ADC[3]= disgy_AD_val_4; //右八
+  if((Inductor_ADC[0]+Inductor_ADC[1])>20) //有电磁信号，没有丢线  
+    Middle_Err=-(float)100*(AD_val_2-AD_val_1)/(AD_val_2+AD_val_1) ;  //归一
+    //Middle_Err=disgy_AD_val_1-disgy_AD_val_2;
+  
+   //下面的各个判定参数需要实际测量来修正
+  if(Go_Out_Circle==0&&circle_Flag==0&&((Inductor_ADC[0]>60 && Inductor_ADC[1]>60 && Inductor_ADC[3]>60) || (Inductor_ADC[1]>60 && Inductor_ADC[0]>60 && Inductor_ADC[2]>60)))//(Inductor_ADC[0]>3000||Inductor_ADC[1]>3000)&&
+  {
+     circle_Flag=1;  //前言可能是圆环
+     if(Inductor_ADC[0]>Inductor_ADC[1]&&Inductor_ADC[2]<Inductor_ADC[3])  //左圆环
+     {
+        turn_left_Flag=1;
+     }
+     if(Inductor_ADC[2]>Inductor_ADC[3])  //右圆环         //Inductor_ADC[1]>Inductor_ADC[0]&&
+     {
+        turn_right_Flag=1;
+     }
+     if(turn_right_Flag==0&&turn_left_Flag==0) //误判
+     {
+        circle_Flag=0;
+     }
+  }
+  err=Inductor_ADC[3]-Inductor_ADC[2]; //八字电感决定进圆环
+  if(ABS(err)<3&&circle_Flag==1&&turn_Flag==0 && Inductor_ADC[0]>70 && Inductor_ADC[1]>70)
+  {
+     turn_Flag=1; //进入圆环
+     RoadType=101;//右拐固定方向
+     //BEEP_ON;
+  }
+  if(Inductor_ADC[0]<20 || Inductor_ADC[1]<20){
+  RoadType=100;
+  }
+  if(RoadType==100&&turn_Flag==1 && turn_Flag2==0) //圆环内部
+  {
+        if(turn_left_Flag==1)
+        {
+           if((Inductor_ADC[0]+Inductor_ADC[3])>10)
+            Middle_Err=-(float)100*(AD_val_4-AD_val_1)/(AD_val_4+AD_val_1);
+        }
+        if(turn_right_Flag==1)
+        {
+          if((Inductor_ADC[1]+Inductor_ADC[2])>10)
+            Middle_Err=-(float)100*(AD_val_2-AD_val_3)/(AD_val_2+AD_val_3);
+        }
+  }
+  if(turn_left_Flag==1&&(Inductor_ADC[0]>Inductor_ADC[1])&&turn_Flag==1&&Inductor_ADC[3]<5000)
+  {
+     turn_Flag2=1;  //准备出环
+  }
+  if(turn_right_Flag==1&&(Inductor_ADC[0]>Inductor_ADC[1])&&turn_Flag==1&&Inductor_ADC[1]>70&&Inductor_ADC[2]>70&&Inductor_ADC[0]>70)
+  {
+     turn_Flag2=1;  //准备出环
+  }
+  if(turn_Flag2==1 && ((turn_left_Flag==1 && Inductor_ADC[0]>80 && Inductor_ADC[1]>80) || (turn_right_Flag==1 && Inductor_ADC[0]>60 && Inductor_ADC[1]>60&& Inductor_ADC[2]>60 && Inductor_ADC[3]>60)))
+  {
+    Go_Out_Circle=1;  //出环
+  }
+  if(Go_Out_Circle==1) //完成一次圆环动作//s 2？不是1吗？？？
+  {
+     turn_Flag=0; 
+     turn_Flag2=0;
+     turn_right_Flag=0;
+     turn_left_Flag=0;
+     circle_Flag=0;
+   //  Go_Out_Circle=0;
+     //BEEP_OFF;
+  }
+  ///偏离很大时
+//  if( (Inductor_ADC[0]<4) && ((Inductor_ADC[1] - Inductor_ADC[0]) < 450) && ((Inductor_ADC[1] - Inductor_ADC[0]) > 350) )  Middle_Err = 80;
+//  if( (Inductor_ADC[1]<4) && ((Inductor_ADC[0] - Inductor_ADC[1]) < 450) && ((Inductor_ADC[0] - Inductor_ADC[1]) > 350) )  Middle_Err = -80; 
+  
+  if(RoadType==101){
+      Middle_Err=45;
+  }
+    Middle_Err=Middle_Err*(Middle_Err*Middle_Err/1250+2)/30;
 
   
   /*
