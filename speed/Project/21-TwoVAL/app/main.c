@@ -108,26 +108,20 @@ void  main(void)
 //  }
   while(1)
   {
-      display1= adc_once(ADC1_SE8, ADC_16bit);
-      display2= adc_once(ADC1_SE9, ADC_16bit);
-      display3= adc_once(ADC1_SE10, ADC_16bit);
-      display4= adc_once(ADC1_SE11, ADC_16bit);
-      display5= adc_once(ADC1_SE12, ADC_16bit);
-      display6= adc_once(ADC1_SE13, ADC_16bit);
+//      display1= adc_once(ADC1_SE8, ADC_16bit);
+//      display2= adc_once(ADC1_SE9, ADC_16bit);
+//      display3= adc_once(ADC1_SE10, ADC_16bit);
+//      display4= adc_once(ADC1_SE11, ADC_16bit);
+//      display5= adc_once(ADC1_SE12, ADC_16bit);
+//      display6= adc_once(ADC1_SE13, ADC_16bit);
       
-      if(Stop){
-      adc_maxmin_update();                      //更新电磁的最大最小值
-      } 
-      
-           
-      
-      
-      
-      
+//      if(Stop){
+//      adc_maxmin_update();                      //更新电磁的最大最小值
+//      }       
+              
       Check_BottonPress();
       if(new_img)                               //此段不超过0.5ms 200ms主频  6ms 或8ms 执行一次
-      { 
-        
+      {       
         get_edge();
         Search();                       //roadturncal() 在Search(); 最后               
        // roadturncal();
@@ -218,8 +212,8 @@ void PIT_IRQHandler()  //2ms一次中断
       {
         Starting=0;
         Stop=0;                                 //Stop=1电机不输出
-        //RoadType=200;                           //s 起步时赛道类型为200，出库
-        RoadType=100;                           //s 测试电磁
+        RoadType=200;                           //s 起步时赛道类型为200，出库
+       // RoadType=100;                           //s 测试电磁
         LED_BLUE_OFF;
         LED_GREEN_OFF;
         BEEP_OFF;                               //蜂鸣器响一段时间关掉

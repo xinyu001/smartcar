@@ -58,14 +58,14 @@ float AD_val_3;
 float AD_val_4;
 float dis_AD_val_1,dis_AD_val_2,dis_AD_val_3,dis_AD_val_4;
 float disgy_AD_val_1,disgy_AD_val_2,disgy_AD_val_3,disgy_AD_val_4;
-float AD_val_1_max=0;
-float AD_val_2_max=0;
-float AD_val_3_max=0;
-float AD_val_4_max=0;         //大概两边相等放中间是40几
-float AD_val_1_min=50000;
-float AD_val_2_min=50000;
-float AD_val_3_min=50000;
-float AD_val_4_min=50000;
+float AD_val_1_max=20000;
+float AD_val_2_max=20000;
+float AD_val_3_max=20000;
+float AD_val_4_max=20000;         //大概两边相等放中间归一化是40几
+float AD_val_1_min=2200;
+float AD_val_2_min=2200;
+float AD_val_3_min=2200;
+float AD_val_4_min=2200;
 
 
 int circle_Flag;
@@ -75,6 +75,7 @@ int turn_right_Flag=0;
 int turn_left_Flag=0;
 int Go_Out_Circle=0;
 float Distance101,Distance102,Distance103,Distance104,Distance105;
+float Distance111,Distance112,Distance113,Distance114,Distance115;
 void roadturncal();
 float adc_ave();
 
@@ -107,7 +108,7 @@ void Speed_Control(void)                        //更新SpeedControlOutOld  计算Sp
   
   //SpeedError=0.42-CarSpeed;//测试
   //现在让小车有变速功能
-  if(Style==0)//不加速，1
+  if(Style==0)                                  //不加速
     SpeedError=SetSpeed-CarSpeed;               //车速偏小 误差为正
   else{//加速  
    /*  if(flag==1) //18
@@ -279,8 +280,19 @@ void Moto_Out() //2ms一次
     MotorOut=0;
     LED_BLUE_ON;
  }
-
-   if(MotorOut>=0) //正转
+ if(Stop_Brake && wycnt<=250){
+   
+   FTM_PWM_Duty(FTM0,FTM_CH0,0);
+   FTM_PWM_Duty(FTM0,FTM_CH1,3000);
+   wycnt++;
+ }
+ if(wycnt>250){
+   FTM_PWM_Duty(FTM0,FTM_CH0,0);
+   FTM_PWM_Duty(FTM0,FTM_CH1,0);
+ }
+ 
+if(Stop_Brake!=1)
+ {if(MotorOut>=0) //正转
   {
      FTM_PWM_Duty(FTM0,FTM_CH0,MotorOut*10000);//占空比精度为10000  第三个参数为占空比分子
      FTM_PWM_Duty(FTM0,FTM_CH1,0);
@@ -293,11 +305,8 @@ void Moto_Out() //2ms一次
      FTM_PWM_Duty(FTM0,FTM_CH1,-MotorOut*10000);
      //my_putchar('B');
   }
+ }
  
-//s 电机反转测试代码
- 
-//     FTM_PWM_Duty(FTM0,FTM_CH0,0);
-//     FTM_PWM_Duty(FTM0,FTM_CH1,2000);
 }
  
 
@@ -312,7 +321,7 @@ float  Turn_Out_Filter(float turn_out)    //转向控制输出滤波
   Turn_Out_Filtered=Pre1_Error[0]*0.3+Pre1_Error[1]*0.2+Pre1_Error[2]*0.2+Pre1_Error[3]*0.2;
   return Turn_Out_Filtered;
 }
-float  Middle_Err_Filter(float middle_err)    //中心偏差滤波    从未使用
+float  Middle_Err_Filter(float middle_err)    //中心偏差滤波    
 {
   float Middle_Err_Fltered; 
   static float Pre3_Error[4]; 
@@ -425,10 +434,10 @@ void roadturncal()  //转向控制程序
     //Middle_Err=disgy_AD_val_1-disgy_AD_val_2;
   
    //下面的各个判定参数需要实际测量来修正
-  if(Go_Out_Circle==0&&circle_Flag==0&&((Inductor_ADC[0]>60 && Inductor_ADC[1]>60 && Inductor_ADC[3]>60) || (Inductor_ADC[0]>90 && Inductor_ADC[1]>75 && Inductor_ADC[2]>70&& Inductor_ADC[3]<40)))//(Inductor_ADC[0]>3000||Inductor_ADC[1]>3000)&&
+  if(Go_Out_Circle==0&&circle_Flag==0&&((Inductor_ADC[0]>90 && Inductor_ADC[1]>75 && Inductor_ADC[3]>60&& Inductor_ADC[2]<40) || (Inductor_ADC[0]>90 && Inductor_ADC[1]>75 && Inductor_ADC[2]>70&& Inductor_ADC[3]<40)))//(Inductor_ADC[0]>3000||Inductor_ADC[1]>3000)&&
   {
      circle_Flag=1;  //前言可能是圆环
-     if(Inductor_ADC[0]>Inductor_ADC[1]&&Inductor_ADC[2]<Inductor_ADC[3])  //左圆环
+     if(Inductor_ADC[2]<Inductor_ADC[3])  //左圆环         //Inductor_ADC[0]>Inductor_ADC[1]&&
      {
         turn_left_Flag=1;
      }
@@ -445,11 +454,49 @@ void roadturncal()  //转向控制程序
   if(ABS(err)<5&&circle_Flag==1&&turn_Flag==0 && Inductor_ADC[0]>70 && Inductor_ADC[1]>70)
   {
      turn_Flag=1;                               //进入圆环
-     RoadType=101;//
+     if(turn_right_Flag==1)
+     {RoadType=101;//
      //BEEP_ON;
      Distance101=Distance;              //记录下检测到右环时的距离
-     
+     }
+     if(turn_left_Flag==1){
+     RoadType=111;
+     Distance111=Distance;              //记录下检测到左环时的距离
+     }
   }
+  //左环
+  if(RoadType==111 && Distance-Distance111>1.5){                
+    RoadType=112;                              //进入左环，往左打固定方向距离
+    Distance112=Distance;                       //记录进入左环时的距离
+  }
+  
+  if(RoadType==112 && Distance-Distance112>1){
+  
+    RoadType=113;              //左环内行驶
+    
+  }
+  if(RoadType==113 && Distance-Distance112>5.5){
+  
+    RoadType=114;              //出环左拐
+    turn_Flag2=1;
+    Distance114=Distance;  
+    
+  }
+  if(RoadType==114 && Distance-Distance114>1){
+  
+    RoadType=115;              //出环
+    Distance115=Distance;  
+    
+  }
+ if(RoadType==115 && Distance-Distance114>1.5){
+  
+    RoadType=100;              //出环一段距离后变回普通赛道 
+    Go_Out_Circle=1;
+    
+    
+  }
+  
+  //右环
   if(RoadType==101 && Distance-Distance101>1.5){                
     RoadType=102;                              //进入右环，往右打固定方向距离
     Distance102=Distance;                       //记录进入右环时的距离
@@ -489,12 +536,44 @@ void roadturncal()  //转向控制程序
       Middle_Err=(float)100*(AD_val_2-AD_val_3)/(AD_val_2+AD_val_3);
         
   }
-  if(RoadType==102){
+  if(RoadType==113&&turn_Flag==1 && turn_Flag2==0) //圆环内部
+  {
+       
+      if((Inductor_ADC[0]+Inductor_ADC[1])>10)
+      Middle_Err=(float)100*(AD_val_4-AD_val_1)/(AD_val_4+AD_val_1);
+        
+  }
+  if(RoadType==102){            //进右环
     Middle_Err=-90;
   }
-  if(RoadType==104){
+  if(RoadType==104){            //出右环
     Middle_Err=-90;
   }
+  if(RoadType==112){            //进左环
+    Middle_Err=90;
+  }
+  if(RoadType==114){            //出左环
+    Middle_Err=90;
+  }
+  if(RoadType==200){            //出库
+    Middle_Err=-90;
+  }
+  if(RoadType==205){            //入库
+    Middle_Err=-90;
+  }
+  if(Go_Out_Circle==1) //完成一次圆环动作//s 2？不是1吗？？？
+  {
+     turn_Flag=0; 
+     turn_Flag2=0;
+     turn_right_Flag=0;
+     turn_left_Flag=0;
+     circle_Flag=0;
+     Go_Out_Circle=0;
+     //BEEP_OFF;
+  }
+  Middle_Err=Middle_Err_Filter(Middle_Err);
+  Middle_Err=-Middle_Err*(Middle_Err*Middle_Err/1250+2)/30;
+}
 //  if(turn_left_Flag==1&&(Inductor_ADC[0]>Inductor_ADC[1])&&turn_Flag==1&&Inductor_ADC[3]<5000)
 //  {
 //     turn_Flag2=1;  //准备出环
@@ -507,16 +586,7 @@ void roadturncal()  //转向控制程序
 //  {
 //    Go_Out_Circle=1;  //出环
 //  }
-  if(Go_Out_Circle==1) //完成一次圆环动作//s 2？不是1吗？？？
-  {
-     turn_Flag=0; 
-     turn_Flag2=0;
-     turn_right_Flag=0;
-     turn_left_Flag=0;
-     circle_Flag=0;
-   //  Go_Out_Circle=0;
-     //BEEP_OFF;
-  }
+
   
 //  if(Inductor_ADC[0]<20 || Inductor_ADC[1]<20){
 //  RoadType=100;
@@ -561,7 +631,7 @@ void roadturncal()  //转向控制程序
 //  if( (Inductor_ADC[1]<4) && ((Inductor_ADC[0] - Inductor_ADC[1]) < 450) && ((Inductor_ADC[0] - Inductor_ADC[1]) > 350) )  Middle_Err = -80; 
   
 
-    Middle_Err=-Middle_Err*(Middle_Err*Middle_Err/1250+2)/30;
+    
 
   
   /*
@@ -633,7 +703,7 @@ void roadturncal()  //转向控制程序
    
 
 // //////////////  四电感法结束   ///////////////////////////
-}
+
 
 
 
