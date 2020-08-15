@@ -1126,7 +1126,7 @@ if(flag_17==1)
      else if(RoadType==17)                              //³ö×ó»·µº
      { 
        
-          LMR[1][i]=26;                                 
+          LMR[1][i]=27;                                 
      }
 
      else if(RoadType==18 )

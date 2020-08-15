@@ -384,7 +384,7 @@ void Moto_Out() //2ms“ª¥Œ
    
    FTM_PWM_Duty(FTM0,FTM_CH0,0);
      
-   FTM_PWM_Duty(FTM0,FTM_CH1,2000);
+   FTM_PWM_Duty(FTM0,FTM_CH1,3000);
   
    wycnt++;                      
   
