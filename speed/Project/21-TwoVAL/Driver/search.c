@@ -409,7 +409,7 @@ void Search()
  
 
 //s 出库，开始正常行驶
-if((RoadType==200)&&(Distance>1)){
+if((RoadType==200)&&(Distance>1.5)){
         
          RoadType=100;
 

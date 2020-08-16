@@ -83,8 +83,8 @@ void init()
 
 void Para_Init()
 {
-  Speed_H=0.65;                                 //0.75
-  Speed_M=0.6;                                 //0.65
+  Speed_H=0.6;                                 //0.75
+  Speed_M=0.5;                                 //0.65
   Speed_L=0.5;                                 //0.52
   if(Style==0)
     SetSpeed=0.55;                              //0.9  Ô­À´0.6

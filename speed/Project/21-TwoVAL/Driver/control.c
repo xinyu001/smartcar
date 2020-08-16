@@ -556,10 +556,10 @@ void roadturncal()  //转向控制程序
     Middle_Err=90;
   }
   if(RoadType==200){            //出库
-    Middle_Err=-90;
+    Middle_Err=-150;
   }
   if(RoadType==205){            //入库
-    Middle_Err=-90;
+    Middle_Err=-150;
   }
   if(Go_Out_Circle==1) //完成一次圆环动作//s 2？不是1吗？？？
   {

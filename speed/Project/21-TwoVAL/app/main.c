@@ -108,16 +108,16 @@ void  main(void)
 //  }
   while(1)
   {
-//      display1= adc_once(ADC1_SE8, ADC_16bit);
-//      display2= adc_once(ADC1_SE9, ADC_16bit);
-//      display3= adc_once(ADC1_SE10, ADC_16bit);
-//      display4= adc_once(ADC1_SE11, ADC_16bit);
-//      display5= adc_once(ADC1_SE12, ADC_16bit);
-//      display6= adc_once(ADC1_SE13, ADC_16bit);
+      display1= adc_once(ADC1_SE8, ADC_16bit);
+      display2= adc_once(ADC1_SE9, ADC_16bit);
+      display3= adc_once(ADC1_SE10, ADC_16bit);
+      display4= adc_once(ADC1_SE11, ADC_16bit);
+      display5= adc_once(ADC1_SE12, ADC_16bit);
+      display6= adc_once(ADC1_SE13, ADC_16bit);
       
-//      if(Stop){
-//      adc_maxmin_update();                      //更新电磁的最大最小值
-//      }       
+      if(Stop){
+      adc_maxmin_update();                      //更新电磁的最大最小值
+      }       
               
       Check_BottonPress();
       if(new_img)                               //此段不超过0.5ms 200ms主频  6ms 或8ms 执行一次
