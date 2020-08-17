@@ -32,7 +32,8 @@ extern int   dis_AD_val_1,dis_AD_val_2,dis_AD_val_3 ;
 extern int   disgy_AD_val_1,disgy_AD_val_2,disgy_AD_val_3 ;
 extern int   AD_val_1_min,AD_val_2_min,AD_val_3_min;
 extern int   AD_val_1_max,AD_val_2_max,AD_val_3_max;
-
+extern float SlopeLeft[6];
+extern float SlopeRight[6];
 void my_putchar(char temp)
 {
       uart_putchar(UART0,temp); //根据实际的串口号来修改
@@ -162,14 +163,28 @@ void OLED_Draw_UI()  //画出界面
     OLED_PrintValueF(72, 6,CarSpeed,4);  //Middle_Err CarSpeed
     reverse=0;
  */
+//    OLED_P6x8Str(0,1,"RoadType");
+//    OLED_PrintValueF(72, 1,RoadType,4);
+//    OLED_P6x8Str(0,2,"Right[1]");
+//    OLED_PrintValueF(72, 2,SlopeRight[1],4);
+//    OLED_P6x8Str(0,3,"Right[2]");
+//    OLED_PrintValueF(72, 3,SlopeRight[2],4);
+//    OLED_P6x8Str(0,4,"Right[3]");
+//    OLED_PrintValueF(72, 4,SlopeRight[3],4);
+//    OLED_P6x8Str(0,5,"LMR[1][27]");
+//    OLED_PrintValueF(72, 5,LMR[1][27],4);
+//    OLED_P6x8Str(0,6,"LMR[1][30]");
+//    OLED_PrintValueF(72, 6,LMR[1][30],4);
+//    OLED_P6x8Str(0,7,"Distance");
+//    OLED_PrintValueF(72, 7,Distance,4);
     OLED_P6x8Str(0,1,"RoadType");
     OLED_PrintValueF(72, 1,RoadType,4);
-    OLED_P6x8Str(0,2,"Right[1]");
-    OLED_PrintValueF(72, 2,SlopeRight[1],4);
-    OLED_P6x8Str(0,3,"Right[2]");
-    OLED_PrintValueF(72, 3,SlopeRight[2],4);
-    OLED_P6x8Str(0,4,"Right[3]");
-    OLED_PrintValueF(72, 4,SlopeRight[3],4);
+    OLED_P6x8Str(0,2,"Left[0]");
+    OLED_PrintValueF(72, 2,SlopeLeft[0],4);
+    OLED_P6x8Str(0,3,"Left[1]");
+    OLED_PrintValueF(72, 3,SlopeLeft[1],4);
+    OLED_P6x8Str(0,4,"Left[2]");
+    OLED_PrintValueF(72, 4,SlopeLeft[2],4);
     OLED_P6x8Str(0,5,"LMR[1][27]");
     OLED_PrintValueF(72, 5,LMR[1][27],4);
     OLED_P6x8Str(0,6,"LMR[1][30]");
@@ -239,31 +254,55 @@ void OLED_Draw_UI()  //画出界面
 ///第六页数据
     else if(Page_Index==5){
     
-     OLED_PrintValueF(0, 1,LMR[0][5],4);
-    OLED_PrintValueF(0, 2,LMR[0][6],4);
-    OLED_PrintValueF(0, 3,LMR[0][7],4);
-    OLED_PrintValueF(0, 4,LMR[0][8],4);
-    OLED_PrintValueF(0, 5,LMR[0][9],4);
-    OLED_PrintValueF(0, 6,LMR[0][10],4);
-    OLED_PrintValueF(0, 7,LMR[0][11],4);
+//    OLED_PrintValueF(0, 1,LMR[0][5],4);
+//    OLED_PrintValueF(0, 2,LMR[0][6],4);
+//    OLED_PrintValueF(0, 3,LMR[0][7],4);
+//    OLED_PrintValueF(0, 4,LMR[0][8],4);
+//    OLED_PrintValueF(0, 5,LMR[0][9],4);
+//    OLED_PrintValueF(0, 6,LMR[0][10],4);
+//    OLED_PrintValueF(0, 7,LMR[0][11],4);
+//    
+//    OLED_PrintValueF(36, 1,LMR[0][12],4);
+//    OLED_PrintValueF(36, 2,LMR[0][13],4);
+//    OLED_PrintValueF(36, 3,LMR[0][14],4);
+//    OLED_PrintValueF(36, 4,LMR[0][15],4);
+//    OLED_PrintValueF(36, 5,LMR[0][16],4);
+//    OLED_PrintValueF(36, 6,LMR[0][17],4);
+//    OLED_PrintValueF(36, 7,LMR[0][18],4);
+//    
+//    
+//    OLED_PrintValueF(72, 1,LMR[0][20],4);
+//    OLED_PrintValueF(72, 2,LMR[0][21],4);
+//    OLED_PrintValueF(72, 3,LMR[0][22],4);
+//    OLED_PrintValueF(72, 4,LMR[0][23],4);
+//    OLED_PrintValueF(72, 5,LMR[0][24],4);
+//    OLED_PrintValueF(72, 6,LMR[0][25],4);
+//    OLED_PrintValueF(72, 7,RoadType,4);  
+//      
+    OLED_PrintValueF(0, 1,LMR[2][5],4);
+    OLED_PrintValueF(0, 2,LMR[2][6],4);
+    OLED_PrintValueF(0, 3,LMR[2][7],4);
+    OLED_PrintValueF(0, 4,LMR[2][8],4);
+    OLED_PrintValueF(0, 5,LMR[2][9],4);
+    OLED_PrintValueF(0, 6,LMR[2][10],4);
+    OLED_PrintValueF(0, 7,LMR[2][11],4);
     
-    OLED_PrintValueF(36, 1,LMR[0][12],4);
-    OLED_PrintValueF(36, 2,LMR[0][13],4);
-    OLED_PrintValueF(36, 3,LMR[0][14],4);
-    OLED_PrintValueF(36, 4,LMR[0][15],4);
-    OLED_PrintValueF(36, 5,LMR[0][16],4);
-    OLED_PrintValueF(36, 6,LMR[0][17],4);
-    OLED_PrintValueF(36, 7,LMR[0][18],4);
+    OLED_PrintValueF(36, 1,LMR[2][12],4);
+    OLED_PrintValueF(36, 2,LMR[2][13],4);
+    OLED_PrintValueF(36, 3,LMR[2][14],4);
+    OLED_PrintValueF(36, 4,LMR[2][15],4);
+    OLED_PrintValueF(36, 5,LMR[2][16],4);
+    OLED_PrintValueF(36, 6,LMR[2][17],4);
+    OLED_PrintValueF(36, 7,LMR[2][18],4);
     
     
-    OLED_PrintValueF(72, 1,LMR[0][20],4);
-    OLED_PrintValueF(72, 2,LMR[0][21],4);
-    OLED_PrintValueF(72, 3,LMR[0][22],4);
-    OLED_PrintValueF(72, 4,LMR[0][23],4);
-    OLED_PrintValueF(72, 5,LMR[0][24],4);
-    OLED_PrintValueF(72, 6,LMR[0][25],4);
+    OLED_PrintValueF(72, 1,LMR[2][20],4);
+    OLED_PrintValueF(72, 2,LMR[2][21],4);
+    OLED_PrintValueF(72, 3,LMR[2][22],4);
+    OLED_PrintValueF(72, 4,LMR[2][23],4);
+    OLED_PrintValueF(72, 5,LMR[2][24],4);
+    OLED_PrintValueF(72, 6,LMR[2][25],4);
     OLED_PrintValueF(72, 7,RoadType,4);  
-      
       
     OLED_Set_Pos(122,7);
     OLED_P6x8Char(Page_Index+48); 
