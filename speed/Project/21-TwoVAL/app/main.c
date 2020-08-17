@@ -115,9 +115,9 @@ void  main(void)
       display5= adc_once(ADC1_SE12, ADC_16bit);
       display6= adc_once(ADC1_SE13, ADC_16bit);
       
-      if(Stop){
-      adc_maxmin_update();                      //更新电磁的最大最小值
-      }       
+//      if(Stop){
+//      adc_maxmin_update();                      //更新电磁的最大最小值
+//      }       
               
       Check_BottonPress();
       if(new_img)                               //此段不超过0.5ms 200ms主频  6ms 或8ms 执行一次

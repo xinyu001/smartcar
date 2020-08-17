@@ -185,7 +185,7 @@ void Search()
  
    
     //起跑线
-   if(i==30 &&  Distance>50)  //Distance>60即保证车是在第二次经过起跑线时才执行  原i==55
+   if(i==45 &&  Distance>5)  //Distance>60即保证车是在第二次经过起跑线时才执行  原i==55
     {
 
         for(j=1;j<8;j++)
@@ -211,15 +211,15 @@ void Search()
           }
         }
         
-        if((Stop_Black+Stop_White)>6)                   //s 原8，因为摄像头高度从20cm调为10cm，看到的条数减少了
+        if((Stop_Black+Stop_White)>5)                   //s 原8，因为摄像头高度从20cm调为10cm，看到的条数减少了
         {
           
           RoadType=205;                                 //s 8.1 看到起跑线，准备入库
           Distance200=Distance;                         //记录当前距离
-          SetSpeed=0;
-          Speed_H=0;
-          Speed_M=0;
-          Speed_L=0;
+//          SetSpeed=0;
+//          Speed_H=0;
+//          Speed_M=0;
+//          Speed_L=0;
         }
         Stop_Black=0;
         Stop_White=0;
@@ -415,15 +415,15 @@ if((RoadType==200)&&(Distance>1.5)){
 
 }
 //s 8.1 入库结束，停车
-if((RoadType==205)&&(Distance-Distance200>0.75)){
+if((RoadType==205)&&(Distance-Distance200>1)){
          Distance200=1000;
          RoadType=206;
          Stop_Brake=1;          //刹车
          
-//       SetSpeed=0;                    //s 暂时与205重复
-//       Speed_H=0;
-//       Speed_M=0;
-//       Speed_L=0;
+       SetSpeed=0;                    //s 暂时与205重复
+       Speed_H=0;
+       Speed_M=0;
+       Speed_L=0;
 }
 
 

@@ -58,14 +58,14 @@ float AD_val_3;
 float AD_val_4;
 float dis_AD_val_1,dis_AD_val_2,dis_AD_val_3,dis_AD_val_4;
 float disgy_AD_val_1,disgy_AD_val_2,disgy_AD_val_3,disgy_AD_val_4;
-float AD_val_1_max=37000;
-float AD_val_2_max=27000;
-float AD_val_3_max=37000;
-float AD_val_4_max=27000;         //大概两边相等放中间归一化是40几
-float AD_val_1_min=2000;
-float AD_val_2_min=2000;
-float AD_val_3_min=2000;
-float AD_val_4_min=2000;
+float AD_val_1_max=35000;
+float AD_val_2_max=35000;
+float AD_val_3_max=35000;
+float AD_val_4_max=35000;         //大概两边相等放中间归一化是40几
+float AD_val_1_min=5000;
+float AD_val_2_min=5000;
+float AD_val_3_min=5000;
+float AD_val_4_min=5000;
 
 
 int circle_Flag;
@@ -162,12 +162,6 @@ void Speed_Control(void)                        //更新SpeedControlOutOld  计算Sp
     else if(RoadType==150)                               //坡道加速
     {
     SpeedError=0.67-CarSpeed;
-    //SpeedError=0.60-CarSpeed;                 //加速
-    
-    }
-    else if(RoadType==200)                               //坡道加速
-    {
-    SpeedError=0.2-CarSpeed;
     //SpeedError=0.60-CarSpeed;                 //加速
     
     }
@@ -465,8 +459,7 @@ void roadturncal()  //转向控制程序
 //    
 //  }
   
-  if(Go_Out_Circle==0&&circle_Flag==0&&
-     ((Inductor_ADC[0]>90 && Inductor_ADC[1]>75 && Inductor_ADC[3]>60&& Inductor_ADC[2]<40) || (Inductor_ADC[0]- Inductor_ADC[1]>25 && Inductor_ADC[2] - Inductor_ADC[3]>25 && Inductor_ADC[0]>50 && Inductor_ADC[2]>75)))
+  if(Go_Out_Circle==0&&circle_Flag==0&&((Inductor_ADC[0]>90 && Inductor_ADC[1]>75 && Inductor_ADC[3]>60&& Inductor_ADC[2]<40) || (Inductor_ADC[0]>65 && Inductor_ADC[1]>45 && Inductor_ADC[2]>75&& Inductor_ADC[3]<20)))//(Inductor_ADC[0]>3000||Inductor_ADC[1]>3000)&&
   {
      circle_Flag=1;  //前言可能是圆环
      if(Inductor_ADC[2]<Inductor_ADC[3])  //左圆环         //Inductor_ADC[0]>Inductor_ADC[1]&&
@@ -483,7 +476,7 @@ void roadturncal()  //转向控制程序
      }
   }
   err=Inductor_ADC[3]-Inductor_ADC[2]; //八字电感决定进圆环
-  if(ABS(err)<50&&circle_Flag==1&&turn_Flag==0 && Inductor_ADC[0]>20 && Inductor_ADC[1]>20)
+  if(ABS(err)<20&&circle_Flag==1&&turn_Flag==0 && Inductor_ADC[0]>20 && Inductor_ADC[1]>20)
   {
      turn_Flag=1;                               //进入圆环
      if(turn_right_Flag==1)
@@ -529,7 +522,7 @@ void roadturncal()  //转向控制程序
   }
   
   //右环
-  if(RoadType==101 && Distance-Distance101>2){                
+  if(RoadType==101 && Distance-Distance101>1.3){                
     RoadType=102;                              //进入右环，往右打固定方向距离
     Distance102=Distance;                       //记录进入右环时的距离
   }
@@ -546,7 +539,7 @@ void roadturncal()  //转向控制程序
     Distance104=Distance;  
     
   }
-  if(RoadType==104 && Distance-Distance104>1.3){
+  if(RoadType==104 && Distance-Distance104>1){
   
     RoadType=105;              //出右环
     Distance105=Distance;  
@@ -564,22 +557,22 @@ void roadturncal()  //转向控制程序
   if(RoadType==103&&turn_Flag==1 && turn_Flag2==0) //圆环内部
   {
        
-      //if((Inductor_ADC[1]+Inductor_ADC[2])>10)
-      //Middle_Err=(float)100*(AD_val_2-AD_val_3)/(AD_val_2+AD_val_3);
+      if((Inductor_ADC[1]+Inductor_ADC[2])>10)
+      Middle_Err=(float)100*(AD_val_2-AD_val_3)/(AD_val_2+AD_val_3);
         
   }
   if(RoadType==113&&turn_Flag==1 && turn_Flag2==0) //圆环内部
   {
        
-      //if((Inductor_ADC[0]+Inductor_ADC[1])>10)
-      //Middle_Err=(float)100*(AD_val_4-AD_val_1)/(AD_val_4+AD_val_1);
+      if((Inductor_ADC[0]+Inductor_ADC[1])>10)
+      Middle_Err=(float)100*(AD_val_4-AD_val_1)/(AD_val_4+AD_val_1);
         
   }
 //  if(RoadType==101){            //进右环之前
 //    Middle_Err=0;
 //  }  
   if(RoadType==102){            //进右环
-    Middle_Err=-60;
+    Middle_Err=-85;
   }
   if(RoadType==104){            //出右环
     Middle_Err=-80;
@@ -594,7 +587,7 @@ void roadturncal()  //转向控制程序
     Middle_Err=90;
   }
   if(RoadType==200){            //出库
-    Middle_Err=-45;
+    Middle_Err=-90;
   }
   if(RoadType==205){            //入库
     Middle_Err=-150;
@@ -609,7 +602,7 @@ void roadturncal()  //转向控制程序
      Go_Out_Circle=0;
      //BEEP_OFF;
   }
-  Middle_Err=-Middle_Err*(Middle_Err*Middle_Err/1250+2)/20;
+  Middle_Err=-Middle_Err*(Middle_Err*Middle_Err/1250+2)/25;
   Middle_Err=Middle_Err_Filter(Middle_Err);
   //Middle_Err=-Middle_Err*(Middle_Err*Middle_Err/1250+2)/25;
 }

@@ -39,7 +39,7 @@
       
       
       
-    <Wnd0>
+    <Wnd1>
         <Tabs>
           <Tab>
             <Identity>TabID-10404-9590</Identity>
@@ -55,7 +55,7 @@
           </Tab>
         <Tab><Identity>TabID-22365-30124</Identity><TabName>Find in Files</TabName><Factory>Find-in-Files</Factory><Session/></Tab><Tab><Identity>TabID-4483-26853</Identity><TabName>Ambiguous Definitions</TabName><Factory>Select-Ambiguous-Definitions</Factory><Session/></Tab></Tabs>
         
-      <SelectedTab>0</SelectedTab></Wnd0><Wnd3>
+      <SelectedTab>0</SelectedTab></Wnd1><Wnd2>
         <Tabs>
           <Tab>
             <Identity>TabID-21153-9594</Identity>
@@ -67,7 +67,7 @@
           </Tab>
         </Tabs>
         
-      <SelectedTab>0</SelectedTab></Wnd3><Wnd4><Tabs><Tab><Identity>TabID-18303-18491</Identity><TabName>References</TabName><Factory>Find-All-References</Factory><Session/></Tab></Tabs><SelectedTab>0</SelectedTab></Wnd4></Windows>
+      <SelectedTab>0</SelectedTab></Wnd2><Wnd5><Tabs><Tab><Identity>TabID-18303-18491</Identity><TabName>References</TabName><Factory>Find-All-References</Factory><Session/></Tab></Tabs><SelectedTab>0</SelectedTab></Wnd5></Windows>
     <Editor>
       
       
@@ -80,7 +80,7 @@
       
       
       
-    <Top><Row0><Sizes><Toolbar-05E61C88><key>iaridepm.enu1</key></Toolbar-05E61C88></Sizes></Row0><Row1><Sizes><Toolbar-16388868><key>debuggergui.enu1</key></Toolbar-16388868></Sizes></Row1><Row2><Sizes><Toolbar-16388EA8><key>armjlink.enu1</key></Toolbar-16388EA8></Sizes></Row2></Top><Left><Row0><Sizes><Wnd3><Rect><Top>-2</Top><Left>-2</Left><Bottom>662</Bottom><Right>271</Right><x>-2</x><y>-2</y><xscreen>223</xscreen><yscreen>222</yscreen><sizeHorzCX>116146</sizeHorzCX><sizeHorzCY>227459</sizeHorzCY><sizeVertCX>142188</sizeVertCX><sizeVertCY>680328</sizeVertCY></Rect></Wnd3></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd4><Rect><Top>-2</Top><Left>-2</Left><Bottom>218</Bottom><Right>952</Right><x>-2</x><y>-2</y><xscreen>954</xscreen><yscreen>220</yscreen><sizeHorzCX>496875</sizeHorzCX><sizeHorzCY>225410</sizeHorzCY><sizeVertCX>104167</sizeVertCX><sizeVertCY>204918</sizeVertCY></Rect></Wnd4><Wnd0><Rect><Top>0</Top><Left>0</Left><Bottom>0</Bottom><Right>7</Right><x>950</x><y>-2</y><xscreen>972</xscreen><yscreen>220</yscreen><sizeHorzCX>506250</sizeHorzCX><sizeHorzCY>225410</sizeHorzCY><sizeVertCX>116146</sizeVertCX><sizeVertCY>227459</sizeVertCY></Rect></Wnd0></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
+    <Top><Row0><Sizes><Toolbar-05331C88><key>iaridepm.enu1</key></Toolbar-05331C88></Sizes></Row0><Row1><Sizes><Toolbar-18115770><key>debuggergui.enu1</key></Toolbar-18115770></Sizes></Row1><Row2><Sizes><Toolbar-18115518><key>armjlink.enu1</key></Toolbar-18115518></Sizes></Row2></Top><Left><Row0><Sizes><Wnd2><Rect><Top>-2</Top><Left>-2</Left><Bottom>732</Bottom><Right>271</Right><x>-2</x><y>-2</y><xscreen>223</xscreen><yscreen>222</yscreen><sizeHorzCX>116146</sizeHorzCX><sizeHorzCY>227459</sizeHorzCY><sizeVertCX>142188</sizeVertCX><sizeVertCY>752049</sizeVertCY></Rect></Wnd2></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd5><Rect><Top>-2</Top><Left>-2</Left><Bottom>148</Bottom><Right>952</Right><x>-2</x><y>-2</y><xscreen>954</xscreen><yscreen>150</yscreen><sizeHorzCX>496875</sizeHorzCX><sizeHorzCY>153689</sizeHorzCY><sizeVertCX>104167</sizeVertCX><sizeVertCY>204918</sizeVertCY></Rect></Wnd5><Wnd1><Rect><Top>0</Top><Left>0</Left><Bottom>0</Bottom><Right>7</Right><x>950</x><y>-2</y><xscreen>972</xscreen><yscreen>150</yscreen><sizeHorzCX>506250</sizeHorzCX><sizeHorzCY>153689</sizeHorzCY><sizeVertCX>116146</sizeVertCX><sizeVertCY>227459</sizeVertCY></Rect></Wnd1></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
   </Desktop>
 </Project>
 

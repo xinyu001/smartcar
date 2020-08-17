@@ -83,13 +83,13 @@ void init()
 
 void Para_Init()
 {
-  Speed_H=0.6;                                 //0.75
-  Speed_M=0.5;                                 //0.65
-  Speed_L=0.5;                                 //0.52
+  Speed_H=0.4;                                 //0.75
+  Speed_M=0.4;                                 //0.65
+  Speed_L=0.4;                                 //0.52
   if(Style==0)
-    SetSpeed=0.55;                              //0.9  原来0.6
+    SetSpeed=0.4;                              //0.9  原来0.6
   if(Style==1)
-    SetSpeed=0.55;                               //0.6//s 0.5
+    SetSpeed=0.4;                               //0.6//s 0.5
   Fuzzy_Kp=0.0065;                              //0.014
   Fuzzy_Kd=0.005;                               //0
   PID_SPEED.P=0.13;                             //0.13  
@@ -205,8 +205,8 @@ void adc_maxmin_update(){
 //        AD_val_2 = adc_ave(ADC1_SE13, ADC_16bit,8); 
 //        AD_val_3 = adc_ave(ADC1_SE10, ADC_16bit,8);
 //        AD_val_4 = adc_ave(ADC1_SE11, ADC_16bit,8);
-        v1 = adc_ave(ADC1_SE10, ADC_16bit,2);
-        v2 = adc_ave(ADC1_SE11, ADC_16bit,2); 
+        v1 = adc_ave(ADC1_SE9, ADC_16bit,2);
+        v2 = adc_ave(ADC1_SE12, ADC_16bit,2); 
         v3 = adc_ave(ADC1_SE8, ADC_16bit,2);
         v4 = adc_ave(ADC1_SE13, ADC_16bit,2);
 //        adtmp1= adtmp1+ AD_val_1;
