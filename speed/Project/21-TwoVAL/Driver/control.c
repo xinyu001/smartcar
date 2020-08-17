@@ -15,7 +15,13 @@ int   Speed_Filter_Times=50;                    //速度平滑输出
 float CarSpeed=0,ControlSpeed=0,AverageSpeed,SetSpeed=0,Distance=0;
 float Speed_H=0,Speed_M=0,Speed_L=0;
 int   Stop_Brake=0;                               //刹车
+int   NitroBooster=0;
+float acceleration;
+//int   speedup=0;
+//int   speeddown=0;
+
 int   wycnt=0;
+int NitroBoostercount=0;
 //方向类变量
 float DirectionControlOutNew;
 float DirectionControlOutOld;
@@ -106,7 +112,10 @@ void Speed_Control(void)                        //更新SpeedControlOutOld  计算Sp
   float  SpeedError;
   uint8 i;
   
-  
+//  if(Distance>5 && CarSpeed<0.2){
+//  SpeedError=1.5-CarSpeed;
+//  }
+
   //SpeedError=0.42-CarSpeed;//测试
   //现在让小车有变速功能
   if(Style==0)                                  //不加速
@@ -159,16 +168,16 @@ void Speed_Control(void)                        //更新SpeedControlOutOld  计算Sp
     //SpeedError=0.60-CarSpeed;                 //减速
     
     }
-    else if(RoadType==150)                               //坡道加速
-    {
-    SpeedError=0.67-CarSpeed;
-    //SpeedError=0.60-CarSpeed;                 //加速
-    
-    }
-    else if(RoadType==200)                               //坡道加速
+//    else if(RoadType==150)                               //坡道加速
+//    {
+//    SpeedError=0.67-CarSpeed;
+//    //SpeedError=0.60-CarSpeed;                 //
+//    
+//    }
+    else if(RoadType==200)                               //
     {
     SpeedError=0.2-CarSpeed;
-    //SpeedError=0.60-CarSpeed;                 //加速
+    //SpeedError=0.60-CarSpeed;                 //
     
     }
     
@@ -195,7 +204,7 @@ void Speed_Control(void)                        //更新SpeedControlOutOld  计算Sp
     }
   }
 
- 
+  acceleration=SpeedError;                      //在debug中查看
   
 
   //求出最近20个偏差的总和作为积分项
@@ -303,22 +312,39 @@ void Moto_Out() //2ms一次
  if(wycnt>250){
    FTM_PWM_Duty(FTM0,FTM_CH0,0);
    FTM_PWM_Duty(FTM0,FTM_CH1,0);
+   Stop_Brake=0;
+   wycnt=0;
  }
  
 if(Stop_Brake!=1)
- {if(MotorOut>=0) //正转
-  {
-     FTM_PWM_Duty(FTM0,FTM_CH0,MotorOut*10000);//占空比精度为10000  第三个参数为占空比分子
+ {
+   if(NitroBooster==1 && NitroBoostercount<=1500){
+     FTM_PWM_Duty(FTM0,FTM_CH0,8000);                   //坡道大加速
      FTM_PWM_Duty(FTM0,FTM_CH1,0);
-     //if(MotorOut>0) my_putchar('A');
-     ///else my_putchar('a');
-  }
-  else   //反转
-  {
-     FTM_PWM_Duty(FTM0,FTM_CH0,0);
-     FTM_PWM_Duty(FTM0,FTM_CH1,-MotorOut*10000);
+     NitroBoostercount++;
+   }
+   if(NitroBoostercount>1500){
+    FTM_PWM_Duty(FTM0,FTM_CH0,0);                   
+    FTM_PWM_Duty(FTM0,FTM_CH1,0);
+    NitroBooster=0;
+    NitroBoostercount=0;
+    
+   }
+   if(NitroBooster!=1){
+      if(MotorOut>=0)             //正转
+      {
+        FTM_PWM_Duty(FTM0,FTM_CH0,MotorOut*10000);      //占空比精度为10000  第三个参数为占空比分子
+        FTM_PWM_Duty(FTM0,FTM_CH1,0);
+        //if(MotorOut>0) my_putchar('A');
+        ///else my_putchar('a');
+      }
+      else                      //反转
+      {
+        FTM_PWM_Duty(FTM0,FTM_CH0,0);
+        FTM_PWM_Duty(FTM0,FTM_CH1,-MotorOut*10000);
      //my_putchar('B');
-  }
+      }
+   }
  }
  
 }
@@ -452,18 +478,10 @@ void roadturncal()  //转向控制程序
 //    else{
 //   Middle_Err=(disgy_AD_val_2-disgy_AD_val_1)/1.5;
 //    }
+  
    //下面的各个判定参数需要实际测量来修正
   
-//  if(RoadType=100 && Distance150==0 && Inductor_ADC[0]>50 && Inductor_ADC[1]>50 && Inductor_ADC[2]<20 && Inductor_ADC[3]<20 ){
-//    RoadType=150; 
-//    Distance150=Distance;
-//    
-//  }                //判断坡道
-//  if(RoadType==150 && Distance150-Distance>1.5){
-//    RoadType=100;
-//    Distance150=1000;
-//    
-//  }
+
   
   if(Go_Out_Circle==0&&circle_Flag==0&&
      ((Inductor_ADC[0]>90 && Inductor_ADC[1]>75 && Inductor_ADC[3]>60&& Inductor_ADC[2]<40) || (Inductor_ADC[0]- Inductor_ADC[1]>25 && Inductor_ADC[2] - Inductor_ADC[3]>25 && Inductor_ADC[0]>50 && Inductor_ADC[2]>75)))
@@ -609,8 +627,30 @@ void roadturncal()  //转向控制程序
      Go_Out_Circle=0;
      //BEEP_OFF;
   }
-  Middle_Err=-Middle_Err*(Middle_Err*Middle_Err/1250+2)/20;
   Middle_Err=Middle_Err_Filter(Middle_Err);
+  Middle_Err=-Middle_Err*(Middle_Err*Middle_Err/1250+2)/20;
+  
+  if(NitroBooster==0 && Distance150==0 && Distance>5 ){//&& Inductor_ADC[0]>35 && Inductor_ADC[1]>35 && Inductor_ADC[2]>15 && Inductor_ADC[3]>20){
+//      Speed_H=0.7;                                 
+//      Speed_M=0.7;                                 
+//      Speed_L=0.5;                                 
+//     SetSpeed=1.5;  
+      Distance150=Distance;
+      NitroBooster=1;
+      
+      
+  }
+  if(NitroBooster==1 && Distance - Distance150>10  ){//&& Distance-Distance150>2){
+    
+//      Speed_H=0.4;                                 //0.75
+//      Speed_M=0.4;                                 //0.65
+//      Speed_L=0.4;                                 //0.52
+//      SetSpeed=0.4;  
+    Stop_Brake=1;  
+    Distance150=1000;
+    
+  }
+//  
   //Middle_Err=-Middle_Err*(Middle_Err*Middle_Err/1250+2)/25;
 }
 //  if(turn_left_Flag==1&&(Inductor_ADC[0]>Inductor_ADC[1])&&turn_Flag==1&&Inductor_ADC[3]<5000)

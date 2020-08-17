@@ -41,6 +41,9 @@ extern int turn_Flag2;
 extern int turn_right_Flag;
 extern int turn_left_Flag;
 extern int Go_Out_Circle;
+extern int Stop_Brake;                               //刹车
+extern int NitroBooster;
+extern float acceleration;
 
 void my_putchar(char temp)
 {
@@ -251,30 +254,43 @@ void OLED_Draw_UI()  //画出界面
 //第六页数据
     else if(Page_Index==5){
       
-//    OLED_P6x8Str(0,2,"Distance");
-//    OLED_PrintValueF(72, 2,Distance,4);
-//    OLED_P6x8Str(0,3,"RunTime");
-//    OLED_PrintValueF(72, 3,RunTime,4);
-//    OLED_P6x8Str(0,4,"Average_Spd");
-//    OLED_PrintValueF(72, 4,AverageSpeed,4);  
-//    OLED_P6x8Str(0,5,"Middle_Err");
-//    OLED_PrintValueF(72, 5,Middle_Err,4);  
-//    OLED_P6x8Str(0,6,"NowSPEED");
-//    OLED_PrintValueF(72, 6,CarSpeed,4);
- 
+    OLED_P6x8Str(0,1,"Distance");
+    OLED_PrintValueF(72, 1,Distance,4);
+    OLED_P6x8Str(0,2,"RunTime");
+    OLED_PrintValueF(72, 2,RunTime,4);
+    OLED_P6x8Str(0,3,"Average_Spd");
+    OLED_PrintValueF(72, 3,AverageSpeed,4);  
+//    OLED_P6x8Str(0,4,"Middle_Err");
+//    OLED_PrintValueF(72, 4,Middle_Err,4);  
+//    OLED_P6x8Str(0,5,"NowSPEED");
+//    OLED_PrintValueF(72, 5,CarSpeed,4);
+    OLED_P6x8Str(0,4,"NowSPEED");
+    OLED_PrintValueF(72, 4,CarSpeed,4);
+    OLED_P6x8Str(0,5,"Stop_Brake");
+    OLED_PrintValueF(72, 5,Stop_Brake,4);
+    OLED_P6x8Str(0,6,"NitroBooster");
+    OLED_PrintValueF(72, 6,NitroBooster,4);
+    OLED_P6x8Str(0,7,"acceleration");
+    OLED_PrintValueF(72, 7,acceleration,4);
+//extern int Stop_Brake;                               //刹车
+//extern int NitroBooster;
+//extern float acceleration;
+    
+    
+    
 //      
-    OLED_P6x8Str(0,2,"1:");
-    OLED_PrintValueF(30, 2,display1,4);
-    OLED_P6x8Str(0,3,"2:");
-    OLED_PrintValueF(30, 3,display2,4);
-    OLED_P6x8Str(0,4,"3:");
-    OLED_PrintValueF(30, 4,display3,4);
-    OLED_P6x8Str(0,5,"4:");
-    OLED_PrintValueF(30, 5,display4,4);
-    OLED_P6x8Str(0,6,"5:");
-    OLED_PrintValueF(30, 6,display5,4);
-    OLED_P6x8Str(0,7,"6:");
-    OLED_PrintValueF(30, 7,display6,4);
+//    OLED_P6x8Str(0,2,"1:");
+//    OLED_PrintValueF(30, 2,display1,4);
+//    OLED_P6x8Str(0,3,"2:");
+//    OLED_PrintValueF(30, 3,display2,4);
+//    OLED_P6x8Str(0,4,"3:");
+//    OLED_PrintValueF(30, 4,display3,4);
+//    OLED_P6x8Str(0,5,"4:");
+//    OLED_PrintValueF(30, 5,display4,4);
+//    OLED_P6x8Str(0,6,"5:");
+//    OLED_PrintValueF(30, 6,display5,4);
+//    OLED_P6x8Str(0,7,"6:");
+//    OLED_PrintValueF(30, 7,display6,4);
     
 
 //    OLED_P6x8Str(0,2,"circle_Flag:");

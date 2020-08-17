@@ -44,6 +44,7 @@ void  main(void)
   uart_putchar(UART0,'K');
   init();
   Stop=1;
+  Style=1;
   
 //  int sum;
 //  int i;

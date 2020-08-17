@@ -185,7 +185,7 @@ void Search()
  
    
     //起跑线
-   if(i==45 &&  Distance>5)  //Distance>60即保证车是在第二次经过起跑线时才执行  原i==55
+   if(i==45 &&  Distance>50)  //Distance>60即保证车是在第二次经过起跑线时才执行  原i==55
     {
 
         for(j=1;j<8;j++)

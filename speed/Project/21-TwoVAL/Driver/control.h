@@ -19,7 +19,9 @@ extern int turn_Flag2;
 extern int turn_right_Flag;
 extern int turn_left_Flag;
 extern int Go_Out_Circle;
-
+extern int   Stop_Brake;                               //É²³µ
+extern int   NitroBooster;
+extern float acceleration;
 
 extern uint8 Style;
 extern int Speed_Filter_Times;
