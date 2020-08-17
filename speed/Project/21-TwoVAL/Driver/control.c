@@ -26,7 +26,7 @@ float Turn_Out;
 float Turn_Angle_Integral;
 
 /**舵机相关**/
-int sever_middle=124;                   //值越大越偏右  
+int sever_middle=140;                   //值越大越偏右  
 int sever_range=35;                     //19(实际范围)//25(原)//28  //s 
 
 //模糊化系数
