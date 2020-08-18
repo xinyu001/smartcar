@@ -184,29 +184,19 @@ void OLED_Draw_UI()  //»­³ö½çÃæ
     OLED_P6x8Str(0,1,"RoadType");
     OLED_PrintValueF(72, 1,RoadType,4);
     
-//    OLED_P6x8Str(0,2,"val_1:");
-//    OLED_PrintValueF(72, 2,dis_AD_val_1,4);
-//    OLED_P6x8Str(0,3,"val_2:");
-//    OLED_PrintValueF(72, 3,dis_AD_val_2,4);
-//    OLED_P6x8Str(0,4,"val_3:");
-//    OLED_PrintValueF(72, 4,dis_AD_val_3,4);
-//    OLED_P6x8Str(0,5,"val_1:");
-//    OLED_PrintValueF(72, 5,disgy_AD_val_1,4);
-//    OLED_P6x8Str(0,6,"val_2:");
-//    OLED_PrintValueF(72, 6,disgy_AD_val_2,4);
-//    OLED_P6x8Str(0,7,"val_3:");
-//    OLED_PrintValueF(72, 7,disgy_AD_val_3,4);
-//    
-     OLED_P6x8Str(0,2,"Distance");
-    OLED_PrintValueF(72, 2,Distance,4);
-    OLED_P6x8Str(0,3,"RunTime");
-    OLED_PrintValueF(72, 3,RunTime,4);
-    OLED_P6x8Str(0,4,"Average_Spd");
-    OLED_PrintValueF(72, 4,AverageSpeed,4);  
-    OLED_P6x8Str(0,5,"GYRO_OFF_Z");
-    OLED_PrintValueF(72, 5,Middle_Err,4);  
-    OLED_P6x8Str(0,6,"NowSPEED");
-    OLED_PrintValueF(72, 6,CarSpeed,4);
+    OLED_P6x8Str(0,2,"val_1:");
+    OLED_PrintValueF(72, 2,dis_AD_val_1,4);
+    OLED_P6x8Str(0,3,"val_2:");
+    OLED_PrintValueF(72, 3,dis_AD_val_2,4);
+    OLED_P6x8Str(0,4,"val_3:");
+    OLED_PrintValueF(72, 4,dis_AD_val_3,4);
+    OLED_P6x8Str(0,5,"val_1:");
+    OLED_PrintValueF(72, 5,disgy_AD_val_1,4);
+    OLED_P6x8Str(0,6,"val_2:");
+    OLED_PrintValueF(72, 6,disgy_AD_val_2,4);
+    OLED_P6x8Str(0,7,"val_3:");
+    OLED_PrintValueF(72, 7,disgy_AD_val_3,4);
+    
     OLED_Set_Pos(122,7);
     OLED_P6x8Char(Page_Index+48); 
     
