@@ -88,13 +88,13 @@ void init()
 
 void Para_Init()
 {
-  Speed_H=0.69;                                 //0.8  0.7
-  Speed_M=0.65;                                 //0.62  0.7
-  Speed_L=0.5;                                 //0.42;
+  Speed_H=0.5;                                 //0.8  0.7
+  Speed_M=0.5;                                 //0.62  0.7
+  Speed_L=0.4;                                 //0.42;
   if(Style==0)
-    SetSpeed=0.59;                              //0.9  原来0.6
+    SetSpeed=0.5;                              //0.9  原来0.6
   if(Style==1)
-    SetSpeed=0.59;                               //0.6//s
+    SetSpeed=0.5;                               //0.6//s
   Fuzzy_Kp=0.0065;                              //0.014
   Fuzzy_Kd=0.005;                               //0
   PID_SPEED.P=0.13;                             //0.13  0.18  原来是0.13
