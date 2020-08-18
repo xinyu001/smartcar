@@ -9,28 +9,18 @@
 
 float adc_ave(ADCn_Ch_e adcn_ch, ADC_nbit bit, int N);//均值滤波声明
 uint16 adc_once(ADCn_Ch_e adcn_ch, ADC_nbit bit);
-void getadval();
 void adc_maxmin_update();
-
+void roadturncal();
 void sendimg();
+
 
 extern uint8 Style;
 extern uint8 RoadType;
 unsigned char cmos[60][80]={0};                         //进行处理的数据
 
                                                         //电磁参数 s 8.5
-extern int   AD_val_1;
-extern int   AD_val_2;
-extern int   AD_val_3;
-extern int   adtmp1,adtmp2,adtmp3;
-extern int   dis_AD_val_1,dis_AD_val_2,dis_AD_val_3 ;
-extern int   disgy_AD_val_1,disgy_AD_val_2,disgy_AD_val_3 ;
-extern int   AD_val_1_min;
-extern int   AD_val_2_min;
-extern int   AD_val_3_min;
-extern int   AD_val_1_max;
-extern int   AD_val_2_max;
-extern int   AD_val_3_max;
+float display1=0,display2=0,display3=0;
+float display4=0,display5=0,display6=0;
 
 
 
@@ -42,60 +32,66 @@ void  main(void)
   uart_putchar(UART0,'K');
   init();
   Stop=1;
+  Style=1;
   
-  int sum;
-  int i;
+//  int sum;
+//  int i;
     
 
-   for(i=0;i<50;i++)                    //检测各电感的最小值
-   {
-     AD_val_1 =adc_once(ADC1_SE8, ADC_16bit);
-     sum+=AD_val_1;
-     DELAY_MS(5);
-   }
-   AD_val_1_min=sum/50;
-   sum=0;
-   for(i=0;i<50;i++)                    
-   {
-     AD_val_2 =adc_once(ADC1_SE9, ADC_16bit);
-     sum+=AD_val_2;
-     DELAY_MS(5);
-   }
-   AD_val_2_min=sum/50;
-   sum=0;
-   for(i=0;i<50;i++)                    
-   {
-     AD_val_3 =adc_once(ADC1_SE10, ADC_16bit);
-     sum+=AD_val_3;
-     DELAY_MS(5);
-   }
-   AD_val_3_min=sum/50;
-   sum=0;
-
-   
-   for(i=0;i<150;i++)                   //检测各电感的最大值
-   {
-     AD_val_1 =adc_once(ADC1_SE8, ADC_16bit);
-     if(AD_val_1>=AD_val_1_max) 
-       AD_val_1_max=AD_val_1;
-     DELAY_MS(1);
-     
-     AD_val_2 =adc_once(ADC1_SE9, ADC_16bit);
-     if(AD_val_2>=AD_val_2_max) 
-       AD_val_2_max=AD_val_2;
-     DELAY_MS(1);
-    	
-     AD_val_3 =adc_once(ADC1_SE10, ADC_16bit);
-     if(AD_val_3>=AD_val_3_max) 
-       AD_val_3_max=AD_val_3;
-     DELAY_MS(1);
-   }
+//   for(i=0;i<50;i++)                    //检测各电感的最小值
+//   {
+//     AD_val_1 =adc_once(ADC1_SE8, ADC_16bit);
+//     sum+=AD_val_1;
+//     DELAY_MS(5);
+//   }
+//   AD_val_1_min=sum/50;
+//   sum=0;
+//   for(i=0;i<50;i++)                    
+//   {
+//     AD_val_2 =adc_once(ADC1_SE9, ADC_16bit);
+//     sum+=AD_val_2;
+//     DELAY_MS(5);
+//   }
+//   AD_val_2_min=sum/50;
+//   sum=0;
+//   for(i=0;i<50;i++)                    
+//   {
+//     AD_val_3 =adc_once(ADC1_SE10, ADC_16bit);
+//     sum+=AD_val_3;
+//     DELAY_MS(5);
+//   }
+//   AD_val_3_min=sum/50;
+//   sum=0;
+//
+//   
+//   for(i=0;i<150;i++)                   //检测各电感的最大值
+//   {
+//     AD_val_1 =adc_once(ADC1_SE8, ADC_16bit);
+//     if(AD_val_1>=AD_val_1_max) 
+//       AD_val_1_max=AD_val_1;
+//     DELAY_MS(1);
+//     
+//     AD_val_2 =adc_once(ADC1_SE9, ADC_16bit);
+//     if(AD_val_2>=AD_val_2_max) 
+//       AD_val_2_max=AD_val_2;
+//     DELAY_MS(1);
+//    	
+//     AD_val_3 =adc_once(ADC1_SE10, ADC_16bit);
+//     if(AD_val_3>=AD_val_3_max) 
+//       AD_val_3_max=AD_val_3;
+//     DELAY_MS(1);
+//   }
   
   
   while(1)
   {
-     
-      getadval();                               //获取电磁值
+      display1= adc_once(ADC1_SE8, ADC_16bit);
+      display2= adc_once(ADC1_SE9, ADC_16bit);
+      display3= adc_once(ADC1_SE10, ADC_16bit);
+      display4= adc_once(ADC1_SE11, ADC_16bit);
+      display5= adc_once(ADC1_SE12, ADC_16bit);
+      display6= adc_once(ADC1_SE13, ADC_16bit);
+
       if(Stop){
       adc_maxmin_update();                      //更新电磁的最大最小值
       }
@@ -105,7 +101,8 @@ void  main(void)
       { 
         
         get_edge();
-        Search();
+        Search();                               //roadturncal() 在Search(); 最后 
+
         Direction_Control();
         new_img=0;
         

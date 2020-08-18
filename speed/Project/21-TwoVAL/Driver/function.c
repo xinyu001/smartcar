@@ -15,23 +15,16 @@ extern float Control_Para[15];
 extern uint8 Style;                             //7月7日加
 
 //s  电磁参数
-int   AD_val_1=0;
-int   AD_val_2=0;
-int   AD_val_3=0;
-int   adtmp1,adtmp2,adtmp3;
-int   dis_AD_val_1,dis_AD_val_2,dis_AD_val_3 ;
-int   disgy_AD_val_1,disgy_AD_val_2,disgy_AD_val_3 ;
-int   AD_val_1_min=0;
-int   AD_val_2_min=0;
-int   AD_val_3_min=0;
-int   AD_val_1_max=0;
-int   AD_val_2_max=0;
-int   AD_val_3_max=0; 
-unsigned char  Dir_last=0;
-int  dir_error_pre=0;
-int  dir_error=0;
-int dis_error;
-unsigned char zz;
+float v1,v2,v3,v4;
+float  adtmp1,adtmp2,adtmp3,adtmp4;
+extern float   AD_val_1_min;
+extern float   AD_val_2_min;
+extern float   AD_val_3_min;
+extern float   AD_val_4_min;
+extern float   AD_val_1_max;
+extern float   AD_val_2_max;
+extern float   AD_val_3_max; 
+extern float   AD_val_4_max; 
 
 
 
@@ -198,72 +191,41 @@ float adc_ave(ADCn_Ch_e adcn_ch, ADC_nbit bit, int N) //均值滤波
 }
 
 void adc_maxmin_update(){  
-  //显示当前电感归一化值，查看归一化值是否正确，等待按鍵PE5按下后小车出发
       adtmp1=0;
       adtmp2=0;
       adtmp3=0;
+      adtmp4=0;
       int i;
-      for(i=0;i<50;i++)
+      for(i=0;i<10;i++)
       {
-        AD_val_1 = adc_ave(ADC1_SE8, ADC_16bit,50);
-        AD_val_2 = adc_ave(ADC1_SE9, ADC_16bit,50); 
-        AD_val_3 = adc_ave(ADC1_SE10, ADC_16bit,50);
-        
-        adtmp1= adtmp1+ AD_val_1;
-        adtmp2= adtmp2+ AD_val_2;
-        adtmp3= adtmp3+ AD_val_3;
+
+        v1 = adc_ave(ADC1_SE12, ADC_16bit,2);
+        v2 = adc_ave(ADC1_SE9, ADC_16bit,2); 
+        v3 = adc_ave(ADC1_SE13, ADC_16bit,2);
+        v4 = adc_ave(ADC1_SE8, ADC_16bit,2);
+
+        adtmp1= adtmp1+ v1;
+        adtmp2= adtmp2+ v2;
+        adtmp3= adtmp3+ v3;
+        adtmp4= adtmp4+ v4;
       } 
-      AD_val_1 = adtmp1/50;
-      AD_val_2 = adtmp2/50;
-      AD_val_3 = adtmp3/50;
-      //更新最大最小值
-      if(AD_val_1>AD_val_1_max)		AD_val_1_max=AD_val_1;
-      if(AD_val_2>AD_val_2_max)		AD_val_2_max=AD_val_2;
-      if(AD_val_3>AD_val_3_max)		AD_val_3_max=AD_val_3;
+
+        v1 = adtmp1/10;
+        v2 = adtmp2/10;
+        v3 = adtmp3/10;
+        v4 = adtmp4/10;
+ //更新最大最小值
+
+      if(v1>AD_val_1_max)		AD_val_1_max=v1;
+      if(v2>AD_val_2_max)		AD_val_2_max=v2;
+      if(v3>AD_val_3_max)		AD_val_3_max=v3;
+      if(v4>AD_val_4_max)		AD_val_4_max=v4;
 			
-      if(AD_val_1<AD_val_1_min)		AD_val_1_min=AD_val_1;
-      if(AD_val_2<AD_val_2_min)		AD_val_2_min=AD_val_2;			  
-      if(AD_val_3<AD_val_3_min)		AD_val_3_min=AD_val_3;
-		
-       //归一化
-      AD_val_1=100*(AD_val_1 - AD_val_1_min)/(AD_val_1_max-AD_val_1_min);
-      AD_val_2=100*(AD_val_2 - AD_val_2_min)/(AD_val_2_max-AD_val_2_min);
-      AD_val_3=100*(AD_val_3 - AD_val_3_min)/(AD_val_3_max-AD_val_3_min);
-  
-  disgy_AD_val_1 = AD_val_1;
-  disgy_AD_val_2 = AD_val_2;
-  disgy_AD_val_3 = AD_val_3;
-}
+      if(v1<AD_val_1_min)		AD_val_1_min=v1;
+      if(v2<AD_val_2_min)		AD_val_2_min=v2;			  
+      if(v3<AD_val_3_min)		AD_val_3_min=v3;
+      if(v4<AD_val_4_min)		AD_val_4_min=v4;	
 
-
-void getadval()
-{
-  
-  
-  AD_val_1 = adc_ave(ADC1_SE8, ADC_16bit,10);                      
-  AD_val_2 = adc_ave(ADC1_SE9, ADC_16bit,10);                   
-  AD_val_3 = adc_ave(ADC1_SE10, ADC_16bit,10);   
-  dis_AD_val_1=AD_val_1;
-  dis_AD_val_2=AD_val_2;
-  dis_AD_val_3=AD_val_3;
- 
-  //限幅
-  if(AD_val_1>AD_val_1_max)		AD_val_1=AD_val_1_max;
-  if(AD_val_2>AD_val_2_max)		AD_val_2=AD_val_2_max;
-  if(AD_val_3>AD_val_3_max)		AD_val_3=AD_val_3_max;
- 
-  if(AD_val_1<AD_val_1_min)		AD_val_1=AD_val_1_min;
-  if(AD_val_2<AD_val_2_min)		AD_val_2=AD_val_2_min;			  
-  if(AD_val_3<AD_val_3_min)		AD_val_3=AD_val_3_min;
-  
-  //归一化
-  AD_val_1=100*(AD_val_1 - AD_val_1_min)/(AD_val_1_max-AD_val_1_min);
-  AD_val_2=100*(AD_val_2 - AD_val_2_min)/(AD_val_2_max-AD_val_2_min);
-  AD_val_3=100*(AD_val_3 - AD_val_3_min)/(AD_val_3_max-AD_val_3_min);
-  
-  disgy_AD_val_1 = AD_val_1;
-  disgy_AD_val_2 = AD_val_2;
-  disgy_AD_val_3 = AD_val_3;
 }
 
 
