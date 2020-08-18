@@ -181,7 +181,7 @@ void Speed_Control_Output(void)                         //2ms一次 每次调用前Spee
 void Direction_Control(void)
 {
   static int Calculate_Length=0;
-  Turn_Speed= -0.01*(Get_Z_Gyro() - GYRO_OFFSET_Z);     //0.01//GYRO_OFFSET_Z静态Z轴角速度值，在I2C中定为17 //GYRO_OFFSET_Z
+  Turn_Speed= -0.01*(Get_Z_Gyro() - 17);     //0.01//GYRO_OFFSET_Z静态Z轴角速度值，在I2C中定为17 //GYRO_OFFSET_Z
   if(Turn_Speed<10&&Turn_Speed>-10)
   {
     Turn_Speed=0;
