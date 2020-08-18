@@ -26,7 +26,7 @@ float Turn_Out;
 float Turn_Angle_Integral;
 
 /**舵机相关**/
-int sever_middle=124;                   //值越大越偏右  
+int sever_middle=140;                   //值越大越偏右  
 int sever_range=35;                     //19(实际范围)//25(原)//28  //s 
 
 //模糊化系数
@@ -181,7 +181,7 @@ void Speed_Control_Output(void)                         //2ms一次 每次调用前Spee
 void Direction_Control(void)
 {
   static int Calculate_Length=0;
-  Turn_Speed= -0.01*(Get_Z_Gyro() - GYRO_OFFSET_Z);     //0.01//GYRO_OFFSET_Z静态Z轴角速度值，在I2C中定为17
+  Turn_Speed= -0.01*(Get_Z_Gyro() - 17);     //0.01//GYRO_OFFSET_Z静态Z轴角速度值，在I2C中定为17 //GYRO_OFFSET_Z
   if(Turn_Speed<10&&Turn_Speed>-10)
   {
     Turn_Speed=0;
@@ -380,19 +380,23 @@ void Moto_Out() //2ms一次
     MotorOut=0;
     LED_BLUE_ON;
  }
- if(Stop_Brake==1 && wycnt<=250){                //终点刹车车轮倒转时间200ms
+ if(Stop_Brake==1 && wycnt<=500){                //终点刹车车轮倒转时间200ms
    
    FTM_PWM_Duty(FTM0,FTM_CH0,0);
      
-   FTM_PWM_Duty(FTM0,FTM_CH1,3000);
+   FTM_PWM_Duty(FTM0,FTM_CH1,2000);
   
    wycnt++;                      
   
  }
-  if(wycnt>250){ 
+  if(wycnt>500){ 
     
    FTM_PWM_Duty(FTM0,FTM_CH0,0);
    FTM_PWM_Duty(FTM0,FTM_CH1,0);
+   Stop_Brake=0;
+   wycnt=0;
+   
+   
                         
  }
 

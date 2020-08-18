@@ -26,6 +26,7 @@ extern uint8 flag2;
 float SlopeRight[6]={0},SlopeLeft[6]={0};
 float Distance_0,Distance_1,Distance2,Distance4,Distance5,Distance6,Distance7;
 float Distance14,Distance15,Distance16,Distance17;
+float Distance150;
 float Distance13=1000;
 float Distance200;                      //s 8.1入库时距离判断
 float Distance3=1000,Distance8=1000;
@@ -739,7 +740,15 @@ if(Distance-Distance8>1 && RoadType==200)
  SlopeLeft[4]=(LMR[0][35]-LMR[0][38])/3.0;
  
  
- 
+ if(Distance>3&&Distance150==0){
+   RoadType=150;
+   Distance150=Distance;
+ }
+ if(RoadType==150 && Distance-Distance150 > 4){
+   Distance150=1000;
+   Stop_Brake=1;
+   RoadType=0;
+ }
 
  if(RoadType==0)                                        //判断左边线是否为直线
  {
@@ -1144,6 +1153,11 @@ if(flag_17==1)
        
           LMR[1][i]=LMR[0][i]+12;
      }
+     else if(RoadType==150)                     //坡道
+     {
+          LMR[1][i]=35;
+     }
+     
      else if(RoadType==200)                     //s 8.1出库左拐
      {
           LMR[1][i]=20;
@@ -1152,6 +1166,8 @@ if(flag_17==1)
      {
           LMR[1][i]=15;
      }
+
+     
   /*   else if(RoadType==50 && flag==1)
      {
        lost_line=3;
