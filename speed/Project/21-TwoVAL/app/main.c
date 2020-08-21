@@ -16,6 +16,7 @@ void sendimg();
 
 extern uint8 Style;
 extern uint8 RoadType;
+extern  PID PID_SPEED,PID_TURN;
 unsigned char cmos[60][80]={0};                         //进行处理的数据
 
                                                         //电磁参数 s 8.5
@@ -25,63 +26,20 @@ float display4=0,display5=0,display6=0;
 
 
 
-void  main(void)
+  void  main(void)
 { //unsigned char xx,yy;
   uart_init(UART0,9600);
   uart_putchar(UART0,'O');
   uart_putchar(UART0,'K');
   init();
   Stop=1;
-  Style=1;
-  
-//  int sum;
-//  int i;
-    
-
-//   for(i=0;i<50;i++)                    //检测各电感的最小值
-//   {
-//     AD_val_1 =adc_once(ADC1_SE8, ADC_16bit);
-//     sum+=AD_val_1;
-//     DELAY_MS(5);
-//   }
-//   AD_val_1_min=sum/50;
-//   sum=0;
-//   for(i=0;i<50;i++)                    
-//   {
-//     AD_val_2 =adc_once(ADC1_SE9, ADC_16bit);
-//     sum+=AD_val_2;
-//     DELAY_MS(5);
-//   }
-//   AD_val_2_min=sum/50;
-//   sum=0;
-//   for(i=0;i<50;i++)                    
-//   {
-//     AD_val_3 =adc_once(ADC1_SE10, ADC_16bit);
-//     sum+=AD_val_3;
-//     DELAY_MS(5);
-//   }
-//   AD_val_3_min=sum/50;
-//   sum=0;
-//
-//   
-//   for(i=0;i<150;i++)                   //检测各电感的最大值
-//   {
-//     AD_val_1 =adc_once(ADC1_SE8, ADC_16bit);
-//     if(AD_val_1>=AD_val_1_max) 
-//       AD_val_1_max=AD_val_1;
-//     DELAY_MS(1);
-//     
-//     AD_val_2 =adc_once(ADC1_SE9, ADC_16bit);
-//     if(AD_val_2>=AD_val_2_max) 
-//       AD_val_2_max=AD_val_2;
-//     DELAY_MS(1);
-//    	
-//     AD_val_3 =adc_once(ADC1_SE10, ADC_16bit);
-//     if(AD_val_3>=AD_val_3_max) 
-//       AD_val_3_max=AD_val_3;
-//     DELAY_MS(1);
-//   }
-  
+  Style=0;
+//  RoadType=200;                           //s 起步时赛道类型为200，出库
+//  Speed_H=0.7;                                 
+//  Speed_M=0.6;                                 
+//  Speed_L=0.4;                                
+//  SetSpeed=0.3;
+//  PID_SPEED.P=0.3;
   
   while(1)
   {
@@ -160,14 +118,14 @@ void PIT_IRQHandler()  //2ms一次中断
      RunTime=RunTime+0.002;
      AverageSpeed=Distance/RunTime;
    }
-   flag_100ms++;                                //1~51
-   // flag_100ms+=20;                            //s 8.5 应该有误，改回上面一行的计数                             
+   //flag_100ms++;                                //1~51
+   flag_100ms+=10;                                                       
    // flag_obstacle++;
    // uart_putchar(UART0,'O');
    if(flag_100ms>Speed_Filter_Times)
    {
      flag_100ms=0;  
-     Speed_Control();                           //100ms进行一次速度控制量计算（SpeedControlOutOld 、SpeedControlOutNew）
+     Speed_Control();                           //ms进行一次速度控制量计算（SpeedControlOutOld 、SpeedControlOutNew）
      LED_RED_TURN;
      SpeedCount=0;
      
@@ -191,6 +149,10 @@ void PIT_IRQHandler()  //2ms一次中断
         Starting=0;
         Stop=0;                                 //Stop=1电机不输出
         RoadType=200;                           //s 起步时赛道类型为200，出库
+////  Speed_H=0.7;                                 
+////  Speed_M=0.6;                                 
+////  Speed_L=0.4;                                
+   //   SetSpeed=0
         LED_BLUE_OFF;
         LED_GREEN_OFF;
         BEEP_OFF;                               //蜂鸣器响一段时间关掉
@@ -207,6 +169,7 @@ void PIT_IRQHandler()  //2ms一次中断
      cnt=0;
    }
    SpeedCount++;//1~50  Speed_Control_Output()调用次数   100ms进行一次速度控制量计算（SpeedControlOutOld 、SpeedControlOutNew）后被清零
+
    Speed_Control_Output();//2ms一次 计算速度控制量PID_SPEED.OUT
    Moto_Out();//2ms一次
 }

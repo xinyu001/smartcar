@@ -15,17 +15,21 @@ extern float Control_Para[15];
 extern uint8 Style;                             //7月7日加
 
 //s  电磁参数
-float v1,v2,v3,v4;
-float  adtmp1,adtmp2,adtmp3,adtmp4;
+float v1,v2,v3,v4,v5,v6;
+float  adtmp1,adtmp2,adtmp3,adtmp4,adtmp5,adtmp6;
 extern float   AD_val_1_min;
 extern float   AD_val_2_min;
 extern float   AD_val_3_min;
 extern float   AD_val_4_min;
+extern float   AD_val_5_min;
+extern float   AD_val_6_min;
+
 extern float   AD_val_1_max;
 extern float   AD_val_2_max;
 extern float   AD_val_3_max; 
 extern float   AD_val_4_max; 
-
+extern float   AD_val_5_max; 
+extern float   AD_val_6_max;
 
 
 
@@ -81,17 +85,21 @@ void init()
 
 void Para_Init()
 {
-  Speed_H=0.69;                                 //0.8  0.7
-  Speed_M=0.63;                                 //0.62  0.7
+  Speed_H=0.5;                                 //0.8  0.7
+  Speed_M=0.5;                                 //0.62  0.7
   Speed_L=0.4;                                 //0.42;
-  if(Style==0)
-    SetSpeed=0.59;                              //0.9  原来0.6
-  if(Style==1)
-    SetSpeed=0.59;                               //0.6//s
+//  if(Style==0)
+  SetSpeed=0.5;                           //0.9  原来0.6
+//  if(Style==1)
+//  SetSpeed=0.52;                            //0.6//s
   Fuzzy_Kp=0.0065;                              //0.014
   Fuzzy_Kd=0.005;                               //0
-  PID_SPEED.P=0.13;                             //0.13  0.18  原来是0.13
-  PID_SPEED.I=0.02;                             //0.013  原来0.02
+ // PID_SPEED.P=0.84;                             //0.13
+  PID_SPEED.P=0.84;
+  PID_SPEED.I=0.005;                             //0.02
+//  Kp=0;
+//  Ki=0.08;
+  
   PID_TURN.P=0.006;                             //0.005
   PID_TURN.D=0.0028;                            //0.001 0.003
   Set_Angle=50;
@@ -195,6 +203,8 @@ void adc_maxmin_update(){
       adtmp2=0;
       adtmp3=0;
       adtmp4=0;
+      adtmp5=0;
+      adtmp6=0;
       int i;
       for(i=0;i<10;i++)
       {
@@ -203,28 +213,42 @@ void adc_maxmin_update(){
         v2 = adc_ave(ADC1_SE9, ADC_16bit,2); 
         v3 = adc_ave(ADC1_SE13, ADC_16bit,2);
         v4 = adc_ave(ADC1_SE8, ADC_16bit,2);
+        v5 = adc_ave(ADC1_SE11, ADC_16bit,2);
+        v6 = adc_ave(ADC1_SE10, ADC_16bit,2);
+        
+        
 
         adtmp1= adtmp1+ v1;
         adtmp2= adtmp2+ v2;
         adtmp3= adtmp3+ v3;
         adtmp4= adtmp4+ v4;
+        adtmp5= adtmp5+ v5;
+        adtmp6= adtmp6+ v6;
+        
       } 
 
         v1 = adtmp1/10;
         v2 = adtmp2/10;
         v3 = adtmp3/10;
         v4 = adtmp4/10;
+        v5 = adtmp5/10;
+        v6 = adtmp6/10;
  //更新最大最小值
 
       if(v1>AD_val_1_max)		AD_val_1_max=v1;
       if(v2>AD_val_2_max)		AD_val_2_max=v2;
       if(v3>AD_val_3_max)		AD_val_3_max=v3;
       if(v4>AD_val_4_max)		AD_val_4_max=v4;
+      if(v5>AD_val_5_max)		AD_val_5_max=v5;
+      if(v6>AD_val_6_max)		AD_val_6_max=v6;
+      
 			
       if(v1<AD_val_1_min)		AD_val_1_min=v1;
       if(v2<AD_val_2_min)		AD_val_2_min=v2;			  
       if(v3<AD_val_3_min)		AD_val_3_min=v3;
-      if(v4<AD_val_4_min)		AD_val_4_min=v4;	
+      if(v4<AD_val_4_min)		AD_val_4_min=v4;
+      if(v5<AD_val_5_min)		AD_val_5_min=v5;
+      if(v6<AD_val_6_min)		AD_val_6_min=v6;
 
 }
 

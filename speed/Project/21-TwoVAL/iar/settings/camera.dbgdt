@@ -19,7 +19,7 @@
           
           
           
-        <Column0>197</Column0><Column1>27</Column1><Column2>27</Column2><Column3>27</Column3></ColumnWidths>
+        <Column0>145</Column0><Column1>27</Column1><Column2>27</Column2><Column3>27</Column3></ColumnWidths>
       </Workspace>
       <Disassembly>
         <col-names>
@@ -34,12 +34,12 @@
         
         
       <PreferedWindows><Position>2</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows/></PreferedWindows><ShowCodeCoverage>1</ShowCodeCoverage><ShowInstrProfiling>1</ShowInstrProfiling></Disassembly>
-    <Find-All-References><ColumnWidth0>459</ColumnWidth0><ColumnWidth1>65</ColumnWidth1><ColumnWidth2>787</ColumnWidth2></Find-All-References><Find-in-Files><ColumnWidth0>569</ColumnWidth0><ColumnWidth1>94</ColumnWidth1><ColumnWidth2>854</ColumnWidth2><ColumnWidth3>379</ColumnWidth3></Find-in-Files><Select-Ambiguous-Definitions><ColumnWidth0>331</ColumnWidth0><ColumnWidth1>47</ColumnWidth1><ColumnWidth2>567</ColumnWidth2></Select-Ambiguous-Definitions></Static>
+    <Find-All-References><ColumnWidth0>459</ColumnWidth0><ColumnWidth1>65</ColumnWidth1><ColumnWidth2>787</ColumnWidth2></Find-All-References><Find-in-Files><ColumnWidth0>569</ColumnWidth0><ColumnWidth1>94</ColumnWidth1><ColumnWidth2>854</ColumnWidth2><ColumnWidth3>379</ColumnWidth3></Find-in-Files><Select-Ambiguous-Definitions><ColumnWidth0>331</ColumnWidth0><ColumnWidth1>47</ColumnWidth1><ColumnWidth2>567</ColumnWidth2></Select-Ambiguous-Definitions><Find-All-Declarations><ColumnWidth0>331</ColumnWidth0><ColumnWidth1>47</ColumnWidth1><ColumnWidth2>567</ColumnWidth2></Find-All-Declarations></Static>
     <Windows>
       
       
       
-    <Wnd1>
+    <Wnd0>
         <Tabs>
           <Tab>
             <Identity>TabID-10404-9590</Identity>
@@ -53,9 +53,9 @@
             <Factory>Build</Factory>
             <Session/>
           </Tab>
-        <Tab><Identity>TabID-22365-30124</Identity><TabName>Find in Files</TabName><Factory>Find-in-Files</Factory><Session/></Tab><Tab><Identity>TabID-4483-26853</Identity><TabName>Ambiguous Definitions</TabName><Factory>Select-Ambiguous-Definitions</Factory><Session/></Tab></Tabs>
+        <Tab><Identity>TabID-22365-30124</Identity><TabName>Find in Files</TabName><Factory>Find-in-Files</Factory><Session/></Tab><Tab><Identity>TabID-4483-26853</Identity><TabName>Ambiguous Definitions</TabName><Factory>Select-Ambiguous-Definitions</Factory><Session/></Tab><Tab><Identity>TabID-23163-12181</Identity><TabName>Declarations</TabName><Factory>Find-All-Declarations</Factory><Session/></Tab></Tabs>
         
-      <SelectedTab>0</SelectedTab></Wnd1><Wnd2>
+      <SelectedTab>0</SelectedTab></Wnd0><Wnd3>
         <Tabs>
           <Tab>
             <Identity>TabID-21153-9594</Identity>
@@ -63,11 +63,11 @@
             <Factory>Workspace</Factory>
             <Session>
               
-            <NodeDict><ExpandedNode>camera</ExpandedNode><ExpandedNode>camera/Driver</ExpandedNode><ExpandedNode>camera/app</ExpandedNode></NodeDict></Session>
+            <NodeDict><ExpandedNode>camera</ExpandedNode><ExpandedNode>camera/Driver</ExpandedNode><ExpandedNode>camera/app</ExpandedNode><ExpandedNode>camera/lib</ExpandedNode></NodeDict></Session>
           </Tab>
         </Tabs>
         
-      <SelectedTab>0</SelectedTab></Wnd2><Wnd5><Tabs><Tab><Identity>TabID-18303-18491</Identity><TabName>References</TabName><Factory>Find-All-References</Factory><Session/></Tab></Tabs><SelectedTab>0</SelectedTab></Wnd5></Windows>
+      <SelectedTab>0</SelectedTab></Wnd3><Wnd4><Tabs><Tab><Identity>TabID-18303-18491</Identity><TabName>References</TabName><Factory>Find-All-References</Factory><Session/></Tab></Tabs><SelectedTab>0</SelectedTab></Wnd4></Windows>
     <Editor>
       
       
@@ -80,7 +80,7 @@
       
       
       
-    <Top><Row0><Sizes><Toolbar-04F41C88><key>iaridepm.enu1</key></Toolbar-04F41C88></Sizes></Row0><Row1><Sizes><Toolbar-1EBF6008><key>debuggergui.enu1</key></Toolbar-1EBF6008></Sizes></Row1><Row2><Sizes><Toolbar-1EBF5B58><key>armjlink.enu1</key></Toolbar-1EBF5B58></Sizes></Row2></Top><Left><Row0><Sizes><Wnd2><Rect><Top>-2</Top><Left>-2</Left><Bottom>662</Bottom><Right>271</Right><x>-2</x><y>-2</y><xscreen>223</xscreen><yscreen>222</yscreen><sizeHorzCX>116146</sizeHorzCX><sizeHorzCY>227459</sizeHorzCY><sizeVertCX>142188</sizeVertCX><sizeVertCY>680328</sizeVertCY></Rect></Wnd2></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd5><Rect><Top>-2</Top><Left>-2</Left><Bottom>218</Bottom><Right>952</Right><x>-2</x><y>-2</y><xscreen>954</xscreen><yscreen>220</yscreen><sizeHorzCX>496875</sizeHorzCX><sizeHorzCY>225410</sizeHorzCY><sizeVertCX>104167</sizeVertCX><sizeVertCY>204918</sizeVertCY></Rect></Wnd5><Wnd1><Rect><Top>0</Top><Left>0</Left><Bottom>0</Bottom><Right>7</Right><x>950</x><y>-2</y><xscreen>972</xscreen><yscreen>220</yscreen><sizeHorzCX>506250</sizeHorzCX><sizeHorzCY>225410</sizeHorzCY><sizeVertCX>116146</sizeVertCX><sizeVertCY>227459</sizeVertCY></Rect></Wnd1></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
+    <Top><Row0><Sizes><Toolbar-05E41C88><key>iaridepm.enu1</key></Toolbar-05E41C88></Sizes></Row0><Row1><Sizes><Toolbar-186B9120><key>debuggergui.enu1</key></Toolbar-186B9120></Sizes></Row1><Row2><Sizes><Toolbar-186B9760><key>armjlink.enu1</key></Toolbar-186B9760></Sizes></Row2></Top><Left><Row0><Sizes><Wnd3><Rect><Top>-2</Top><Left>-2</Left><Bottom>820</Bottom><Right>219</Right><x>-2</x><y>-2</y><xscreen>343</xscreen><yscreen>331</yscreen><sizeHorzCX>178646</sizeHorzCX><sizeHorzCY>339139</sizeHorzCY><sizeVertCX>115104</sizeVertCX><sizeVertCY>842213</sizeVertCY></Rect></Wnd3></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd4><Rect><Top>-2</Top><Left>-2</Left><Bottom>60</Bottom><Right>946</Right><x>-2</x><y>-2</y><xscreen>948</xscreen><yscreen>62</yscreen><sizeHorzCX>493750</sizeHorzCX><sizeHorzCY>63525</sizeHorzCY><sizeVertCX>160417</sizeVertCX><sizeVertCY>305328</sizeVertCY></Rect></Wnd4><Wnd0><Rect><Top>0</Top><Left>0</Left><Bottom>94461672</Bottom><Right>94487776</Right><x>944</x><y>-2</y><xscreen>978</xscreen><yscreen>62</yscreen><sizeHorzCX>509375</sizeHorzCX><sizeHorzCY>63525</sizeHorzCY><sizeVertCX>178646</sizeVertCX><sizeVertCY>339139</sizeVertCY></Rect></Wnd0></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
   </Desktop>
 </Project>
 

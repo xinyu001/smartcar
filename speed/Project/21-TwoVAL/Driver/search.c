@@ -3,9 +3,9 @@
 
 */
 #include "include.h"
-#define SlopeLeftDiff 0.4
+#define SlopeLeftDiff 0.3               //0.4
 #define SlopeRightDiff 0.3
-
+extern  PID PID_SPEED,PID_TURN;
 extern uint8 flag2;
 float SlopeRight[6]={0},SlopeLeft[6]={0};
 float Distance_0,Distance_1,Distance2,Distance4,Distance5,Distance6,Distance7;
@@ -14,6 +14,7 @@ float Distance150=0;
 float Distance13=1000;
 float Distance200;                                      //s 入库时距离判断
 float Distance3=1000,Distance8=1000;
+float Distance18=1000;
 float distance_test;
 uint8  RoadType=0;                                      //路况标志，默认0，1十字路口
 float Previous_Error[10];
@@ -25,10 +26,13 @@ int flag,flag_obstacle;
 extern int flag_cricle_right,flag_cricle_left;         //电磁感应环岛
 extern int Go_Out_Circle,circle_Flag;
 int flag_right,flag_left,flag_3,flag_4,flag_13,flag_14,flag_15,flag_7,flag_17;
-int flag_16;
+int flag_16,flag_6,flag_5;
 extern uint8 Style;                             
 extern uint8 flag_jump;
 extern int Stop_Brake;
+extern int NitroBooster;
+extern float CarSpeed,AverageSpeed;
+
 uint16 edgposition[CAMERA_H];
 uint8 mid_line=35,left_line=0,right_line=70;            //mid_line越小，小车越靠右
 uint8 lost_line;
@@ -273,7 +277,7 @@ void Search()
           }
         }
         
-        if((Stop_Black+Stop_White)>6)                   //s 原8，因为摄像头高度从20cm调为10cm，看到的条数减少了
+        if((Stop_Black+Stop_White)>7)                   //s 原8，因为摄像头高度从20cm调为10cm，看到的条数减少了
         {
           
           RoadType=205;                                 //s 8.1 看到起跑线，准备入库
@@ -478,23 +482,39 @@ void Search()
 //s 出库，开始正常行驶
 if((RoadType==200)&&(Distance>1)){
         
-         RoadType=0;
+        RoadType=0;
+//  Speed_H=0.5;                                 
+//  Speed_M=0.5;                                 
+//  Speed_L=0.4;                                
+  //      SetSpeed=0.52;
 
 }
-if(Distance>3 && Distance150==0){               //判断坡道
-  RoadType=150;
-  Distance150=Distance;
-  
-}
-if(Distance-Distance150>5){                     //坡道结束
-  RoadType=0;
-  Distance150=1000;
-  Stop_Brake=1;
-  
-}
+//if(RoadType==0 && Distance>3 && Distance150==0 &&
+//   LMR[0][1]<15 && LMR[0][2]<15 && LMR[0][3]<15 && LMR[0][4]<15 && LMR[0][5]<10 && LMR[0][6]<10 && LMR[0][7]<10 && LMR[0][8]<10 && LMR[0][9]<10 && LMR[0][10]<10 && LMR[0][11]<5 && LMR[0][30]<5 && LMR[0][40]<5 && LMR[0][50]<5 &&         
+//   LMR[2][1]>65 && LMR[2][2]>65 && LMR[2][3]>65 && LMR[2][4]>65 &&LMR[2][5]>70 && LMR[2][6]>70 && LMR[2][7]>70 && LMR[2][8]>70 && LMR[2][9]>70 && LMR[2][10]>70 && LMR[2][11]>75 && LMR[2][30]>75 && LMR[2][40]>75 && LMR[2][50]>75){               //判断坡道
+//  RoadType=150;
+//  Distance150=Distance; 
+// // NitroBooster=1;
+////  Speed_H=0.7;                                 
+////  Speed_M=0.6;                                 
+////  Speed_L=0.4;                                
+////  SetSpeed=0.7;
+//}
+//if((Distance-Distance150>4) && RoadType==150){                     //坡道结束
+//  RoadType=0;
+//  Distance150=1000;
+//  Stop_Brake=1;
+//  
+////  SetSpeed=0.5;
+////  Speed_H=0.5;                  //恢复正常速度                                
+////  Speed_M=0.5;                                 
+////  Speed_L=0.4;                                
+////  SetSpeed=0.5;
+//  
+//}
 
 //s 入库结束，停车
-if((RoadType==205)&&(Distance-Distance200>1.1)){
+if((RoadType==205)&&(Distance-Distance200>1.5)){
        Distance200=1000;
        RoadType=206;
        Stop_Brake=1;                    //刹车
@@ -557,6 +577,8 @@ if((RoadType==205)&&(Distance-Distance200>1.1)){
    }   
  }
 
+
+ //roadturncal();                          //电磁检测环岛
  SlopeLeft[0]=(LMR[0][15]-LMR[0][18])/3.0;
  SlopeLeft[1]=(LMR[0][20]-LMR[0][23])/3.0;
  SlopeLeft[2]=(LMR[0][25]-LMR[0][28])/3.0;
@@ -568,11 +590,11 @@ if((RoadType==205)&&(Distance-Distance200>1.1)){
 
  if(RoadType==0)                                        //判断左边线是否为直线
  {
-   if(SlopeLeft[0]!=0 && SlopeLeft[1]!=0 && SlopeLeft[2]!=0 && SlopeLeft[3]!=0)
+   if(SlopeLeft[0]!=0 && SlopeLeft[1]!=0 && SlopeLeft[2]!=0 )
    {
-     if(SlopeLeft[0]<1.2 && SlopeLeft[1]<1.2 && SlopeLeft[2]<1.2)
+     if(SlopeLeft[0]<4 && SlopeLeft[1]<4 && SlopeLeft[2]<4)
      {       
-       if(ABS(SlopeLeft[0]-SlopeLeft[1])<SlopeLeftDiff && ABS(SlopeLeft[1]-SlopeLeft[2])<SlopeLeftDiff && ABS(SlopeLeft[2]-SlopeLeft[3])<SlopeLeftDiff )
+       if(ABS(SlopeLeft[0]-SlopeLeft[1])<1.4*SlopeLeftDiff && ABS(SlopeLeft[1]-SlopeLeft[2])<1.4*SlopeLeftDiff)
        {
          RoadType=2;                                    //左边线为直线
         // uart_putchar(UART0,'L');
@@ -580,92 +602,100 @@ if((RoadType==205)&&(Distance-Distance200>1.1)){
      }
    }
  }
- if(RoadType==2 || RoadType==12 || RoadType==0)  
- {                                      
-  // if(ABS(SlopeLeft[0]-SlopeLeft[2])>=SlopeLeftDiff || ABS(SlopeLeft[1]-SlopeLeft[3])>=SlopeLeftDiff || ABS(SlopeLeft[2]-SlopeLeft[4])>=SlopeLeftDiff)
-  //    RoadType=0;  //此处判断存在疑问？？？？？？？？？？？？？？
-   if(LMR[2][5]!=80 && LMR[2][7]!=80 && LMR[2][10]!=80 && LMR[2][15]==80 && LMR[2][20]==80 && LMR[2][5]<LMR[2][7] && LMR[2][7]<LMR[2][10] && ABS(LMR[0][15]-LMR[0][22])<5 /*&& ABS(SlopeLeft[0]-SlopeLeft[1])<=SlopeLeftDiff  && ABS(SlopeLeft[1]-SlopeLeft[2])<=SlopeLeftDiff*/)
+ if((RoadType==2 || RoadType==12 || RoadType==0)&& Distance>5 && flag_right==0)//|| RoadType==0)  
+ {   
+   roadturncal();                                     
+   if(ABS(SlopeLeft[0]-SlopeLeft[1])>1.4*SlopeLeftDiff || ABS(SlopeLeft[1]-SlopeLeft[2])>1.4*SlopeLeftDiff )
+      RoadType=0;  
+   
+   else if (Go_Out_Circle==0 && flag_cricle_right==1 )
    { RoadType=3;                                        //看到第一个朝右丁字路口  //32   34
-      flag_3=1;                                         //右环第一个路口标志
-  // uart_putchar(UART0,'F');
+     // flag_3=1;                                         //右环第一个路口标志
+
+    Distance3=Distance;   
    }  
  }
  
  if(RoadType==3)   
  {
-  // if(ABS(SlopeLeft[1]-SlopeLeft[2])>=2.5*SlopeLeftDiff || ABS(SlopeLeft[1]-SlopeLeft[3])>=2.5*SlopeLeftDiff /*|| ABS(SlopeLeft[2]-SlopeLeft[4])>=SlopeLeftDiff*/)
-  // RoadType=0;
-  // RoadType=4;   if 3 then 4 ,那么连3都不会出现
-   if(LMR[2][20]==80 && LMR[2][25]==80 && LMR[2][30]==80  && LMR[2][35]==80 && LMR[0][20]==0  && LMR[0][25]==0  && LMR[0][30]==0 && LMR[0][35]==0)////////7月5日改
-     RoadType=0;                                        //避免路过十字路口变成5，因为出环岛时也是4
-   if(LMR[2][5]!=80 && LMR[2][7]!=80 && LMR[2][10]!=80 && LMR[2][15]!=80 && LMR[2][20]!=80 && LMR[2][5]>LMR[2][10] && LMR[2][20]>LMR[2][10] && LMR[0][6]!=0  && LMR[0][7]!=0  && LMR[0][8]!=0 && ABS(SlopeLeft[0]-SlopeLeft[1])<=SlopeLeftDiff  && ABS(SlopeLeft[1]-SlopeLeft[2])<=SlopeLeftDiff/*&& LMR[2][5]>LMR[2][6] && LMR[2][20]>LMR[2][10]*/)  // 34  36    
-   {  RoadType=4;                                       //看到环岛侧边
-      flag_4=1;                                         //右环侧边标志
-  // uart_putchar(UART0,'H');
-   }
-   
+  
+   RoadType=4;
  }
  if(RoadType==4)  
  {
-  //  if(ABS(SlopeLeft[0]-SlopeLeft[2])>=2.5*SlopeLeftDiff || ABS(SlopeLeft[1]-SlopeLeft[3])>=2.5*SlopeLeftDiff || ABS(SlopeLeft[2]-SlopeLeft[4])>=2.5*SlopeLeftDiff)
-  //  RoadType=0;
-
-   if(LMR[2][5]!=80 && LMR[2][7]!=80 && LMR[2][20]==80 && LMR[2][25]==80 && LMR[2][15]==80 && LMR[2][5]<LMR[2][7] )
-   { 
-     RoadType=5;                                        //看到第2个朝右丁字路口
-     flag_right=1;                                      //进入右环标记
-     Distance3=Distance;                                //记下进入右环时的距离，判断RoadType6
-     Distance7=Distance;                                //记下进入右环时的距离，判断RoadType0
-    // uart_putchar(UART0,'S');
+                                        
+  if(LMR[0][10] == 0 && LMR[0][15] == 0 && LMR[0][20] == 0 && LMR[2][20] == 80 && LMR[2][15] == 80 && LMR[2][10] == 80)
+   {
+     RoadType=0;
+     
    }
-   if(LMR[2][20]==80 && LMR[2][25]==80 && LMR[2][30]==80  && LMR[2][35]==80 && LMR[0][20]==0  && LMR[0][25]==0  && LMR[0][30]==0 && LMR[0][35]==0)////////7月5日改
-     RoadType=0;                                        //避免路过十字路口变成5，因为出环岛时也是4  ，斟酌
- }
-if(i<10)
-{
-  if(img_edg[j]==255)
-  {
-  jishu1++;
-  if(jishu1>5)
-  {
-    if(LMR[2][20]==80 && LMR[2][25]==80 && LMR[2][30]==80  && LMR[2][35]==80 && LMR[0][20]==0  && LMR[0][25]==0  && LMR[0][30]==0 && LMR[0][35]==0)
-    {
-      if(Distance-Distance3>3)                                 //出环判断，必须在环内行驶一定的距离
-      {RoadType=6;
-      jishu1=0;
-      }
-    }
+  else{
+    flag_5=1;
   }
+ }
+
+ if(flag_5=1&&(Distance-Distance3>1.3)){
+    RoadType=5; 
+    flag_right=1;                        //进环
+    Distance3=1000;
+    Distance5=Distance;
+ }
+if(RoadType==5)
+{
+  if(Distance-Distance5>1.5)
+  {
+    RoadType=6;
+    flag_6=1;
+   // flag_3=0;
+   // flag_4=0;
+    flag_5=0;
+    Distance5=1000;
+    Distance6=Distance;//记下环内行驶的距离，判断RoadType7
   }
 }
-//进环行驶一段距离后变回普通RoadType
- if((Distance-Distance7>1)&& RoadType==5)
- {RoadType=0;
- flag_3=0;
- flag_4=0;
- }
  //出右环
-if(RoadType==6 && flag_right==1)
+ //出环岛
+if(flag_6==1)
 {
-  RoadType=7;
-  flag_7=1;
-  Distance4=Distance;
+  RoadType=6;
+  if(flag_right==1 && Distance-Distance6>4.5 )
+  { 
+    flag_6=0;  
+    RoadType=7;
+    flag_7=1;
+    Distance6=1000;
+    Distance7=Distance;     //记录出环时距离，一段时间后恢复直线行驶。
+    
+   }                      
 }
-//防止误判
-if(RoadType==6 && flag_right==0)
-{
-  RoadType=0;
-}
-//出右环一段距离后变回普通RoadType
+
+//出左环拐弯
 if(flag_7==1)
 {
   RoadType=7;
-if(Distance-Distance4>0.55)
-{
-  RoadType=0;
-  flag_right=0;
+  if(Distance-Distance7>1.7)
+  {
+    RoadType=8;
+    Distance8=Distance;
+    Distance7=1000;
+//    flag_right=0;
+    flag_7=0;
+    Go_Out_Circle=1;
+  //  flag_right=0;                     //注释掉右环，防止误判
+//    flag_cricle_right=0; 
+//    circle_Flag=0;
+    
+  }
 }
+if(RoadType==8 && Distance-Distance8>2  ){
+    RoadType=0;
+    Go_Out_Circle=0;
+    Distance8=1000;
+    flag_cricle_right=0;
+ //   flag_right=0;
+
 }
+
  
 
  
@@ -690,44 +720,27 @@ if(Distance-Distance4>0.55)
      }
    }
  }
- 
- if(RoadType==12 || RoadType==0 || RoadType==2)   
+// flag_cricle_left=0;
+ if((RoadType==12 || RoadType==2 || RoadType==0 )&& Distance>5 && flag_left==0)//|| RoadType==0)
  {  
+   roadturncal();
+ 
    if(ABS(SlopeRight[0]-SlopeRight[1])>=1.4*SlopeRightDiff || ABS(SlopeRight[1]-SlopeRight[2])>=1.4*SlopeRightDiff )
       RoadType=0;
    
-   else if((LMR[0][5]!=0 && LMR[0][7]!=0 &&
-          ( (LMR[0][8]<=3 && LMR[0][9]<=3 && LMR[0][10]<=3) || LMR[0][8]==0 || LMR[0][9]==0 || LMR[0][10]==0)&& 
-           LMR[0][16]!=0 && LMR[0][18]!=0 &&
-           LMR[0][5]>LMR[0][7] && LMR[0][4]>LMR[0][6]&& 
-           LMR[0][13]>LMR[0][15] && LMR[0][15]>LMR[0][17]&&
-           LMR[2][4]<LMR[2][8] && LMR[2][6]<LMR[2][10] && LMR[2][10]<LMR[2][12])||
-           (Go_Out_Circle==0 && flag_cricle_left==1 ))
+   if (Go_Out_Circle==0 && flag_cricle_left==1 )
    
    {
-//      RoadType=13;                                        //看到第一个朝左丁字路口
-//      flag_13=1;                                           //左环第一个路口标记
-//      Distance13=Distance;                                //s 记下摄像头第一次看到左环时的距离，判断RoadType15
       RoadType=13;                                        //电磁检测到左环
-      flag_13=1;                                           //左环第一个路口标记
+ //     flag_13=1;                                           //左环第一个路口标记
       Distance13=Distance;                                //s 记下电磁进检测到左环时的距离，判断RoadType15  
-      Go_Out_Circle=1;
    }
  }
  
 if(RoadType==13)      
 {
-//   if(ABS(SlopeRight[0]-SlopeRight[1])>=4*SlopeRightDiff || ABS(SlopeRight[1]-SlopeRight[2])>=4*SlopeRightDiff) //
-//      RoadType=0;  
-//   else if( LMR[0][2]!=0 && LMR[0][4]!=0 && LMR[0][6]!=0 && LMR[0][18]!=0 && LMR[0][20]!=0 &&
-//           LMR[0][12]<LMR[0][6] && LMR[0][12]<LMR[0][18] &&
-//           LMR[2][4]<LMR[2][8] &&LMR[2][6]<LMR[2][12] && LMR[2][10]<LMR[2][20] )
-//   {
-//     RoadType=14;                                         //看到环岛侧边
-//     flag_14=1;                                           //左环侧边标记
-//   }
   RoadType=14;
-  flag_14=1;
+ // flag_14=1;
 }
  
  if(RoadType==14)   //s 离第一次看到左环通过了一段距离
@@ -737,35 +750,25 @@ if(RoadType==13)
      RoadType=0;
    }
    
-//   if(LMR[0][4]!=0 && LMR[0][6]!=0 && LMR[0][15]==0 && LMR[0][20]==0 &&
-//      LMR[0][25]==0 && LMR[0][4]>LMR[0][6])     
-//   { 
-//     //RoadType=15;                                       //看到第2个朝左丁字路口
-//     //flag_left=1;                                       //进入左环标记
-//     flag_15=1;
-//    // Distance4=Distance;                                //记下进入左环时的距离，判断RoadType6     
-//   }
    flag_15=1;
  }
- //if(flag_15=1&&(Distance-Distance13>3.3)){
- if(flag_15=1&&(Distance-Distance13>2)){
+ if(flag_15=1&&(Distance-Distance13>1.3)){
     RoadType=15; 
-    flag_left=1;
+    flag_left=1;                        //进左环
     Distance13=1000;
     Distance15=Distance;
  }
- 
  //进环后变RoadType16
 if(RoadType==15)
 {
-  //RoadType==15;
-  if(Distance-Distance15>1)
+  if(Distance-Distance15>1.5)
   {
     RoadType=16;
     flag_16=1;
-    flag_13=0;
-    flag_14=0;
+   // flag_13=0;
+   // flag_14=0;
     flag_15=0;
+    Distance15=1000;
     Distance16=Distance;//记下环内行驶的距离，判断RoadType17
   }
 }
@@ -779,7 +782,9 @@ if(flag_16==1)
     flag_16=0;  
     RoadType=17;
     flag_17=1;
-    Distance17=Distance;     //记录出环时距离，一段时间后恢复正常行驶。
+    Distance16=1000;
+    Distance17=Distance;     //记录出环时距离，一段时间后恢复直线行驶。
+    
    }                      
 }
 
@@ -787,16 +792,28 @@ if(flag_16==1)
 if(flag_17==1)
 {
   RoadType=17;
-  if(Distance-Distance17>2)
+  if(Distance-Distance17>1.7)
   {
-    RoadType=0;
-    flag_left=0;
+    RoadType=18;
+    Distance18=Distance;
+    Distance17=1000;
+//    flag_left=0;                      //取消注释时，使得只进一次环岛
     flag_17=0;
-    Go_Out_Circle=0;
-    flag_cricle_left=0; 
-    circle_Flag=0;
+    Go_Out_Circle=1;
+    flag_left=0;
+//    flag_cricle_left=0; 
+//    circle_Flag=0;
     
   }
+}
+if(RoadType==18 && Distance-Distance18>2  ){
+    RoadType=0;
+    Go_Out_Circle=0;
+    Distance18=1000;
+    flag_cricle_left=0;
+    
+ //   flag_left=0;
+
 }
 
   
@@ -861,7 +878,7 @@ if(flag_17==1)
      if(RoadType==5)                                    //朝右的第二个丁字口
      {
        
-          LMR[1][i]=40;
+          LMR[1][i]=50;
      }
      else if(RoadType==7)                               //朝右出环岛
      {
@@ -882,32 +899,25 @@ if(flag_17==1)
      else if(RoadType==17)                              //出左环岛
      { 
        
-          LMR[1][i]=27;                                 
+          LMR[1][i]=24;                                 
      }
 
-     else if(RoadType==18 )
-     {
-       
-          LMR[1][i]=LMR[2][i]-26;
-     }
-     else if(RoadType==40 )
-     {
-       
-          LMR[1][i]=LMR[2][i]-17;
-     }
-     else if(RoadType==41 )
-     {
-       
-          LMR[1][i]=LMR[0][i]+12;
-     }
      else if(RoadType==200)                     //s 8.1出库左拐
      {
-          LMR[1][i]=20;
+          LMR[1][i]=24;
      }
      else if(RoadType==205)                     //s 8.1入库左拐
      {
           LMR[1][i]=15;
      }
+//     else if(RoadType==200)                     //出库右拐
+//     {
+//          LMR[1][i]=46;
+//     }
+//     else if(RoadType==205)                     //入库右拐
+//     {
+//          LMR[1][i]=55;
+//     }
      else                                               //RoadType=0,6，16...
      {
        LMR[1][i]=(LMR[0][i]+LMR[2][i])/2-1;             //中线  -3
@@ -958,6 +968,12 @@ if(flag_17==1)
       }
     }
    }
+  
+    Middle_Err_Sum=0;
+    for(i=22;i<24;i++)
+      {
+          Middle_Err_Sum=Middle_Err_Sum+ LMR[1][i]-mid_line;            //取了行的误差
+      }
    Middle_Err_Sum=Middle_Err_Sum/3;                                     //取平均
   
    if(RoadType==1)
@@ -1014,7 +1030,7 @@ if(flag_17==1)
   Push_And_Pull(Previous_Error,10,Middle_Err);          //Middle_Err放入长度为12的数组Previous_Error的首元
   Delt_error=-10*Slope_Calculate(0,10,Previous_Error);  //该变量算出来供在其他文件使用
   
-
+//roadturncal();
 }
 //search()结束
 

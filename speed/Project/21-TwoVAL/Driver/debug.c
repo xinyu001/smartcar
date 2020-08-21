@@ -26,23 +26,24 @@ char Para_Name1[7][12]={"Set_Speed\0","Set_Angle\0","Acc_Offset\0","Fuzzy_kp",
 extern int16 GYRO_OFFSET_Z;
 extern uint8  LMR[3][CAMERA_H];
 extern uint8 Style;
+extern  PID PID_SPEED,PID_TURN;
 
-extern float AD_val_1,AD_val_2,AD_val_3,AD_val_4;
-extern float dis_AD_val_1,dis_AD_val_2,dis_AD_val_3,dis_AD_val_4;
-extern float disgy_AD_val_1,disgy_AD_val_2,disgy_AD_val_3,disgy_AD_val_4;
-extern float AD_val_1_min,AD_val_2_min,AD_val_3_min,AD_val_4_min;
-extern float AD_val_1_max,AD_val_2_max,AD_val_3_max,AD_val_4_max;
+extern float AD_val_1,AD_val_2,AD_val_3,AD_val_4,AD_val_5,AD_val_6;
+extern float dis_AD_val_1,dis_AD_val_2,dis_AD_val_3,dis_AD_val_4,dis_AD_val_5,dis_AD_val_6;
+extern float disgy_AD_val_1,disgy_AD_val_2,disgy_AD_val_3,disgy_AD_val_4,disgy_AD_val_5,disgy_AD_val_6;
+extern float AD_val_1_min,AD_val_2_min,AD_val_3_min,AD_val_4_min,AD_val_5_min,AD_val_6_min;
+extern float AD_val_1_max,AD_val_2_max,AD_val_3_max,AD_val_4_max,AD_val_5_max,AD_val_6_max;
 extern float display1,display2,display3;
 extern float display4,display5,display6;
 extern int circle_Flag;
 extern int Go_Out_Circle;
 extern int flag_cricle_right,flag_cricle_left;         //电磁感应环岛
-
+extern int turn_right_Flag,turn_left_Flag;
 extern int Stop_Brake;                               //刹车
 extern int NitroBooster;
 extern float acceleration;
 
-extern int flag_cricle_right,flag_cricle_left;         //电磁感应环岛
+
 
 void my_putchar(char temp)
 {
@@ -173,21 +174,55 @@ void OLED_Draw_UI()  //画出界面
     OLED_PrintValueF(72, 6,CarSpeed,4);  //Middle_Err CarSpeed
     reverse=0;
  */
-    OLED_P6x8Str(0,1,"RoadType");
-    OLED_PrintValueF(72, 1,RoadType,4);
-    OLED_P6x8Str(0,2,"Right[1]");
-    OLED_PrintValueF(72, 2,SlopeRight[1],4);
-    OLED_P6x8Str(0,3,"Right[2]");
-    OLED_PrintValueF(72, 3,SlopeRight[2],4);
-    OLED_P6x8Str(0,4,"Right[3]");
-    OLED_PrintValueF(72, 4,SlopeRight[3],4);
-    OLED_P6x8Str(0,5,"LMR[1][27]");
-    OLED_PrintValueF(72, 5,LMR[1][27],4);
-    OLED_P6x8Str(0,6,"LMR[1][30]");
-    OLED_PrintValueF(72, 6,LMR[1][30],4);
-    OLED_P6x8Str(0,7,"Distance");
-    OLED_PrintValueF(72, 7,Distance,4);
+//    OLED_P6x8Str(0,1,"RoadType");
+//    OLED_PrintValueF(72, 1,RoadType,4);
+//    OLED_P6x8Str(0,2,"Right[1]");
+//    OLED_PrintValueF(72, 2,SlopeRight[1],4);
+//    OLED_P6x8Str(0,3,"Right[2]");
+//    OLED_PrintValueF(72, 3,SlopeRight[2],4);
+//    OLED_P6x8Str(0,4,"Right[3]");
+//    OLED_PrintValueF(72, 4,SlopeRight[3],4);
+//    OLED_P6x8Str(0,5,"LMR[1][27]");
+//    OLED_PrintValueF(72, 5,LMR[1][27],4);
+//    OLED_P6x8Str(0,6,"LMR[1][30]");
+//    OLED_PrintValueF(72, 6,LMR[1][30],4);
+//    OLED_P6x8Str(0,7,"Distance");
+//    OLED_PrintValueF(72, 7,Distance,4);
 
+     //电感电磁数值查看    
+//    OLED_P6x8Str(0,2,"1:");
+//    OLED_PrintValueF(30, 2,display1,4);
+//    OLED_P6x8Str(0,3,"2:");
+//    OLED_PrintValueF(30, 3,display2,4);
+//    OLED_P6x8Str(0,4,"3:");
+//    OLED_PrintValueF(30, 4,display3,4);
+//    OLED_P6x8Str(0,5,"4:");
+//    OLED_PrintValueF(30, 5,display4,4);
+//    OLED_P6x8Str(0,6,"5:");
+//    OLED_PrintValueF(30, 6,display5,4);
+//    OLED_P6x8Str(0,7,"6:");
+//    OLED_PrintValueF(30, 7,display6,4); 
+    
+    OLED_P6x8Str(0,1,"Distance");
+    OLED_PrintValueF(72, 1,Distance,4);
+    OLED_P6x8Str(0,2,"RunTime");
+    OLED_PrintValueF(72, 2,RunTime,4);
+//    OLED_P6x8Str(0,3,"Average_Spd");
+//    OLED_PrintValueF(72, 3,AverageSpeed,4);  
+        OLED_P6x8Str(0,3,"NitroBooster");
+    OLED_PrintValueF(72, 3,NitroBooster,4);  
+//    OLED_P6x8Str(0,3,"MotorOut");
+//    OLED_PrintValueF(72, 3,MotorOut,4);  
+    OLED_P6x8Str(0,4,"NowSPEED");
+    OLED_PrintValueF(72, 4,CarSpeed,4);
+    OLED_P6x8Str(0,5,"Stop_Brake");
+    OLED_PrintValueF(72, 5,Stop_Brake,4);
+
+    OLED_P6x8Str(0,6,"MotorOut");
+    OLED_PrintValueF(72, 6,MotorOut,4);
+    OLED_P6x8Str(0,7,"acceleration");
+    OLED_PrintValueF(72, 7,acceleration,4);
+   
   } 
   ////////////////////////////////////////////////////////////第3页 显示数据
   else if(Page_Index==2){
@@ -207,9 +242,14 @@ void OLED_Draw_UI()  //画出界面
     OLED_P6x8Str(0,5,"v4:");
     OLED_PrintValueF(30, 5,dis_AD_val_4,4);
     OLED_PrintValueF(80, 5,disgy_AD_val_4,4);
-    OLED_P6x8Str(0,6,"Middle_Err");
-    OLED_PrintValueF(72, 6,Middle_Err,4);
-    
+//    OLED_P6x8Str(0,6,"Middle_Err");
+//    OLED_PrintValueF(72, 6,Middle_Err,4);
+    OLED_P6x8Str(0,6,"v5:");
+    OLED_PrintValueF(30, 6,dis_AD_val_5,4);
+    OLED_PrintValueF(80, 6,disgy_AD_val_5,4);
+    OLED_P6x8Str(0,7,"v6:");
+    OLED_PrintValueF(30, 7,dis_AD_val_6,4);
+    OLED_PrintValueF(80, 7,disgy_AD_val_6,4);
     OLED_Set_Pos(122,7);
     OLED_P6x8Char(Page_Index+48); 
     
@@ -244,6 +284,12 @@ void OLED_Draw_UI()  //画出界面
     OLED_P6x8Str(0,5,"v4:");
     OLED_PrintValueF(30, 5,AD_val_4_min,4);  
     OLED_PrintValueF(70, 5,AD_val_4_max,4);
+    OLED_P6x8Str(0,6,"v5:");
+    OLED_PrintValueF(30, 6,AD_val_5_min,4);
+    OLED_PrintValueF(70, 6,AD_val_5_max,4);
+    OLED_P6x8Str(0,7,"v6:");
+    OLED_PrintValueF(30, 7,AD_val_6_min,4);  
+    OLED_PrintValueF(70, 7,AD_val_6_max,4);
     
     OLED_Set_Pos(122,7);
     OLED_P6x8Char(Page_Index+48); 
@@ -252,21 +298,30 @@ void OLED_Draw_UI()  //画出界面
 ///第六页数据
     else if(Page_Index==5){
     
-//    OLED_PrintValueF(0, 1,LMR[0][5],4);
-//    OLED_PrintValueF(0, 2,LMR[0][6],4);
-//    OLED_PrintValueF(0, 3,LMR[0][7],4);
-//    OLED_PrintValueF(0, 4,LMR[0][8],4);
-//    OLED_PrintValueF(0, 5,LMR[0][9],4);
-//    OLED_PrintValueF(0, 6,LMR[0][10],4);
-//    OLED_PrintValueF(0, 7,LMR[0][11],4);
+//    OLED_PrintValueF(0, 1,LMR[0][1],4);
+//    OLED_PrintValueF(0, 2,LMR[0][2],4);
+//    OLED_PrintValueF(0, 3,LMR[0][3],4);
+//    OLED_PrintValueF(0, 4,LMR[0][4],4);
+//    OLED_PrintValueF(0, 5,LMR[0][5],4);
+//    OLED_PrintValueF(0, 6,LMR[0][6],4);
+//    OLED_PrintValueF(0, 7,LMR[0][7],4);
 //    
-//    OLED_PrintValueF(36, 1,LMR[0][12],4);
-//    OLED_PrintValueF(36, 2,LMR[0][13],4);
-//    OLED_PrintValueF(36, 3,LMR[0][14],4);
-//    OLED_PrintValueF(36, 4,LMR[0][15],4);
-//    OLED_PrintValueF(36, 5,LMR[0][16],4);
-//    OLED_PrintValueF(36, 6,LMR[0][17],4);
-//    OLED_PrintValueF(36, 7,LMR[0][18],4);
+//    OLED_PrintValueF(36, 1,LMR[0][8],4);
+//    OLED_PrintValueF(36, 2,LMR[0][9],4);
+//    OLED_PrintValueF(36, 3,LMR[0][10],4);
+//    OLED_PrintValueF(36, 4,LMR[0][11],4);
+//    OLED_PrintValueF(36, 5,LMR[2][1],4);
+//    OLED_PrintValueF(36, 6,LMR[2][2],4);
+//    OLED_PrintValueF(36, 7,LMR[2][3],4);
+//    
+//    OLED_PrintValueF(72, 1,LMR[2][4],4);
+//    OLED_PrintValueF(72, 2,LMR[2][5],4);
+//    OLED_PrintValueF(72, 3,LMR[2][6],4);
+//    OLED_PrintValueF(72, 4,LMR[2][7],4);
+//    OLED_PrintValueF(72, 5,LMR[2][8],4);
+//    OLED_PrintValueF(72, 6,LMR[2][9],4);
+//    OLED_PrintValueF(72, 7,RoadType,4);  
+    
 //    
 //    
 //    OLED_PrintValueF(72, 1,LMR[0][20],4);
@@ -299,34 +354,35 @@ void OLED_Draw_UI()  //画出界面
 //    OLED_PrintValueF(72, 7,acceleration,4);
       
     
-//  //电感电磁数值查看    
-//    OLED_P6x8Str(0,2,"1:");
-//    OLED_PrintValueF(30, 2,display1,4);
-//    OLED_P6x8Str(0,3,"2:");
-//    OLED_PrintValueF(30, 3,display2,4);
-//    OLED_P6x8Str(0,4,"3:");
-//    OLED_PrintValueF(30, 4,display3,4);
-//    OLED_P6x8Str(0,5,"4:");
-//    OLED_PrintValueF(30, 5,display4,4);
-//    OLED_P6x8Str(0,6,"5:");
-//    OLED_PrintValueF(30, 6,display5,4);
-//    OLED_P6x8Str(0,7,"6:");
-//    OLED_PrintValueF(30, 7,display6,4);
+  //电感电磁数值查看    
+    OLED_P6x8Str(0,2,"1:");
+    OLED_PrintValueF(30, 2,display1,4);
+    OLED_P6x8Str(0,3,"2:");
+    OLED_PrintValueF(30, 3,display2,4);
+    OLED_P6x8Str(0,4,"3:");
+    OLED_PrintValueF(30, 4,display3,4);
+    OLED_P6x8Str(0,5,"4:");
+    OLED_PrintValueF(30, 5,display4,4);
+    OLED_P6x8Str(0,6,"5:");
+    OLED_PrintValueF(30, 6,display5,4);
+    OLED_P6x8Str(0,7,"6:");
+    OLED_PrintValueF(30, 7,display6,4);
     
-//电磁检测环岛
-    OLED_P6x8Str(0,2,"circle_Flag:");
-    OLED_PrintValueF(72, 2,circle_Flag,4);
-    OLED_P6x8Str(0,3,"flag_cricle_right:");
-    OLED_PrintValueF(72, 3,flag_cricle_right,4);
-    OLED_P6x8Str(0,4,"flag_cricle_left:");
-    OLED_PrintValueF(72, 4,flag_cricle_left,4);
-    OLED_P6x8Str(0,5,"Middle_Err:");
-    OLED_PrintValueF(72, 5,Middle_Err,4);
-    OLED_P6x8Str(0,6,"RoadType:");
-    OLED_PrintValueF(72, 6,RoadType,4);
-    OLED_P6x8Str(0,7,"Go_Out_Circle:");
-    OLED_PrintValueF(72, 7,Go_Out_Circle,4);    
-
+////电磁检测环岛
+//    OLED_P6x8Str(0,1,"RoadType:");
+//    OLED_PrintValueF(72, 1,RoadType,4);
+//    OLED_P6x8Str(0,2,"circle_Flag:");
+//    OLED_PrintValueF(72, 2,circle_Flag,4);
+//    OLED_P6x8Str(0,3,"flag_cricle_right:");
+//    OLED_PrintValueF(72, 3,flag_cricle_right,4);
+//    OLED_P6x8Str(0,4,"flag_cricle_left:");
+//    OLED_PrintValueF(72, 4,flag_cricle_left,4);
+//    OLED_P6x8Str(0,5,"turn_right_Flag:");
+//    OLED_PrintValueF(72, 5,turn_right_Flag,4);
+//    OLED_P6x8Str(0,6,"turn_left_Flag:");
+//    OLED_PrintValueF(72, 6,turn_left_Flag,4);
+//    OLED_P6x8Str(0,7,"Go_Out_Circle:");
+//    OLED_PrintValueF(72, 7,Go_Out_Circle,4);    
     OLED_Set_Pos(122,7);
     OLED_P6x8Char(Page_Index+48); 
     }
@@ -340,7 +396,7 @@ void Read_Switch() //0表示ON(左) 1表示OFF(右)
 {
   if(gpio_get(SW1)==0)  //拨码开关1功能   
   {
-    Style=1; ///////////////////7月7日注释
+    //Style=1; ///////////////////7月7日注释
   }
   else           
   {
