@@ -282,7 +282,7 @@ void Search()
           
           RoadType=205;                                 //s 8.1 看到起跑线，准备入库
           Distance200=Distance;                         //记录当前距离,从而判断刹车
-//          SetSpeed=0;
+          SetSpeed=0.2;
 //          Speed_H=0;
 //          Speed_M=0;
 //          Speed_L=0;
@@ -514,7 +514,7 @@ if((RoadType==200)&&(Distance>1)){
 //}
 
 //s 入库结束，停车
-if((RoadType==205)&&(Distance-Distance200>2)){
+if((RoadType==205)&&(Distance-Distance200>2.5)){
        Distance200=1000;
        RoadType=206;
        Stop_Brake=1;                    //刹车
@@ -602,7 +602,7 @@ if((RoadType==205)&&(Distance-Distance200>2)){
      }
    }
  }
- if((RoadType==2 || RoadType==12 || RoadType==0)&& Distance>5 && flag_right==0)//|| RoadType==0)  
+ if((RoadType==2 || RoadType==12 || RoadType==0)&& Distance>500 && flag_right==0)//|| RoadType==0)  
  {   
    roadturncal();                                     
    if(ABS(SlopeLeft[0]-SlopeLeft[1])>1.4*SlopeLeftDiff || ABS(SlopeLeft[1]-SlopeLeft[2])>1.4*SlopeLeftDiff )
@@ -721,7 +721,7 @@ if(RoadType==8 && Distance-Distance8>2  ){
    }
  }
 // flag_cricle_left=0;
- if((RoadType==12 || RoadType==2 )&& Distance>5 && flag_left==0)//|| RoadType==0)
+ if((RoadType==12 || RoadType==2 || RoadType==0 )&& Distance>20 && flag_left==0)//|| RoadType==0)
  {  
    roadturncal();
  
@@ -752,7 +752,7 @@ if(RoadType==13)
    
    flag_15=1;
  }
- if(flag_15=1&&(Distance-Distance13>1.1)){
+ if(flag_15=1&&(Distance-Distance13>1)){
     RoadType=15; 
     flag_left=1;                        //进左环
     Distance13=1000;
@@ -777,7 +777,7 @@ if(RoadType==15)
 if(flag_16==1)
 {
   RoadType=16;
-  if(flag_left==1 && Distance-Distance16>4.5 )
+  if(flag_left==1 && Distance-Distance16>4.6 )
   { 
     flag_16=0;  
     RoadType=17;
@@ -792,7 +792,7 @@ if(flag_16==1)
 if(flag_17==1)
 {
   RoadType=17;
-  if(Distance-Distance17>1.7)
+  if(Distance-Distance17>1.8)
   {
     RoadType=18;
     Distance18=Distance;
@@ -902,22 +902,22 @@ if(RoadType==18 && Distance-Distance18>2  ){
           LMR[1][i]=24;                                 
      }
 
-     else if(RoadType==200)                     //s 8.1出库左拐
-     {
-          LMR[1][i]=24;
-     }
-     else if(RoadType==205)                     //s 8.1入库左拐
-     {
-          LMR[1][i]=15;
-     }
-//     else if(RoadType==200)                     //出库右拐
+//     else if(RoadType==200)                     //s 8.1出库左拐
 //     {
-//          LMR[1][i]=46;
+//          LMR[1][i]=24;
 //     }
-//     else if(RoadType==205)                     //入库右拐
+//     else if(RoadType==205)                     //s 8.1入库左拐
 //     {
-//          LMR[1][i]=55;
+//          LMR[1][i]=15;
 //     }
+     else if(RoadType==200)                     //出库右拐
+     {
+          LMR[1][i]=46;
+     }
+     else if(RoadType==205)                     //入库右拐
+     {
+          LMR[1][i]=55;
+     }
      else                                               //RoadType=0,6，16...
      {
        LMR[1][i]=(LMR[0][i]+LMR[2][i])/2-1;             //中线  -3

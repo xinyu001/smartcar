@@ -185,7 +185,7 @@ void Speed_Control(void)                        //更新SpeedControlOutOld  计算Sp
   SpeedControlIntegral+=PreError[19];
   //速度更新
   SpeedControlOutOld=SpeedControlOutNew;
-  if(Distance<5){
+  if(Distance<3){
     SpeedControlOutNew=0.13*SpeedError+0.02*SpeedControlIntegral;
   }
   else{
@@ -509,7 +509,7 @@ void roadturncal()                              //电磁检测环岛
      }
      Distance70=Distance;
   }
-  if(Distance-Distance70 <1 && Inductor_ADC[4]+Inductor_ADC[5]>145 ){
+  if(Distance-Distance70 <1.5 && Inductor_ADC[4]+Inductor_ADC[5]>145 ){
  
     if(turn_left_Flag==1){
       flag_cricle_left=1;                           //传递给search，识别到环岛
@@ -519,7 +519,7 @@ void roadturncal()                              //电磁检测环岛
     }
   }
   
-  if(Distance-Distance70>1 &&(flag_cricle_left!=1 || flag_cricle_right!=1)){
+  if(Distance-Distance70>1.5 &&(flag_cricle_left!=1 || flag_cricle_right!=1)){
       circle_Flag=0;
       turn_left_Flag=0;
       turn_right_Flag=0;
