@@ -88,8 +88,10 @@ void Para_Init()
   Speed_H=0.5;                                 //0.8  0.7
   Speed_M=0.5;                                 //0.62  0.7
   Speed_L=0.4;                                 //0.42;
-//  if(Style==0)
-  SetSpeed=0.55;                           //0.9  原来0.6
+//  if(Sty
+  le==0)
+  SetSpeed=0.6;
+  //0.9  原来0.6
 //  if(Style==1)
 //  SetSpeed=0.52;                            //0.6//s
   Fuzzy_Kp=0.0065;                              //0.014

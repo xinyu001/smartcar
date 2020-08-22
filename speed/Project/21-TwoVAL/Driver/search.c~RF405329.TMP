@@ -282,7 +282,7 @@ void Search()
           
           RoadType=205;                                 //s 8.1 看到起跑线，准备入库
           Distance200=Distance;                         //记录当前距离,从而判断刹车
-          SetSpeed=0.2;
+          SetSpeed=0.4;
 //          Speed_H=0;
 //          Speed_M=0;
 //          Speed_L=0;
