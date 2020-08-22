@@ -26,7 +26,8 @@ float display4=0,display5=0,display6=0;
 
 
 
-  void  main(void)
+  
+void  main(void)
 { //unsigned char xx,yy;
   uart_init(UART0,9600);
   uart_putchar(UART0,'O');

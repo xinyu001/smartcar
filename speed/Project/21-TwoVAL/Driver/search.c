@@ -251,7 +251,7 @@ void Search()
  
    
     //起跑线
-   if(i==30 &&  Distance>50)  //Distance>50即保证车是在第二次经过起跑线时才执行  原i==55
+   if(i==30 &&  Distance>50 && (RoadType==0 || RoadType==2 || RoadType==12 ))  //Distance>50即保证车是在第二次经过起跑线时才执行  原i==55
     {
 
         for(j=1;j<8;j++)
@@ -277,7 +277,7 @@ void Search()
           }
         }
         
-        if((Stop_Black+Stop_White)>7)                   //s 原8，因为摄像头高度从20cm调为10cm，看到的条数减少了
+        if((Stop_Black+Stop_White)>6)                   //s 原8，因为摄像头高度从20cm调为10cm，看到的条数减少了
         {
           
           RoadType=205;                                 //s 8.1 看到起跑线，准备入库
@@ -514,7 +514,7 @@ if((RoadType==200)&&(Distance>1)){
 //}
 
 //s 入库结束，停车
-if((RoadType==205)&&(Distance-Distance200>1.5)){
+if((RoadType==205)&&(Distance-Distance200>2)){
        Distance200=1000;
        RoadType=206;
        Stop_Brake=1;                    //刹车
@@ -634,7 +634,7 @@ if((RoadType==205)&&(Distance-Distance200>1.5)){
   }
  }
 
- if(flag_5=1&&(Distance-Distance3>1.3)){
+ if(flag_5=1&&(Distance-Distance3>1.1)){
     RoadType=5; 
     flag_right=1;                        //进环
     Distance3=1000;
@@ -721,7 +721,7 @@ if(RoadType==8 && Distance-Distance8>2  ){
    }
  }
 // flag_cricle_left=0;
- if((RoadType==12 || RoadType==2 || RoadType==0 )&& Distance>5 && flag_left==0)//|| RoadType==0)
+ if((RoadType==12 || RoadType==2 )&& Distance>5 && flag_left==0)//|| RoadType==0)
  {  
    roadturncal();
  
@@ -752,7 +752,7 @@ if(RoadType==13)
    
    flag_15=1;
  }
- if(flag_15=1&&(Distance-Distance13>1.3)){
+ if(flag_15=1&&(Distance-Distance13>1.1)){
     RoadType=15; 
     flag_left=1;                        //进左环
     Distance13=1000;

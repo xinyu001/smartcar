@@ -185,8 +185,8 @@ void Speed_Control(void)                        //更新SpeedControlOutOld  计算Sp
   SpeedControlIntegral+=PreError[19];
   //速度更新
   SpeedControlOutOld=SpeedControlOutNew;
-  if(RoadType==200){
-    SpeedControlOutNew=0.2*SpeedError+0.02*SpeedControlIntegral;
+  if(Distance<5){
+    SpeedControlOutNew=0.13*SpeedError+0.02*SpeedControlIntegral;
   }
   else{
     SpeedControlOutNew=PID_SPEED.P*SpeedError+PID_SPEED.I*SpeedControlIntegral;   //PI控制 当CarSpeed增大且向SetSpeed靠近，此变量为正且变小  当CarSpeed减小且向SetSpeed靠近，此变量为负且绝对值变小
