@@ -602,7 +602,7 @@ if((RoadType==205)&&(Distance-Distance200>2)){
      }
    }
  }
- if((RoadType==2 || RoadType==12 || RoadType==0)&& Distance>5 && flag_right==0)//|| RoadType==0)  
+ if((RoadType==2 || RoadType==12 || RoadType==0)&& Distance>45 && flag_right==0)//|| RoadType==0)  
  {   
    roadturncal();                                     
    if(ABS(SlopeLeft[0]-SlopeLeft[1])>1.4*SlopeLeftDiff || ABS(SlopeLeft[1]-SlopeLeft[2])>1.4*SlopeLeftDiff )
@@ -721,7 +721,7 @@ if(RoadType==8 && Distance-Distance8>2  ){
    }
  }
 // flag_cricle_left=0;
- if((RoadType==12 || RoadType==2 )&& Distance>5 && flag_left==0)//|| RoadType==0)
+ if((RoadType==12 || RoadType==2 )&& Distance>500 && flag_left==0)//|| RoadType==0)
  {  
    roadturncal();
  
