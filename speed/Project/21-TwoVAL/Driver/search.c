@@ -721,7 +721,7 @@ if(RoadType==8 && Distance-Distance8>2  ){
    }
  }
 // flag_cricle_left=0;
- if((RoadType==12 || RoadType==2 || RoadType==0 )&& Distance>20 && flag_left==0)//|| RoadType==0)
+ if((RoadType==12 || RoadType==2 || RoadType==0 )&& (Distance>10 && Distance<25 )&& flag_left==0)//|| RoadType==0)
  {  
    roadturncal();
  
