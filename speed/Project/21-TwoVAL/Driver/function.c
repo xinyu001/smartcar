@@ -95,7 +95,7 @@ void Para_Init()
   Fuzzy_Kp=0.0065;                              //0.014
   Fuzzy_Kd=0.005;                               //0
  // PID_SPEED.P=0.84;                             //0.13
-  PID_SPEED.P=0.9;                                      //¿¼ÂÇËõÐ¡
+  PID_SPEED.P=0.89;                                      //¿¼ÂÇËõÐ¡
   PID_SPEED.I=0.008;                             //0.02
 //  Kp=0;
 //  Ki=0.08;

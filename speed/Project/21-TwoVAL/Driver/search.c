@@ -282,7 +282,7 @@ void Search()
           
           RoadType=205;                                 //s 8.1 看到起跑线，准备入库
           Distance200=Distance;                         //记录当前距离,从而判断刹车
-          SetSpeed=0.2;
+          SetSpeed=0.35;
 //          Speed_H=0;
 //          Speed_M=0;
 //          Speed_L=0;
@@ -721,7 +721,7 @@ if(RoadType==8 && Distance-Distance8>2  ){
    }
  }
 // flag_cricle_left=0;
- if((RoadType==12 || RoadType==2 || RoadType==0 )&& (Distance>10 && Distance<25 )&& flag_left==0)//|| RoadType==0)
+ if((RoadType==12 || RoadType==2 || RoadType==0 )&& (Distance>5 && Distance<20 )&& flag_left==0)//|| RoadType==0)
  {  
    roadturncal();
  
@@ -752,7 +752,7 @@ if(RoadType==13)
    
    flag_15=1;
  }
- if(flag_15=1&&(Distance-Distance13>1)){
+ if(flag_15=1&&(Distance-Distance13>1.3)){
     RoadType=15; 
     flag_left=1;                        //进左环
     Distance13=1000;
@@ -777,7 +777,7 @@ if(RoadType==15)
 if(flag_16==1)
 {
   RoadType=16;
-  if(flag_left==1 && Distance-Distance16>4.6 )
+  if(flag_left==1 && Distance-Distance16>6.2 )
   { 
     flag_16=0;  
     RoadType=17;
